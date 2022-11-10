@@ -56,6 +56,7 @@ def readtxt(filename, color: Tuple[int, int, int]):
     filtered_L = [value for value in fullText if "[" not in value]
     hasChild = [value for value in fullText if "[" in value]
     fullText2 = [value for value in fullText]
+    noParent = ""
 
 
     #print(filtered_L)
@@ -101,8 +102,7 @@ def openFile():
     file.close()
     filepath2 = str(filepath)
     #filepath2 = '"' + filepath + '"'
-    print(filepath2)
-
+    #print(filepath2)
     return filepath2
 
 def generateReport():
@@ -148,55 +148,56 @@ def generateReport():
     #print(child)
     child2 = removeAfter(child) #removes everything after the child tag if there is anything to remove
     #print(child2)
-    while sentences:
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = sentences[0]
-        #green = paragraph.add_run(sentences[0] + "    ")
-        #paragraph.add_run("\n\n")
-        #green.font.color.rgb = RGBColor(0x00, 0xFF, 0x00)
-        #green.bold = True
-        sentences.remove(sentences[0])
-        #print(fullText)
-        #print(filtered_L)
+    while sentences or child2:
+        if len(sentences) > 0 and sentences[0]:
+            row = table.add_row().cells # Adding a row and then adding data in it.
+            row[0].text = sentences[0]
+            sentences.remove(sentences[0])
+            #print(fullText)
+            #print(filtered_L)
 
 
-        if e < len(fullText2):
+            if e < len(fullText2):
 
-            if fullText2[e] in filtered_L:
+                if fullText2[e] in filtered_L:
 
-                #row = table.add_row().cells # Adding a row and then adding data in it.
-                # print("no child")
-                #print("yes")
+                    #row = table.add_row().cells # Adding a row and then adding data in it.
+                    # print("no child")
+                    #print("yes")
 
-                row[1].text = " "
-
-                e += 1
-
-            elif fullText2[e] not in filtered_L:
-                #print("has a child")
-                #print(fullText[e])
-                #row[1].text = "Has no child tag"
-                if child2:
-                    #red = paragraph.add_run(child[0])
-                    row[1].text = child2[0]
-                    #paragraph.add_run("\n\n")
-                    #red.bold = True
-                    #red.font.color.rgb = RGBColor(255, 0, 0)
-                    child2.remove(child2[0])
+                    row[1].text = "No child tag "
 
                     e += 1
 
+                elif fullText2[e] not in filtered_L:
+                    #print("has a child")
+                    #print(fullText[e])
+                    #row[1].text = "Has no child tag"
+                    if child2:
+                        #red = paragraph.add_run(child[0])
+                        row[1].text = child2[0]
+                        #paragraph.add_run("\n\n")
+                        #red.bold = True
+                        #red.font.color.rgb = RGBColor(255, 0, 0)
+                        child2.remove(child2[0])
+
+                        e += 1
 
 
-    while sentences: # This is in case there are any more parent tags left in the list
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = sentences[0]
-        sentences.remove(sentences[0])
 
-    while child2: #This is for orphan tags
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[1].text = child2[0]
-        child2.remove(child2[0])
+        #if sentences : # This is in case there are any more parent tags left in the list
+         #   row = table.add_row().cells # Adding a row and then adding data in it.
+          #  row[0].text = sentences[0]
+           # sentences.remove(sentences[0])
+            #row[1].text = "No child tag"
+
+
+        elif not (len(child2) < 0 and sentences[0]) and  (child2[0] and len(child2) > 0): #This is for orphan tags
+            row = table.add_row().cells # Adding a row and then adding data in it.
+            row[1].text = child2[0]
+            child2.remove(child2[0])
+            row[0].text = "No parent tag"
+
 
     #green = paragraph.add_run(sentences[0])
     #paragraph.add_run("\n\n")
@@ -206,12 +207,14 @@ def generateReport():
     child2.clear()
     sentences.clear()
     child.clear()
+
     #paragraph.add_run(f)
     report3.save('report3.docx')
 
 
 def removeAfter(childtags): #removes everything after the child tag, example "pass"
     seperator = ']'
+
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
 
     return childAfter
@@ -256,11 +259,12 @@ if __name__ == '__main__':
     # Creates button 2
     Button(window, text="Generate Report ", command=generateReport).pack()
 
+    # creates button 3
     getDoc = Button(window, text="Open Generated Report", command=getDocument)
     getDoc.pack()
 
-    # Creates button 3
-    button = Button(text="End Program",command=window.destroy)
+    # Creates button 4
+    button = Button(text="End Program", command=window.destroy)
     button.pack()
 
     window.mainloop()

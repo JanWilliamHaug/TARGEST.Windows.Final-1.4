@@ -145,7 +145,8 @@ def generateReport(): #Will generate the report for tags
     dicts = {}
     dicts = dict(zip(parents2, childCopy))
     print(dicts)
-    print(parents2)
+    #print(parents2)
+
 
     for x, y in dicts.items():
         #row = table.add_row().cells  # Adding a row and then adding data in it.
@@ -153,16 +154,18 @@ def generateReport(): #Will generate the report for tags
  #       row[1].text = y
         # text1 = int(str(list(fullText)))
         # print(everything)
-        text2 = removechild(everything)  # parent tags and text
+        text2 = removeParent(everything) # child tag and text
+        #text2 = removechild(everything)  # parent tags and text
 
         # print(text2)
-        text3 = removeParent(text2)  # only text list
+        #text3 = removeParent(text2)  # only text list
+        text3 = removechild(text2)  # only text list
         # print(text3)
         text4 = removeText(text2)
         # print(text4) #only parent tag list
         dicts2 = {}  # will hold parentTag and text
         dicts2 = dict(zip(text4, text3))
-        print(dicts2)
+        #print(dicts2)
 
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
@@ -172,22 +175,25 @@ def generateReport(): #Will generate the report for tags
 
 
     m = 0
-    for key, value in dicts2.items():
-        report3.add_paragraph("\n")
-        report3.add_paragraph(key)
-        report3.add_paragraph(value)
-        report3.add_paragraph("Links to")
-        report3.add_paragraph("'Insert Parent Tag here'")
-        #m += 1
+    if dicts2:
+        for key, value in dicts2.items():
+            report3.add_paragraph("\n")
+            report3.add_paragraph(key)
+            stringKey = str(key + " ")
+            report3.add_paragraph(value)
+            report3.add_paragraph("Links to")
+            report3.add_paragraph(dicts[str(stringKey)])
+                #"'Insert Parent Tag here'")
+            #m += 1
 
-    for key, value in dicts.items():
-        report3.add_paragraph("\n")
-        report3.add_paragraph(key)
-        report3.add_paragraph(value)
+        for key, value in dicts.items():
+            report3.add_paragraph("\n")
+            report3.add_paragraph(key)
+            report3.add_paragraph(value)
 
 
-        #p += 1
-        #j += 1
+            #p += 1
+            #j += 1
 
     while parentTags:
         row = table.add_row().cells # Adding a row and then adding data in it.
@@ -231,17 +237,15 @@ def removeParent(text2): #removes everything after the child tag, example "pass"
 
     return childAfter
 
-def removeText(text6): #removes everything after the child tag, example "pass"
-    seperator = '['
-    childAfter = [seperator + i.rsplit('[', 1)[-1] for i in text6]
-
+def removeText(text6): #this should remove everything before the parent tag
+    childAfter = [s.split(None, 1)[0] for s in text6]
     return childAfter
 
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
-def removechild(text): #removes everything after the child tag, example "pass"
+def removechild(text): #removes child, this one needs fixing
     mylst = []
     mylst = [s.split(None, 1)[1] for s in text]
     return mylst

@@ -19,6 +19,8 @@ from tkinter import *
 from tkinter import filedialog
 from typing import Tuple
 
+import re
+
 #This libraries are for opening word document automatically
 import os
 import platform
@@ -98,7 +100,6 @@ def openFile(): #This will let the user pick a document from their own directory
     file.close()
     # Will store the filepath to the document as a string
     filepath2 = str(filepath)
-    print(filepath2)
 
     return filepath2
 
@@ -110,9 +111,11 @@ def generateReport(): #Will generate the report for tags
     fullText10 = str(fullText)
     s = ''.join(fullText10)
     w = (s.replace (']', ']\n\n'))
-
     paragraph = report3.add_paragraph()
-    runner = paragraph.add_run("\n" + filepath2 + "\n")
+    filepath3 = str(filepath2.rsplit('/', 1)[-1]) # change filepath to something.docx
+    filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
+    print(filepath3 + " added to the report")
+    runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
     runner.bold = True #makes the header bold
     # w will be used in the future
     w = (w.replace ('([', ''))
@@ -124,9 +127,8 @@ def generateReport(): #Will generate the report for tags
 
     # Adds headers in the 1st row of the table
     row = table.rows[0].cells
-    row[0].text = 'Parent Tag'
-    row[1].text = 'Child Tag/Tags'
-
+    row[0].text = 'Child Tag'
+    row[1].text = 'Parent Tag/tags'
     # Adding style to a table
     table.style = 'Colorful List'
 
@@ -144,19 +146,20 @@ def generateReport(): #Will generate the report for tags
 
     # creates a dict for parent and child tags
     dicts = {}
-    dicts = dict(zip(parents2, childCopy))
-    print(dicts)
+    dicts = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
+    #print(dicts)
     #print(parents2)
     global dicts3
     dicts3 = {} # will hold parentTag and text, Orphan tags
     global dicts2
     dicts2 = {}  # will hold parentTag and text
 
-    for x in parents2:
+    for x in parents2: # creates dicttionary for child tags and text
         text2 = removeParent(everything)  # child tag and text
+        #text8 = [s.replace(" ", "") for s in text2]
         text3 = removechild(text2)  # only text list
         text4 = removeText(text2)  # child tags
-        text8 = [s.replace(" ", "") for s in text4]
+        #text8 = [s.replace(" ", "") for s in text4]
         dicts3 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
         sorted(dicts3.keys())  # sorts the keys in the dictionary
 
@@ -173,13 +176,15 @@ def generateReport(): #Will generate the report for tags
 
         # print(text2)
         #text3 = removeParent(text2)  # only text list
+        #text9 = ('"""' + str(text2) + '"""')  # child tag and text
         text3 = removechild(text2)  # only text list
         # print(text3)
         text4 = removeText(text2) # child tags
         # print(text4) #only parent tag list
         #text7 = [s.replace(" ", "") for s in text3]
         text8 = [s.replace(" ", "") for s in text4]
-        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with parents tags and text
+
+        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
         sorted(dicts2.keys()) # sorts the keys in the dictionary
 
         #print(dicts2)
@@ -187,33 +192,27 @@ def generateReport(): #Will generate the report for tags
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
         #row[1].text = ""
-        #p = 0
-        #j = 0
 
-    #print(dicts2)
-    print(dicts3)
     m = 0
-    if dicts2:
-        for key, value in dicts2.items():
-            report3.add_paragraph("\n")
-            print(key)
-            report3.add_paragraph(key)
-            stringKey = str(key)
-            report3.add_paragraph(value)
-            report3.add_paragraph("Links to")
-            report3.add_paragraph(dicts[str(stringKey)])
-                #"'Insert Parent Tag here'")
-            #m += 1
+    while m < len(parents2):
+        if dicts2:
+            for key, value in dicts2.items():
+                report3.add_paragraph("\n")
+                report3.add_paragraph(key)
+                stringKey = str(key)
+                report3.add_paragraph(value)
+                report3.add_paragraph(dicts[str(stringKey)], style='List Bullet')
+                    #"'Insert Parent Tag here'")
+                m += 1
 
-    elif not dicts2:
-        for key, value in dicts3.items():
-            report3.add_paragraph("\n")
-            report3.add_paragraph(key)
-            report3.add_paragraph(value)
-            report3.add_paragraph(key + " is an orphan tags")
+        elif not dicts2: # this is for orphan tags
+            for key, value in dicts3.items():
+                report3.add_paragraph("\n")
+                report3.add_paragraph(key)
+                report3.add_paragraph(value)
+                report3.add_paragraph(key + " is an orphan tags")
+                m += 1
 
-            #p += 1
-            #j += 1
 
     while parentTags:
         row = table.add_row().cells # Adding a row and then adding data in it.
@@ -251,11 +250,14 @@ def generateReport(): #Will generate the report for tags
     child.clear()
     report3.save('report3.docx') #Saves in document "report3"
 
-def removeParent(text2): #removes everything after the child tag, example "pass"
-    seperator = ']'
-    childAfter = [i.rsplit('[', 1)[0] for i in text2]
-
+def removeParent(text): #removes parent tags
+    for line in text:
+        childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
+        childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
+        childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
     return childAfter
+
+
 
 def removeText(text6): #this should remove everything before the parent tag
     childAfter = [s.split(None, 1)[0] for s in text6]
@@ -263,8 +265,10 @@ def removeText(text6): #this should remove everything before the parent tag
 
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
-    childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
+    for line in childtags:
+        childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
+
 def removechild(text): #removes child, this one needs fixing
     mylst = []
     mylst = [s.split(None, 1)[1] for s in text]

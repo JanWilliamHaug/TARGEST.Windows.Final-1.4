@@ -140,12 +140,26 @@ def generateReport(): #Will generate the report for tags
     parents2 = parentTags # copy of parent tags list
     childCopy = child2  # copy of child tags list
 
+    parents2 = [s.replace(" ", "") for s in parents2] # gets rid of spaces
 
     # creates a dict for parent and child tags
     dicts = {}
     dicts = dict(zip(parents2, childCopy))
     print(dicts)
     #print(parents2)
+    global dicts3
+    dicts3 = {} # will hold parentTag and text, Orphan tags
+    global dicts2
+    dicts2 = {}  # will hold parentTag and text
+
+    for x in parents2:
+        text2 = removeParent(everything)  # child tag and text
+        text3 = removechild(text2)  # only text list
+        text4 = removeText(text2)  # child tags
+        text8 = [s.replace(" ", "") for s in text4]
+        dicts3 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
+        sorted(dicts3.keys())  # sorts the keys in the dictionary
+
 
 
     for x, y in dicts.items():
@@ -163,12 +177,11 @@ def generateReport(): #Will generate the report for tags
         # print(text3)
         text4 = removeText(text2) # child tags
         # print(text4) #only parent tag list
-        dicts2 = {}  # will hold parentTag and text
         #text7 = [s.replace(" ", "") for s in text3]
         text8 = [s.replace(" ", "") for s in text4]
-        dicts2 = dict(zip(text8, text3))
+        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with parents tags and text
         sorted(dicts2.keys()) # sorts the keys in the dictionary
-        print(dicts2)
+
         #print(dicts2)
 
         #row = table.add_row().cells  # Adding a row and then adding data in it.
@@ -177,26 +190,27 @@ def generateReport(): #Will generate the report for tags
         #p = 0
         #j = 0
 
-
-
+    #print(dicts2)
+    print(dicts3)
     m = 0
     if dicts2:
         for key, value in dicts2.items():
             report3.add_paragraph("\n")
             print(key)
             report3.add_paragraph(key)
-            stringKey = str(key + " ")
+            stringKey = str(key)
             report3.add_paragraph(value)
             report3.add_paragraph("Links to")
             report3.add_paragraph(dicts[str(stringKey)])
                 #"'Insert Parent Tag here'")
             #m += 1
 
-        for key, value in dicts.items():
+    elif not dicts2:
+        for key, value in dicts3.items():
             report3.add_paragraph("\n")
             report3.add_paragraph(key)
             report3.add_paragraph(value)
-
+            report3.add_paragraph(key + " is an orphan tags")
 
             #p += 1
             #j += 1
@@ -300,13 +314,3 @@ if __name__ == '__main__':
     button.pack()
 
     window.mainloop()
-
-
-
-
-
-
-
-
-
-

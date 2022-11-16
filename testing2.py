@@ -21,6 +21,9 @@ from typing import Tuple
 
 import re
 
+import copy
+import time
+
 #This libraries are for opening word document automatically
 import os
 import platform
@@ -140,14 +143,57 @@ def generateReport(): #Will generate the report for tags
     # while loop until all the  parentTags has been added to the report
 
     parents2 = parentTags # copy of parent tags list
-    childCopy = child2  # copy of child tags list
+    childCopy = copy.deepcopy(child2)
+    noParent = []
+    noParent2 = []
 
-    parents2 = [s.replace(" ", "") for s in parents2] # gets rid of spaces
+    parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
+    while parentTags:
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[0].text = parentTags[0] # Adds the parentTag to the table
+        noParent.append(parentTags[0])
+        parentTags.remove(parentTags[0]) # Removes that tag after use
+
+
+        if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
+            if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
+
+                noParent2.append(" ")
+                row[1].text = " " # No child tag, so adds emopty string to that cell
+                e += 1
+
+            elif fullText2[e] not in filtered_L:
+                if child2:
+                    row[1].text = child2[0] #Adds childTag to table
+                    e += 1
+                    noParent2.append(child2[0])
+                    child2.remove(child2[0])  # Removed that tag from the list
+    """
+    while parentTags: # In case there are any more parent tags left in the list
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[0].text = parentTags[0]
+        parentTags.remove(parentTags[0])
+
+    while child2: #This is for orphan tags, but not finished
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[1].text = child2[0]
+        child2.remove(child2[0])
+    """
+    # Make sure everything is cleared before the program gets the next document
+    child2.clear()
+    parentTags.clear()
+    child.clear()
+    report3.save('report3.docx') #Saves in document "report3"
 
     # creates a dict for parent and child tags
     dicts = {}
     dicts = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
-    #print(dicts)
+    #print(noParent)
+    #print(noParent2)
+    noParent = [s.replace(" ", "") for s in noParent]
+    if noParent2:
+        dicts10 = dict(zip(noParent, noParent2))
+    #print(dicts10)
     #print(parents2)
     global dicts3
     dicts3 = {} # will hold parentTag and text, Orphan tags
@@ -165,7 +211,7 @@ def generateReport(): #Will generate the report for tags
 
 
 
-    for x, y in dicts.items():
+    #for x, y in dicts.items():
         #row = table.add_row().cells  # Adding a row and then adding data in it.
 #        row[0].text = x
  #       row[1].text = y
@@ -192,20 +238,42 @@ def generateReport(): #Will generate the report for tags
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
         #row[1].text = ""
-
+    dicts2Copy = dicts2
     m = 0
-    while m < len(parents2):
+    k = 0
+    #print(dicts)
+    #print(parents2)
+    #print(fullText2[1])
+    #print(filtered_L)
+    print(dicts2)
+    print(parents2)
+    while m <= len(parents2):
         if dicts2:
             for key, value in dicts2.items():
+                #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
                 report3.add_paragraph("\n")
+
                 report3.add_paragraph(key)
                 stringKey = str(key)
                 report3.add_paragraph(value)
-                report3.add_paragraph(dicts[str(stringKey)], style='List Bullet')
-                    #"'Insert Parent Tag here'")
-                m += 1
+                if fullText2[k] not in filtered_L: # check if it is an orphan tag
+                    k += 1
+                    if str(stringKey) in dicts10:
+                        report3.add_paragraph(dicts10[str(stringKey)], style='List Bullet')
+                        m += 2
+                    else:
+                        m += 2
+                        pass
+                else:
+                    report3.add_paragraph(key + " is an orphan tag")
+                    m += 2
+                    k += 1
 
-        elif not dicts2: # this is for orphan tags
+    report3.save('report3.docx')
+
+    """
+        elif not dicts2Copy: # this is for orphan tags
+            dict3 = dict(dicts2.items() - dicts3.items())
             for key, value in dicts3.items():
                 report3.add_paragraph("\n")
                 report3.add_paragraph(key)
@@ -213,44 +281,11 @@ def generateReport(): #Will generate the report for tags
                 report3.add_paragraph(key + " is an orphan tags")
                 m += 1
 
+    """
 
-    while parentTags:
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = parentTags[0] # Adds the parentTag to the table
-        parentTags.remove(parentTags[0]) # Removes that tag after use
-
-
-
-        if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-            if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
-
-
-                row[1].text = " " # No child tag, so adds emopty string to that cell
-                e += 1
-
-            elif fullText2[e] not in filtered_L:
-                if child2:
-                    row[1].text = child2[0] #Adds childTag to table
-                    child2.remove(child2[0]) #Removed that tag from the list
-                    e += 1
-
-    while parentTags: # In case there are any more parent tags left in the list
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = parentTags[0]
-        parentTags.remove(parentTags[0])
-
-    while child2: #This is for orphan tags, but not finished
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[1].text = child2[0]
-        child2.remove(child2[0])
-
-    # Make sure everything is cleared before the program gets the next document
-    child2.clear()
-    parentTags.clear()
-    child.clear()
-    report3.save('report3.docx') #Saves in document "report3"
 
 def removeParent(text): #removes parent tags
+    childAfter = []
     for line in text:
         childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
         childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
@@ -265,8 +300,9 @@ def removeText(text6): #this should remove everything before the parent tag
 
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
-    for line in childtags:
-        childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
+
+    #for line in childtags:
+    childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
 
 def removechild(text): #removes child, this one needs fixing

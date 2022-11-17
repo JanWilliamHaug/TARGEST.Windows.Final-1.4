@@ -19,6 +19,11 @@ from tkinter import *
 from tkinter import filedialog
 from typing import Tuple
 
+import re
+
+import copy
+import time
+
 #This libraries are for opening word document automatically
 import os
 import platform
@@ -98,7 +103,6 @@ def openFile(): #This will let the user pick a document from their own directory
     file.close()
     # Will store the filepath to the document as a string
     filepath2 = str(filepath)
-    print(filepath2)
 
     return filepath2
 
@@ -110,9 +114,11 @@ def generateReport(): #Will generate the report for tags
     fullText10 = str(fullText)
     s = ''.join(fullText10)
     w = (s.replace (']', ']\n\n'))
-
     paragraph = report3.add_paragraph()
-    runner = paragraph.add_run("\n" + filepath2 + "\n")
+    filepath3 = str(filepath2.rsplit('/', 1)[-1]) # change filepath to something.docx
+    filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
+    print(filepath3 + " added to the report")
+    runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
     runner.bold = True #makes the header bold
     # w will be used in the future
     w = (w.replace ('([', ''))
@@ -124,9 +130,8 @@ def generateReport(): #Will generate the report for tags
 
     # Adds headers in the 1st row of the table
     row = table.rows[0].cells
-    row[0].text = 'Parent Tag'
-    row[1].text = 'Child Tag/Tags'
-
+    row[0].text = 'Child Tag'
+    row[1].text = 'Parent Tag/tags'
     # Adding style to a table
     table.style = 'Colorful List'
 
@@ -136,19 +141,76 @@ def generateReport(): #Will generate the report for tags
 
     child2 = removeAfter(child) #removes everything after the child tag if there is anything to remove
     # while loop until all the  parentTags has been added to the report
-
+    global parents2
     parents2 = parentTags # copy of parent tags list
-    childCopy = child2  # copy of child tags list
+    childCopy = copy.deepcopy(child2)
+    noParent = []
+    noParent2 = []
+
+    parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
+    while parentTags:
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[0].text = parentTags[0] # Adds the parentTag to the table
+        noParent.append(parentTags[0])
+        parentTags.remove(parentTags[0]) # Removes that tag after use
 
 
-    # creates a dict for parent and child tags
-    dicts = {}
-    dicts = dict(zip(parents2, childCopy))
-    print(dicts)
+        if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
+            if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
+
+                noParent2.append(" ")
+                row[1].text = " " # No child tag, so adds emopty string to that cell
+                e += 1
+
+            elif fullText2[e] not in filtered_L:
+                if child2:
+                    row[1].text = child2[0] #Adds childTag to table
+                    e += 1
+                    noParent2.append(child2[0])
+                    child2.remove(child2[0])  # Removed that tag from the list
+    """
+    while parentTags: # In case there are any more parent tags left in the list
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[0].text = parentTags[0]
+        parentTags.remove(parentTags[0])
+
+    while child2: #This is for orphan tags, but not finished
+        row = table.add_row().cells # Adding a row and then adding data in it.
+        row[1].text = child2[0]
+        child2.remove(child2[0])
+    """
+    # Make sure everything is cleared before the program gets the next document
+    child2.clear()
+    parentTags.clear()
+    child.clear()
+    report3.save('report3.docx') #Saves in document "report3"
+
+    global dicts11
+    dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
+    dicts.update(dicts)
+
+    noParent = [s.replace(" ", "") for s in noParent]
+    if noParent2:
+        dicts3 = dict(zip(noParent, noParent2))
+        dicts10.update(dicts3)
+    #print(dicts10)
     #print(parents2)
 
 
-    for x, y in dicts.items():
+    for x in parents2: # creates dicttionary for child tags and text
+        text2 = removeParent(everything)  # child tag and text
+        #text8 = [s.replace(" ", "") for s in text2]
+        text3 = removechild(text2)  # only text list
+        text4 = removeText(text2)  # child tags
+        #text8 = [s.replace(" ", "") for s in text4]
+
+        dicts12 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
+        sorted(dicts3.keys())  # sorts the keys in the dictionary
+        dicts3.update(dicts12)
+
+
+
+    #for x, y in dicts.items():
         #row = table.add_row().cells  # Adding a row and then adding data in it.
 #        row[0].text = x
  #       row[1].text = y
@@ -159,89 +221,90 @@ def generateReport(): #Will generate the report for tags
 
         # print(text2)
         #text3 = removeParent(text2)  # only text list
+        #text9 = ('"""' + str(text2) + '"""')  # child tag and text
         text3 = removechild(text2)  # only text list
         # print(text3)
         text4 = removeText(text2) # child tags
         # print(text4) #only parent tag list
-        dicts2 = {}  # will hold parentTag and text
         #text7 = [s.replace(" ", "") for s in text3]
         text8 = [s.replace(" ", "") for s in text4]
-        dicts2 = dict(zip(text8, text3))
+
+        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
         sorted(dicts2.keys()) # sorts the keys in the dictionary
-        print(dicts2)
+        dicts2Copy.update(dicts2)
+
         #print(dicts2)
 
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
         #row[1].text = ""
-        #p = 0
-        #j = 0
+    #print(dicts)
+    #print(parents2)
+    #print(fullText2[1])
+    #print(filtered_L)
+    #print(parents2)
+    print(dicts2)
+    print(dicts10)
+    print(dicts2Copy)
 
-
-
+def generateReport2():
     m = 0
-    if dicts2:
-        for key, value in dicts2.items():
-            report3.add_paragraph("\n")
-            print(key)
-            report3.add_paragraph(key)
-            stringKey = str(key + " ")
-            report3.add_paragraph(value)
-            report3.add_paragraph("Links to")
-            report3.add_paragraph(dicts[str(stringKey)])
-                #"'Insert Parent Tag here'")
-            #m += 1
+    k = 0
+    while m <= len(parents2):
+        if dicts2:
+            for key, value in dicts2.items():
 
-        for key, value in dicts.items():
-            report3.add_paragraph("\n")
-            report3.add_paragraph(key)
-            report3.add_paragraph(value)
+                #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
+                report3.add_paragraph("\n")
+
+                report3.add_paragraph(key)
+                stringKey = str(key)
+                report3.add_paragraph(value)
+                if fullText2[k] not in filtered_L: # check if it is an orphan tag
+                    k += 1
+                    if str(stringKey) in dicts10:
+                        report3.add_paragraph(dicts10[str(stringKey)], style='List Bullet')
+                        keyCheck = (dicts10[str(stringKey)].replace('[', ''))
+                        keyCheck2 = (keyCheck.replace(']', ''))
+                        keyCheck3 = (keyCheck2.replace(']', ''))
+                        keyCheck4 = (keyCheck3.replace(' ', ''))
+                        print(keyCheck4)
+                        if keyCheck4 in dicts2Copy:
+                            report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
+                        m += 2
+                    else:
+                        m += 2
+                        pass
+                else:
+                    report3.add_paragraph(key + " is an orphan tag")
+                    m += 2
+                    k += 1
+
+    report3.save('report3.docx')
+    return dicts2Copy
+
+    """
+        elif not dicts2Copy: # this is for orphan tags
+            dict3 = dict(dicts2.items() - dicts3.items())
+            for key, value in dicts3.items():
+                report3.add_paragraph("\n")
+                report3.add_paragraph(key)
+                report3.add_paragraph(value)
+                report3.add_paragraph(key + " is an orphan tags")
+                m += 1
+
+    """
 
 
-            #p += 1
-            #j += 1
-
-    while parentTags:
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = parentTags[0] # Adds the parentTag to the table
-        parentTags.remove(parentTags[0]) # Removes that tag after use
-
-
-
-        if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-            if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
-
-
-                row[1].text = " " # No child tag, so adds emopty string to that cell
-                e += 1
-
-            elif fullText2[e] not in filtered_L:
-                if child2:
-                    row[1].text = child2[0] #Adds childTag to table
-                    child2.remove(child2[0]) #Removed that tag from the list
-                    e += 1
-
-    while parentTags: # In case there are any more parent tags left in the list
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[0].text = parentTags[0]
-        parentTags.remove(parentTags[0])
-
-    while child2: #This is for orphan tags, but not finished
-        row = table.add_row().cells # Adding a row and then adding data in it.
-        row[1].text = child2[0]
-        child2.remove(child2[0])
-
-    # Make sure everything is cleared before the program gets the next document
-    child2.clear()
-    parentTags.clear()
-    child.clear()
-    report3.save('report3.docx') #Saves in document "report3"
-
-def removeParent(text2): #removes everything after the child tag, example "pass"
-    seperator = ']'
-    childAfter = [i.rsplit('[', 1)[0] for i in text2]
-
+def removeParent(text): #removes parent tags
+    childAfter = []
+    for line in text:
+        childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
+        childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
+        childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
     return childAfter
+
+
 
 def removeText(text6): #this should remove everything before the parent tag
     childAfter = [s.split(None, 1)[0] for s in text6]
@@ -249,8 +312,11 @@ def removeText(text6): #this should remove everything before the parent tag
 
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
+
+    #for line in childtags:
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
+
 def removechild(text): #removes child, this one needs fixing
     mylst = []
     mylst = [s.split(None, 1)[1] for s in text]
@@ -273,6 +339,18 @@ if __name__ == '__main__':
     report3.add_heading('Report', 0) #create word document
     paragraph = report3.add_paragraph()
     report3.save('report3.docx')
+    dicts2Copy = {} # This will hold the dicts2 content in all documents
+
+    # creates a dict for parent and child tags
+    global dicts
+    dicts = {}
+
+    global dicts10
+    dicts10 = {}
+    global dicts3
+    dicts3 = {}  # will hold parentTag and text, Orphan tags
+    global dicts2
+    dicts2 = {}  # will hold parentTag and text
 
     # declaring different lists that will be used to store, tags and sentences
     parentTags = []
@@ -286,27 +364,19 @@ if __name__ == '__main__':
     # Creates the gui
     window = Tk(className=' TARGEST')
     # set window size
-    window.geometry("220x110")
+    window.geometry("240x130")
     # Creates button 1
     button = Button(text="Choose Document",command=openFile)
     button.pack()
     # Creates button 2
     Button(window, text="Generate Report ", command=generateReport).pack()
     # Creates button 3
+    Button(window, text="Generate Report ", command=generateReport2).pack()
+    # Creates button 4
     getDoc = Button(window, text="Open Generated Report", command=getDocument)
     getDoc.pack()
-    # Creates button 4
+    # Creates button 5
     button = Button(text="End Program",command=window.destroy)
     button.pack()
 
     window.mainloop()
-
-
-
-
-
-
-
-
-
-

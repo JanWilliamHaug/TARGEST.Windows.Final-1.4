@@ -191,6 +191,7 @@ def generateReport(): #Will generate the report for tags
     #print(noParent)
     #print(noParent2)
     noParent = [s.replace(" ", "") for s in noParent]
+    global dicts10
     if noParent2:
         dicts10 = dict(zip(noParent, noParent2))
     #print(dicts10)
@@ -232,24 +233,29 @@ def generateReport(): #Will generate the report for tags
 
         dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
         sorted(dicts2.keys()) # sorts the keys in the dictionary
+        dicts2Copy.update(dicts2)
 
         #print(dicts2)
 
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
         #row[1].text = ""
-    dicts2Copy = dicts2
-    m = 0
-    k = 0
     #print(dicts)
     #print(parents2)
     #print(fullText2[1])
     #print(filtered_L)
+    #print(parents2)
     print(dicts2)
-    print(parents2)
+    print(dicts10)
+    print(dicts2Copy)
+
+
+    m = 0
+    k = 0
     while m <= len(parents2):
         if dicts2:
             for key, value in dicts2.items():
+
                 #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
                 report3.add_paragraph("\n")
 
@@ -260,6 +266,13 @@ def generateReport(): #Will generate the report for tags
                     k += 1
                     if str(stringKey) in dicts10:
                         report3.add_paragraph(dicts10[str(stringKey)], style='List Bullet')
+                        keyCheck = (dicts10[str(stringKey)].replace('[', ''))
+                        keyCheck2 = (keyCheck.replace(']', ''))
+                        keyCheck3 = (keyCheck2.replace(']', ''))
+                        keyCheck4 = (keyCheck3.replace(' ', ''))
+                        print(keyCheck4)
+                        if keyCheck4 in dicts2Copy:
+                            report3.add_paragraph("       " + dicts2Copy[str(keyCheck4)])
                         m += 2
                     else:
                         m += 2
@@ -270,6 +283,7 @@ def generateReport(): #Will generate the report for tags
                     k += 1
 
     report3.save('report3.docx')
+    return dicts2Copy
 
     """
         elif not dicts2Copy: # this is for orphan tags
@@ -327,6 +341,8 @@ if __name__ == '__main__':
     report3.add_heading('Report', 0) #create word document
     paragraph = report3.add_paragraph()
     report3.save('report3.docx')
+    dicts2Copy = {}
+      # This will hold the dicts2 content in all documents
 
     # declaring different lists that will be used to store, tags and sentences
     parentTags = []

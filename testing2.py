@@ -521,10 +521,9 @@ def generateReport2(): #Will generate the report for tags
 def multipleDoc():
     global filePaths
     global filepath4
-    filePaths = filedialog.askopenfilenames(title="",
-                                           multiple=True,
-                                           filetypes=(("Word Document", "*.docx"),
-                                                      ("All File Types", "*.")))
+    fileTypes = [('Word Doc', '*.docx'), ('All files', "*.*")]
+    filePaths = filedialog.askopenfilenames(title='Select Folder', filetypes=fileTypes)
+    dataDir = filePaths[0].rsplit('/', 1)[0]
     print(filePaths)
     # Will store the filepath to the document as a string
     filepath4 = str(filePaths)
@@ -554,14 +553,16 @@ if __name__ == '__main__':
     # Creates the gui
     window = Tk(className=' TARGEST')
     # set window size
-    window.geometry("220x160")
+    window.geometry("220x180")
     # Creates button 1
     button = Button(text="Choose Document",command=openFile)
     button.pack()
-    mulDoc = Button(text="Choose multiple Documents", command=multipleDoc)
+    mulDoc = Button(window, text="Choose multiple Documents", command=multipleDoc)
     mulDoc.pack()
     # Creates button 2
     Button(window, text="Generate Report ", command=generateReport).pack()
+    genMultiple = Button(window, text="Generate Multiple reports", command=generateReport2)
+    genMultiple.pack()
     # Creates button 3
     getDoc = Button(window, text="Open Generated Report", command=getDocument)
     getDoc.pack()

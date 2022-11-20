@@ -299,7 +299,7 @@ def generateReport(): #Will generate the report for tags
                 m += 1
 
     """
-
+#
 
 def removeParent(text): #removes parent tags
     childAfter = []

@@ -280,7 +280,7 @@ def generateReport2():
                 report3.add_paragraph(key)
                 stringKey = str(key)
                 report3.add_paragraph(value)
-                if (k + 1) < len(fullText2):
+                if (k + 1) < len(fullText2): #
                     if fullText2[k] not in filtered_LCopy: # check if it is an orphan tag
                         k += 1
                         if str(stringKey) in dicts10:

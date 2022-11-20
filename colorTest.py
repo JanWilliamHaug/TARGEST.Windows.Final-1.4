@@ -310,9 +310,9 @@ def generateReport2():
                                 print(keyCheck4)
                                 if keyCheck4 in dicts2Copy:
                                     report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
-                                #m += 2
+                                # m += 2
                             else:
-                                #m += 2
+                                # m += 2
                                 report3.add_paragraph("No parent tag found", style='List Bullet')
                                 pass
                         #else:

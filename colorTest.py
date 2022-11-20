@@ -60,6 +60,9 @@ def readtxt(filename, color: Tuple[int, int, int]):
     hasChild = [value for value in fullText if "[" in value]
     # will store everything found
     fullText2 = [value for value in fullText]
+    fullText2Copy.extend(fullText2)
+
+
 
     print("filtered_L")
     print(filtered_L)
@@ -67,7 +70,7 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
 
 
-    return fullText, filtered_L, hasChild, filtered_LCopy
+    return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy
 
 def getcoloredTxt(runs, color): # Will look for colored text
 
@@ -266,8 +269,8 @@ def generateReport2():
     print(dicts10)
     print("filtered_LCopy")
     print(filtered_LCopy)
-    print("fullText2")
-    print(fullText2)
+    print("fullText2Copy")
+    print(fullText2Copy)
 
     m = 0
     k = 0
@@ -279,26 +282,28 @@ def generateReport2():
                 report3.add_paragraph("\n")
                 report3.add_paragraph(key)
                 stringKey = str(key)
+                stringKey2 = (stringKey.replace(' ', ''))
                 report3.add_paragraph(value)
-                if (k + 1) < len(fullText2): #
-                    if fullText2[k] not in filtered_LCopy: # check if it is an orphan tag
+                if k < len(fullText2Copy): #
+                    if fullText2Copy[k] not in filtered_LCopy: # check if it is an orphan tag
                         k += 1
                         if str(stringKey) in dicts10:
-                            report3.add_paragraph(dicts10[str(stringKey)], style='List Bullet')
-                            keyCheck = (dicts10[str(stringKey)].replace('[', ''))
+                            report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
+                            keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
                             keyCheck2 = (keyCheck.replace(']', ''))
                             keyCheck3 = (keyCheck2.replace(']', ''))
                             keyCheck4 = (keyCheck3.replace(' ', ''))
+                            print(keyCheck4)
                             if keyCheck4 in dicts2Copy:
                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
                             m += 2
                         else:
                             m += 2
                             pass
-                else:
-                    report3.add_paragraph(key + " is an orphan tag")
-                    m += 2
-                    k += 1
+                    else:
+                        report3.add_paragraph(key + " is an orphan tag")
+                        m += 2
+                        k += 1
 
     report3.save('report3.docx')
     return dicts2Copy
@@ -369,6 +374,9 @@ if __name__ == '__main__':
 
     global filtered_LCopy
     filtered_LCopy = [""]
+
+    global fullText2Copy
+    fullText2Copy = []
 
     global parents2 #list of parent tags or child tags
     parents2 = []

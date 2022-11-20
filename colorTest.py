@@ -64,12 +64,6 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
 
 
-    print("filtered_L")
-    print(filtered_L)
-    print(filtered_LCopy)
-
-
-
     return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy
 
 def getcoloredTxt(runs, color): # Will look for colored text
@@ -155,6 +149,8 @@ def generateReport(): #Will generate the report for tags
     childCopy = copy.deepcopy(child2)
     noParent = []
     noParent2 = []
+    orphanChild = []
+    orphanChildParent = []
 
     parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
     print("filtered_LCopy")
@@ -168,16 +164,17 @@ def generateReport(): #Will generate the report for tags
 
         if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
             if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
-
+                orphanChild.append(parentTags[0])
                 noParent2.append(" ")
-                row[1].text = " " # No child tag, so adds emopty string to that cell
+                orphanChildParent.append()
+                row[1].text = " " # No parent tag, so adds empty string to that cell
                 e += 1
 
             elif fullText2[e] not in filtered_L:
                 if child2:
                     row[1].text = child2[0] #Adds childTag to table
                     e += 1
-                    noParent2.append(child2[0])
+                    noParent.append(child2[0])
                     child2.remove(child2[0])  # Removed that tag from the list
     """
     while parentTags: # In case there are any more parent tags left in the list
@@ -201,11 +198,14 @@ def generateReport(): #Will generate the report for tags
     dicts.update(dicts)
 
     noParent = [s.replace(" ", "") for s in noParent]
-    if noParent2:
-        dicts3 = dict(zip(noParent, noParent2))
-        dicts10.update(dicts3)
-    #print(dicts10)
-    #print(parents2)
+    #dicts3 = dict(zip(noParent, noParent2))
+
+
+    orphanChild = [s.replace(" ", "") for s in orphanChild]
+
+    dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
+    orphanDicts.update(dicts9000)
+    OrphanChild2.extend(orphanChild)
 
 
     #for x in parents2: # creates dicttionary for child tags and text
@@ -227,23 +227,26 @@ def generateReport(): #Will generate the report for tags
  #       row[1].text = y
         # text1 = int(str(list(fullText)))
         # print(everything)
-        text2 = removeParent(everything) # child tag and text
+    text2 = removeParent(everything) # child tag and text
         #text2 = removechild(everything)  # parent tags and text
 
         # print(text2)
         #text3 = removeParent(text2)  # only text list
         #text9 = ('"""' + str(text2) + '"""')  # child tag and text
-        text3 = removechild(text2)  # only text list
+    text3 = removechild(text2)  # only text list
         # print(text3)
-        text4 = removeText(text2) # child tags
+    text4 = removeText(text2) # child tags
         # print(text4) #only parent tag list
         #text7 = [s.replace(" ", "") for s in text3]
-        text8 = [s.replace(" ", "") for s in text4]
+    text8 = [s.replace(" ", "") for s in text4]
 
-        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
-        sorted(dicts2.keys()) # sorts the keys in the dictionary
-        dicts2Copy.update(dicts2)
+    dicts3 = dict(zip(parents2, childCopy))
+    dicts10.update(dicts3)
 
+    dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
+    dicts100 = copy.deepcopy(dicts2)
+    sorted(dicts2.keys()) # sorts the keys in the dictionary
+    dicts2Copy.update(dicts100)
         #print(dicts2)
 
         #row = table.add_row().cells  # Adding a row and then adding data in it.
@@ -254,11 +257,15 @@ def generateReport(): #Will generate the report for tags
     #print(fullText2[1])
     #print(filtered_L)
     #print(parents2)
-        print(dicts2)
-        print(dicts10)
-        print(dicts2Copy)
-        print(filtered_LCopy)
-        return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy
+        #print(dicts2)
+        #print(dicts10)
+        #print(dicts2Copy)
+        #print(filtered_LCopy)
+    print(orphanDicts)
+    print(parents2)
+    print(text3)
+    print(dicts100)
+    return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
 def generateReport2():
     print("parents2Copy")
@@ -274,36 +281,55 @@ def generateReport2():
 
     m = 0
     k = 0
+    i = 0
+    o = 1
+    z = 0
+    print(len(parents2Copy))
     while m < len(parents2Copy):
-        if dicts2Copy:
-            for key, value in dicts2Copy.items():
-
-                #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
+        #print(m)
+        if fullText2Copy[k] not in filtered_LCopy:
+            if z < len(dicts2Copy) and dicts2Copy:
+                z += 1
+                k += 1
+                for key, value in dicts2Copy.items():
+                    #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
+                    report3.add_paragraph("\n")
+                    report3.add_paragraph(key)
+                    stringKey = str(key)
+                    stringKey2 = (stringKey.replace(' ', ''))
+                    report3.add_paragraph(value)
+                    m += 2
+                    if k < len(fullText2Copy):
+                        if fullText2Copy[k] not in filtered_LCopy:  # check if it is an orphan tag
+                            if str(stringKey) in dicts10:
+                                report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
+                                keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
+                                keyCheck2 = (keyCheck.replace(']', ''))
+                                keyCheck3 = (keyCheck2.replace(']', ''))
+                                keyCheck4 = (keyCheck3.replace(' ', ''))
+                                print(keyCheck4)
+                                if keyCheck4 in dicts2Copy:
+                                    report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
+                                #m += 2
+                            else:
+                                #m += 2
+                                report3.add_paragraph("No parent tag found", style='List Bullet')
+                                pass
+                        #else:
+                         #   report3.add_paragraph(key + " is an orphan tag")
+                          #  m += 2
+                            # k += 1
+        elif fullText2Copy[k] in filtered_LCopy:
+            #print(orphanDicts)
                 report3.add_paragraph("\n")
-                report3.add_paragraph(key)
-                stringKey = str(key)
-                stringKey2 = (stringKey.replace(' ', ''))
-                report3.add_paragraph(value)
-                if k < len(fullText2Copy): #
-                    if fullText2Copy[k] not in filtered_LCopy: # check if it is an orphan tag
-                        k += 1
-                        if str(stringKey) in dicts10:
-                            report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
-                            keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
-                            keyCheck2 = (keyCheck.replace(']', ''))
-                            keyCheck3 = (keyCheck2.replace(']', ''))
-                            keyCheck4 = (keyCheck3.replace(' ', ''))
-                            print(keyCheck4)
-                            if keyCheck4 in dicts2Copy:
-                                report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
-                            m += 2
-                        else:
-                            m += 2
-                            pass
-                    else:
-                        report3.add_paragraph(key + " is an orphan tag")
-                        m += 2
-                        k += 1
+                report3.add_paragraph(parents2Copy[i])
+                report3.add_paragraph(filtered_LCopy[o])
+                o += 1
+                report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                m += 1
+                k += 1
+                i +=1
+
 
     report3.save('report3.docx')
     return dicts2Copy
@@ -385,6 +411,9 @@ if __name__ == '__main__':
     global dicts
     dicts = {}
 
+    global OrphanChild2
+    OrphanChild2 = []
+
 
     global dicts10
     dicts10 = {}
@@ -392,6 +421,8 @@ if __name__ == '__main__':
     dicts3 = {}  # will hold parentTag and text, Orphan tags
     global dicts2
     dicts2 = {}  # will hold parentTag and text
+    global orphanDicts
+    orphanDicts = {}  # orphan dictionary
 
     # declaring different lists that will be used to store, tags and sentences
     parentTags = []
@@ -400,6 +431,7 @@ if __name__ == '__main__':
     noChild = []  # Used to Store parentTags with no child
     withChild = [] # Used to Store parentTags with child tag
     parents = [] #Will be used for future function
+
 
 
     # Creates the gui

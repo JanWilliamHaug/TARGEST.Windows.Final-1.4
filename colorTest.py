@@ -92,7 +92,22 @@ def getcoloredTxt(runs, color): # Will look for colored text
     return coloredWords #returns everything found
 
 
-def openFile(): #This will let the user pick a document from their own directory
+# def openFile(): #This will let the user pick a document from their own directory
+#     global filepath
+#     global filepath2
+#     filepath = filedialog.askopenfilename(initialdir="/",
+#                                           title="",
+#                                           filetypes= (("word documents","*.docx"),
+#                                                       ("all files","*.*")))
+#     file = open(filepath,'r')
+#     #print(filepath)
+#     file.close()
+#     # Will store the filepath to the document as a string
+#     filepath2 = str(filepath)
+#
+#     return filepath2, filtered_L
+
+def generateReport(): #Will generate the report for tags
     global filepath
     global filepath2
     filepath = filedialog.askopenfilename(initialdir="/",
@@ -105,9 +120,8 @@ def openFile(): #This will let the user pick a document from their own directory
     # Will store the filepath to the document as a string
     filepath2 = str(filepath)
 
-    return filepath2, filtered_L
+    # return filepath2, filtered_L
 
-def generateReport(): #Will generate the report for tags
     fullText = readtxt(filename=filepath2,
                        color=(255, 0, 0))
     #filtered_L = readtxt(filename=filepath2, #For future use
@@ -265,6 +279,7 @@ def generateReport(): #Will generate the report for tags
     print(parents2)
     print(text3)
     print(dicts100)
+    return filepath2, filtered_L
     return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
 def generateReport2():
@@ -439,10 +454,10 @@ if __name__ == '__main__':
     # set window size
     window.geometry("240x130")
     # Creates button 1
-    button = Button(text="Choose Document",command=openFile)
-    button.pack()
+    # button = Button(text="Choose Document",command=openFile)
+    # button.pack()
     # Creates button 2
-    Button(window, text="Generate Report ", command=generateReport).pack()
+    Button(window, text="Choose Document ", command=generateReport).pack()
     # Creates button 3
     Button(window, text="Generate Report2 ", command=generateReport2).pack()
     # Creates button 4

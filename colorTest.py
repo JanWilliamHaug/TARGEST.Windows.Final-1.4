@@ -1,4 +1,5 @@
-## Instructions on how to use the program:
+# Instructions on how to use the program:
+# Instructions needs to be updated
 # 1. run program
 # 2. click on button "Choose document" and choose a document
 # 3. click on button "Generate Report" (this will print it out on the terminal and
@@ -55,16 +56,18 @@ def readtxt(filename, color: Tuple[int, int, int]):
     global children
     # Finds the lines without a childTag
     filtered_L = [value for value in fullText if "[" not in value]
+    filtered_L = [s.replace(": ", ":") for s in filtered_L]
     # Finds the lines with a childTag
     filtered_LCopy.extend(filtered_L)
     hasChild = [value for value in fullText if "[" in value]
     # will store everything found
     fullText2 = [value for value in fullText]
+    fullText2 = [s.replace(": ", ":") for s in fullText2]
     fullText2Copy.extend(fullText2)
 
 
 
-    return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy
+    return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
 
 def getcoloredTxt(runs, color): # Will look for colored text
 
@@ -92,7 +95,22 @@ def getcoloredTxt(runs, color): # Will look for colored text
     return coloredWords #returns everything found
 
 
-def openFile(): #This will let the user pick a document from their own directory
+# def openFile(): #This will let the user pick a document from their own directory
+#     global filepath
+#     global filepath2
+#     filepath = filedialog.askopenfilename(initialdir="/",
+#                                           title="",
+#                                           filetypes= (("word documents","*.docx"),
+#                                                       ("all files","*.*")))
+#     file = open(filepath,'r')
+#     #print(filepath)
+#     file.close()
+#     # Will store the filepath to the document as a string
+#     filepath2 = str(filepath)
+#
+#     return filepath2, filtered_L
+
+def generateReport(): #Will generate the report for tags
     global filepath
     global filepath2
     filepath = filedialog.askopenfilename(initialdir="/",
@@ -105,9 +123,8 @@ def openFile(): #This will let the user pick a document from their own directory
     # Will store the filepath to the document as a string
     filepath2 = str(filepath)
 
-    return filepath2, filtered_L
+    # return filepath2, filtered_L
 
-def generateReport(): #Will generate the report for tags
     fullText = readtxt(filename=filepath2,
                        color=(255, 0, 0))
     #filtered_L = readtxt(filename=filepath2, #For future use
@@ -151,29 +168,31 @@ def generateReport(): #Will generate the report for tags
     noParent2 = []
     orphanChild = []
     orphanChildParent = []
+    parents9000 = []
 
     parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
-    print("filtered_LCopy")
-    print(filtered_LCopy)
     while parentTags:
         row = table.add_row().cells # Adding a row and then adding data in it.
         row[0].text = parentTags[0] # Adds the parentTag to the table
         noParent.append(parentTags[0])
-        parentTags.remove(parentTags[0]) # Removes that tag after use
 
 
         if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-            if fullText2[e] in filtered_L: #filtered_L contains the parent tags without a child tag
+            if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
                 orphanChild.append(parentTags[0])
+                parentTags.remove(parentTags[0]) # Removes that tag after use
                 noParent2.append(" ")
-                orphanChildParent.append()
+                parents9000.append(" ")
+                orphanChildParent.append(" ")
                 row[1].text = " " # No parent tag, so adds empty string to that cell
                 e += 1
 
-            elif fullText2[e] not in filtered_L:
+            elif fullText2[e] not in filtered_LCopy:
+                parentTags.remove(parentTags[0]) # Removes that tag after use
                 if child2:
                     row[1].text = child2[0] #Adds childTag to table
                     e += 1
+                    parents9000.append(child2[0])
                     noParent.append(child2[0])
                     child2.remove(child2[0])  # Removed that tag from the list
     """
@@ -181,12 +200,14 @@ def generateReport(): #Will generate the report for tags
         row = table.add_row().cells # Adding a row and then adding data in it.
         row[0].text = parentTags[0]
         parentTags.remove(parentTags[0])
-
     while child2: #This is for orphan tags, but not finished
         row = table.add_row().cells # Adding a row and then adding data in it.
         row[1].text = child2[0]
         child2.remove(child2[0])
     """
+
+    parents9.extend(parents9000)
+
     # Make sure everything is cleared before the program gets the next document
     child2.clear()
     parentTags.clear()
@@ -209,89 +230,98 @@ def generateReport(): #Will generate the report for tags
 
 
     #for x in parents2: # creates dicttionary for child tags and text
-     #   text2 = removeParent(everything)  # child tag and text
-        #text8 = [s.replace(" ", "") for s in text2]
-      #  text3 = removechild(text2)  # only text list
-       # text4 = removeText(text2)  # child tags
-        ##text8 = [s.replace(" ", "") for s in text4]
+    #   text2 = removeParent(everything)  # child tag and text
+    #text8 = [s.replace(" ", "") for s in text2]
+    #  text3 = removechild(text2)  # only text list
+    # text4 = removeText(text2)  # child tags
+    ##text8 = [s.replace(" ", "") for s in text4]
 
-        #dicts12 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
-        #sorted(dicts3.keys())  # sorts the keys in the dictionary
-        #dicts3.update(dicts12)
+    #dicts12 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
+    #sorted(dicts3.keys())  # sorts the keys in the dictionary
+    #dicts3.update(dicts12)
 
 
 
     #for x, y in dicts.items():
-        #row = table.add_row().cells  # Adding a row and then adding data in it.
-#        row[0].text = x
- #       row[1].text = y
-        # text1 = int(str(list(fullText)))
-        # print(everything)
+    #row = table.add_row().cells  # Adding a row and then adding data in it.
+    #        row[0].text = x
+    #       row[1].text = y
+    # text1 = int(str(list(fullText)))
+    # print(everything)
     text2 = removeParent(everything) # child tag and text
-        #text2 = removechild(everything)  # parent tags and text
+    #text2 = removechild(everything)  # parent tags and text
 
-        # print(text2)
-        #text3 = removeParent(text2)  # only text list
-        #text9 = ('"""' + str(text2) + '"""')  # child tag and text
+    # print(text2)
+    #text3 = removeParent(text2)  # only text list
+    #text9 = ('"""' + str(text2) + '"""')  # child tag and text
     text3 = removechild(text2)  # only text list
-        # print(text3)
+    # print(text3)
     text4 = removeText(text2) # child tags
-        # print(text4) #only parent tag list
-        #text7 = [s.replace(" ", "") for s in text3]
+    # print(text4) #only parent tag list
+    #text7 = [s.replace(" ", "") for s in text3]
     text8 = [s.replace(" ", "") for s in text4]
 
-    dicts3 = dict(zip(parents2, childCopy))
+    #dicts3 = dict(zip(parents2, childCopy))
+    dicts3 = dict(zip(parents2, parents9000))
+
     dicts10.update(dicts3)
 
     dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
     dicts100 = copy.deepcopy(dicts2)
     sorted(dicts2.keys()) # sorts the keys in the dictionary
     dicts2Copy.update(dicts100)
-        #print(dicts2)
+    #print(dicts2)
 
-        #row = table.add_row().cells  # Adding a row and then adding data in it.
-        #row[0].text = ""
-        #row[1].text = ""
+    #row = table.add_row().cells  # Adding a row and then adding data in it.
+    #row[0].text = ""
+    #row[1].text = ""
     #print(dicts)
     #print(parents2)
     #print(fullText2[1])
     #print(filtered_L)
     #print(parents2)
-        #print(dicts2)
-        #print(dicts10)
-        #print(dicts2Copy)
-        #print(filtered_LCopy)
-    print(orphanDicts)
-    print(parents2)
-    print(text3)
-    print(dicts100)
+    #print(dicts2)
+    #print(dicts10)
+    #print(dicts2Copy)
+    #print(filtered_LCopy)
+    #print(orphanDicts)
+    #print(parents2)
+    #print(text3)
+    #print(dicts100)
+    return filepath2, filtered_L
     return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
 def generateReport2():
-    print("parents2Copy")
-    print(parents2Copy)
-    print("dicts2Copy")
-    print(dicts2Copy)
-    print("dicts10")
-    print(dicts10)
-    print("filtered_LCopy")
-    print(filtered_LCopy)
-    print("fullText2Copy")
-    print(fullText2Copy)
+    #print("parents2Copy")
+    #print(parents2Copy)
+    #print("dicts2Copy")
+    #print(dicts2Copy)
+    #print("dicts10")
+    #print(dicts10)
+    #print("filtered_LCopy")
+    #print(filtered_LCopy)
+    #print("fullText2Copy")
+    #print(fullText2Copy)
 
     m = 0
     k = 0
     i = 0
     o = 1
     z = 0
-    print(len(parents2Copy))
+    #print(filtered_LCopy)
+
+    #print(len(parents2Copy))
+    #fullText2Copy = [s.replace(": ", ":") for s in fullText2Copy]
+    #print(fullText2)
+    #print(fullText2Copy)
+    print(dicts10)
     while m < len(parents2Copy):
         #print(m)
         if fullText2Copy[k] not in filtered_LCopy:
             if z < len(dicts2Copy) and dicts2Copy:
                 z += 1
-                k += 1
                 for key, value in dicts2Copy.items():
+                    k += 1
                     #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
                     report3.add_paragraph("\n")
                     report3.add_paragraph(key)
@@ -299,38 +329,41 @@ def generateReport2():
                     stringKey2 = (stringKey.replace(' ', ''))
                     report3.add_paragraph(value)
                     m += 2
-                    if k < len(fullText2Copy):
-                        if fullText2Copy[k] not in filtered_LCopy:  # check if it is an orphan tag
+                    if k <= len(fullText2Copy):
+                        if fullText2Copy[k-1] not in filtered_LCopy:  # check if it is an orphan tag
                             if str(stringKey) in dicts10:
                                 report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
                                 keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
                                 keyCheck2 = (keyCheck.replace(']', ''))
                                 keyCheck3 = (keyCheck2.replace(']', ''))
                                 keyCheck4 = (keyCheck3.replace(' ', ''))
-                                print(keyCheck4)
+                                #print(keyCheck4)
                                 if keyCheck4 in dicts2Copy:
                                     report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
-                                # m += 2
+                                else:
+
+                                    report3.add_paragraph("No text found", style='List Bullet')
+
                             else:
                                 # m += 2
                                 report3.add_paragraph("No parent tag found", style='List Bullet')
                                 pass
-                        #else:
-                         #   report3.add_paragraph(key + " is an orphan tag")
-                          #  m += 2
-                            # k += 1
+                        else:
+                            report3.add_paragraph(key + " is an orphan tag")
+                        #m += 2
+                        #k += 1
         elif fullText2Copy[k] in filtered_LCopy:
             #print(orphanDicts)
-                report3.add_paragraph("\n")
-                report3.add_paragraph(parents2Copy[i])
-                report3.add_paragraph(filtered_LCopy[o])
-                o += 1
-                report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
-                m += 1
-                k += 1
-                i +=1
+            report3.add_paragraph("\n")
+            report3.add_paragraph(parents2Copy[i])
+            report3.add_paragraph(filtered_LCopy[o])
+            o += 1
+            report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+            m += 1
+            k += 1
+            i += 1
 
-
+    print("Report Generated")
     report3.save('report3.docx')
     return dicts2Copy
 
@@ -343,7 +376,6 @@ def generateReport2():
                 report3.add_paragraph(value)
                 report3.add_paragraph(key + " is an orphan tags")
                 m += 1
-
     """
 
 
@@ -399,7 +431,7 @@ if __name__ == '__main__':
     filtered_L = []
 
     global filtered_LCopy
-    filtered_LCopy = [""]
+    filtered_LCopy = []
 
     global fullText2Copy
     fullText2Copy = []
@@ -424,6 +456,9 @@ if __name__ == '__main__':
     global orphanDicts
     orphanDicts = {}  # orphan dictionary
 
+    global parents9
+    parents9 = []
+
     # declaring different lists that will be used to store, tags and sentences
     parentTags = []
     parent = []  # This will be used to store everything
@@ -437,12 +472,12 @@ if __name__ == '__main__':
     # Creates the gui
     window = Tk(className=' TARGEST')
     # set window size
-    window.geometry("240x130")
+    window.geometry("220x120")
     # Creates button 1
-    button = Button(text="Choose Document",command=openFile)
-    button.pack()
+    # button = Button(text="Choose Document",command=openFile)
+    # button.pack()
     # Creates button 2
-    Button(window, text="Generate Report ", command=generateReport).pack()
+    Button(window, text="Choose Document ", command=generateReport).pack()
     # Creates button 3
     Button(window, text="Generate Report2 ", command=generateReport2).pack()
     # Creates button 4

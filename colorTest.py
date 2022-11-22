@@ -306,7 +306,7 @@ def generateReport2():
     m = 0
     k = 0
     i = 0
-    o = 1
+    o = 0
     z = 0
     #print(filtered_LCopy)
 

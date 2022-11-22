@@ -471,7 +471,7 @@ if __name__ == '__main__':
 
     # Creates the gui
     window = Tk(className=' TARGEST')
-    # set window size
+    # set window size #
     window.geometry("220x120")
     # Creates button 1
     # button = Button(text="Choose Document",command=openFile)

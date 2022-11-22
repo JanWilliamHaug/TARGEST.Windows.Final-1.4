@@ -345,6 +345,7 @@ def generateReport2():
                                 pass
                         else:
                             report3.add_paragraph(key + " is an orphan tag")
+                            k += 1
                         #m += 2
                         #k += 1
         elif fullText2Copy[k] in filtered_LCopy:

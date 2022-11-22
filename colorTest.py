@@ -303,17 +303,15 @@ def generateReport2():
     #print("fullText2Copy")
     #print(fullText2Copy)
 
+# declaring counters
     m = 0
     k = 0
     i = 0
     o = 0
     z = 0
-    #print(filtered_LCopy)
 
-    #print(len(parents2Copy))
-    #fullText2Copy = [s.replace(": ", ":") for s in fullText2Copy]
-    #print(fullText2)
-    #print(fullText2Copy)
+    orphanTagText = removechild(filtered_LCopy)
+
     print(dicts10)
     while m < len(parents2Copy):
         #print(m)
@@ -356,9 +354,9 @@ def generateReport2():
             #print(orphanDicts)
             report3.add_paragraph("\n")
             report3.add_paragraph(parents2Copy[i])
-            report3.add_paragraph(filtered_LCopy[o])
+            report3.add_paragraph(orphanTagText[o])
             o += 1
-            report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+            report3.add_paragraph(parents2Copy[i] + " is an orphan tagg")
             m += 1
             k += 1
             i += 1
@@ -379,7 +377,7 @@ def generateReport2():
     """
 
 
-def removeParent(text): #removes parent tags
+def removeParent(text): #removes parent tags or child tags
     childAfter = []
     for line in text:
         childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
@@ -395,8 +393,6 @@ def removeText(text6): #this should remove everything before the parent tag
 
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
-
-    #for line in childtags:
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
 
@@ -467,6 +463,8 @@ if __name__ == '__main__':
     withChild = [] # Used to Store parentTags with child tag
     parents = [] #Will be used for future function
 
+    global orphanTagText
+    orphanTagText = [] # Will be used to hold text of orphanChildTags
 
 
     # Creates the gui

@@ -316,7 +316,6 @@ def generateReport2():
             if z < len(dicts2Copy) and dicts2Copy:
                 z += 1
                 for key, value in dicts2Copy.items():
-                    k += 1
                     #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
                     report3.add_paragraph("\n")
                     report3.add_paragraph(key)
@@ -324,8 +323,9 @@ def generateReport2():
                     stringKey2 = (stringKey.replace(' ', ''))
                     report3.add_paragraph(value)
                     m += 2
-                    if k <= len(fullText2Copy):
-                        if fullText2Copy[k-1] not in filtered_LCopy:  # check if it is an orphan tag
+                    if k < len(fullText2Copy):
+                        if fullText2Copy[k] not in filtered_LCopy:  # check if it is an orphan tag
+                            k += 1
                             if str(stringKey) in dicts10:
                                 report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
                                 keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
@@ -357,6 +357,7 @@ def generateReport2():
             m += 1
             k += 1
             i += 1
+            del dicts2Copy[list(dicts2Copy.keys())[0]] # deletes the first item in dicts2Copy
 
     print("Report Generated")
     report3.save('report3.docx')

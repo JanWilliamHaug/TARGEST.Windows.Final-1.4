@@ -13,6 +13,7 @@
 import docx
 from docx import Document
 from docx.shared import RGBColor
+from docx.shared import Inches
 from tkinter import *
 from tkinter import filedialog
 from typing import Tuple
@@ -327,17 +328,26 @@ def generateReport2():
                         if fullText2Copy[k] not in filtered_LCopy:  # check if it is an orphan tag
                             k += 1
                             if str(stringKey) in dicts10:
-                                report3.add_paragraph(dicts10[str(stringKey2)], style='List Bullet')
-                                keyCheck = (dicts10[str(stringKey2)].replace('[', ''))
-                                keyCheck2 = (keyCheck.replace(']', ''))
-                                keyCheck3 = (keyCheck2.replace(']', ''))
-                                keyCheck4 = (keyCheck3.replace(' ', ''))
-                                #print(keyCheck4)
-                                if keyCheck4 in dicts2Copy:
-                                    report3.add_paragraph(dicts2Copy[str(keyCheck4)], style='List Bullet')
-                                else:
 
-                                    report3.add_paragraph("No text found", style='List Bullet')
+                                text = dicts10[str(stringKey2)]
+                                PTags = text.split(']')
+                                PTags = [s.strip() + ']' for s in PTags]
+                                PTags.pop()
+
+                                for x in PTags:
+                                    print(x)
+                                    report3.add_paragraph(x, style='List Bullet')
+                                    keyCheck = (x.replace('[', ''))
+                                    keyCheck2 = (keyCheck.replace(']', ''))
+                                    keyCheck3 = (keyCheck2.replace(']', ''))
+                                    keyCheck4 = (keyCheck3.replace(' ', ''))
+                                    #print(keyCheck4)
+                                    if keyCheck4 in dicts2Copy:
+                                        para = report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                        para.paragraph_format.left_indent = Inches(0.25) # adds indentation ot text
+                                    else:
+
+                                        report3.add_paragraph("No text found", style='List Bullet')
 
                             else:
                                 # m += 2

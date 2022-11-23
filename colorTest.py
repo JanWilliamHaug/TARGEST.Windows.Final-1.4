@@ -434,9 +434,10 @@ def createExcel():
     report = "report"
     #excelReport.name = report
     excelReport.range("B1").value = "Report"
-    excelReport.range("B1").api.Font.Size = 14 # Change font size
+    excelReport.range("B1").api.Font.Size = 18 # Change font size
     excelReport.range("B1").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('A1:S1').color = (0,0,255) # Change cell background color
+
 
 
     # creating a Dataframe object from a list
@@ -451,15 +452,39 @@ def createExcel():
 
     #df = pd.DataFrame(list)
 
+
+
     # For childTag -Text
     excelReport.range("A3").value = df
-    excelReport['B3'].value = 'ChildTag'
-    excelReport['C3'].value = 'Text'
+
+    # Adding childTag header
+    excelReport.range("B3").value = 'Child Tag'
+    excelReport.range("B3").api.Font.Size = 14 # Change font size
+    excelReport.range("B3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
+
+    # Adding Text header
+    excelReport.range("C3").value = 'Text'
+    excelReport.range("C3").api.Font.Size = 14 # Change font size
+    excelReport.range("C3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
+
 
     # For the childTag - parentTag
     excelReport.range("D3").value = df2
-    excelReport['E3'].value = 'ChildTag'
-    excelReport['F3'].value = 'ParentTag'
+
+
+    # Adding parentTag header
+    excelReport.range("F3").value = 'Parent Tag'
+    excelReport.range("F3").api.Font.Size = 14 # Change font size
+    excelReport.range("F3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
+
+    # Adding childTag header
+    excelReport.range("E3").value = 'Child Tag'
+    excelReport.range("E3").api.Font.Size = 14 # Change font size
+    excelReport.range("E3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range('E3:E3').color = (255, 0, 0) # Change cell background color
 
     wb.sheets["Sheet1"].autofit()
 

@@ -28,6 +28,10 @@ import os
 import platform
 import subprocess
 
+import xlwings as xw
+
+import pandas as pd
+
 # reads the text in the document and use the getcoloredTXT function
 def readtxt(filename, color: Tuple[int, int, int]):
     doc = docx.Document(filename)
@@ -301,7 +305,7 @@ def generateReport2():
     #print("fullText2Copy")
     #print(fullText2Copy)
 
-# declaring counters
+    # declaring counters
     m = 0
     k = 0
     i = 0
@@ -311,6 +315,7 @@ def generateReport2():
     orphanTagText = removechild(filtered_LCopy)
 
     print(dicts10)
+    print(dicts2Copy)
     while m < len(parents2Copy):
         #print(m)
         if fullText2Copy[k] not in filtered_LCopy:
@@ -420,6 +425,46 @@ def getDocument():
     else:
         subprocess.call('xdg-open', report3)
 
+# Creates an excel report
+def createExcel():
+    wb = xw.Book() # Creating an new excel file.
+    # Select the first excel sheet, and rename it
+    excelReport = wb.sheets["Sheet1"]
+
+    report = "report"
+    #excelReport.name = report
+    excelReport.range("B1").value = "Report"
+    excelReport.range("B1").api.Font.Size = 14 # Change font size
+    excelReport.range("B1").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range('A1:S1').color = (0,0,255) # Change cell background color
+
+
+    # creating a Dataframe object from a list
+    # of tuples of key, value pair
+    df = pd.DataFrame(list(dicts2Copy.items()))
+
+    # Dictionary For child and parent tag
+    df2 = pd.DataFrame(list(dicts10.items()))
+    #for tag in list:
+    #list.append(tag)
+    #excelReport.write_column('A1', list)
+
+    #df = pd.DataFrame(list)
+
+    # For childTag -Text
+    excelReport.range("A3").value = df
+    excelReport['B3'].value = 'ChildTag'
+    excelReport['C3'].value = 'Text'
+
+    # For the childTag - parentTag
+    excelReport.range("D3").value = df2
+    excelReport['E3'].value = 'ChildTag'
+    excelReport['F3'].value = 'ParentTag'
+
+    wb.sheets["Sheet1"].autofit()
+
+
+    wb.save('report.xlsx') # Saving excel report
 
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading
@@ -479,19 +524,20 @@ if __name__ == '__main__':
     # Creates the gui
     window = Tk(className=' TARGEST')
     # set window size #
-    window.geometry("220x120")
+    window.geometry("250x135")
     # Creates button 1
-    # button = Button(text="Choose Document",command=openFile)
-    # button.pack()
-    # Creates button 2
     Button(window, text="Choose Document ", command=generateReport).pack()
-    # Creates button 3
+    # Creates button 2
     Button(window, text="Generate Report ", command=generateReport2).pack()
-    # Creates button 4
+    # Creates button 3
     getDoc = Button(window, text="Open Generated Report", command=getDocument)
     getDoc.pack()
+    # Creates Excel button button 4
+    button = Button(text="Create Excel Report",command=createExcel)
+    button.pack()
     # Creates button 5
     button = Button(text="End Program",command=window.destroy)
     button.pack()
+
 
     window.mainloop()

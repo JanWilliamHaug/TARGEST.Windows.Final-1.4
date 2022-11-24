@@ -310,9 +310,9 @@ def generateReport2():
     z = 0
 
     orphanTagText = removechild(filtered_LCopy)
-    print(parents2Copy)
-    print(dicts10)
-    print(dicts2Copy)
+    #print(parents2Copy)
+    #print(dicts10)
+    #print(dicts2Copy)
     report3.add_paragraph("\n") # Adds a line space from the table
     while m < len(parents2Copy):
         #print(m)

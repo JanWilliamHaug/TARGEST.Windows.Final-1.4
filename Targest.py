@@ -14,14 +14,19 @@ import docx
 from docx import Document
 from docx.shared import RGBColor
 from docx.shared import Inches
+import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from typing import Tuple
+
+from tkinter import scrolledtext
 
 import re
 
 import copy
 import time
+
+
 
 #This libraries are for opening word document automatically
 import os
@@ -135,6 +140,8 @@ def generateReport(): #Will generate the report for tags
     filepath3 = str(filepath2.rsplit('/', 1)[-1]) # change filepath to something.docx
     filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
     print(filepath3 + " added to the report")
+    nameOfDoc = (filepath3 + " added to the report\n")
+    T.insert(tk.END, nameOfDoc) #print in GUI
     runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
     runner.bold = True #makes the header bold
     # w will be used in the future
@@ -147,8 +154,8 @@ def generateReport(): #Will generate the report for tags
 
     # Adds headers in the 1st row of the table
     row = table.rows[0].cells
-    row[0].text = 'Child Tag'
-    row[1].text = 'Parent Tag/tags'
+    row[0].text = 'Front Tag'
+    row[1].text = 'Back Tag/tags'
     # Adding style to a table
     table.style = 'Colorful List'
 
@@ -294,16 +301,6 @@ def generateReport(): #Will generate the report for tags
     return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
 def generateReport2():
-    #print("parents2Copy")
-    #print(parents2Copy)
-    #print("dicts2Copy")
-    #print(dicts2Copy)
-    #print("dicts10")
-    #print(dicts10)
-    #print("filtered_LCopy")
-    #print(filtered_LCopy)
-    #print("fullText2Copy")
-    #print(fullText2Copy)
 
     # declaring counters
     m = 0
@@ -316,13 +313,13 @@ def generateReport2():
 
     #dict(sorted(dicts2Copy.items(), key=lambda item: item[1])) # sorts by value/parentTag, not working at the moment
     #print(parents2Copy)
-    print(dicts10)
+    #print(dicts10)
     #print(dicts2Copy)
-    print(filtered_LCopy)
-    print(fullText2Copy)
-    print(parents2Copy)
-    print(orphanTagText)
-    print(dicts2Copy)
+    #print(filtered_LCopy)
+    #print(fullText2Copy)
+    #print(parents2Copy)
+    #print(orphanTagText)
+    #print(dicts2Copy)
     #report3.add_paragraph("\n") # Adds a line space from the table
     while m < len(dicts2Copy):
         #print(m)
@@ -412,7 +409,10 @@ def generateReport2():
 
 
 
-
+    msg1 = ("\nReport Generated\n")
+    T.insert(tk.END, msg1) #print in GUI
+    msg2 = ("You can now open up your report\n")
+    T.insert(tk.END, msg2) #print in GUI
     print("Report Generated")
     print("You can now open up your report")
     report3.save('report3.docx')
@@ -582,10 +582,13 @@ if __name__ == '__main__':
     global orphanTagText
     orphanTagText = []  # Will be used to hold text of orphanChildTags
 
+
+
     # Creates the gui
-    window = Tk(className=' TARGEST')
+    window = Tk(className=' TARGEST v.1.3.x ')
     # set window size #
-    window.geometry("250x135")
+    window.geometry("380x360")
+
     # Creates button 1
     Button(window, text="Choose Document ", command=generateReport).pack()
     # Creates button 2
@@ -601,5 +604,12 @@ if __name__ == '__main__':
     button = Button(text="End Program", command=window.destroy)
     button.pack()
 
+    # Create text widget and specify size.
+    T = Text(window, height = 13, width = 52)
+    T.pack()
+
+    msg3 = ('Please choose your documents by clicking on \nthe "choose document" button\n\n')
+    T.insert(tk.END, msg3) #print in GUI
 
     window.mainloop()
+

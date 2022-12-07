@@ -26,15 +26,12 @@ import re
 import copy
 import time
 
-
-
 #This libraries are for opening word document automatically
 import os
 import platform
 import subprocess
 
 import xlwings as xw
-
 import pandas as pd
 
 # reads the text in the document and use the getcoloredTXT function
@@ -72,7 +69,6 @@ def readtxt(filename, color: Tuple[int, int, int]):
     fullText2 = [s.replace(": ", ":") for s in fullText2]
     fullText2Copy.extend(fullText2)
 
-
     return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
 
 def getcoloredTxt(runs, color): # Will look for colored text
@@ -82,21 +78,21 @@ def getcoloredTxt(runs, color): # Will look for colored text
         if run.font.color.rgb == RGBColor(*color):
             word += str(run.text) # Saves everything found
 
-        elif word != "": # This will find the parentTags
+        elif word != "":  # This will find the parentTags
             coloredWords.append(word)
             parentTags.append(word)
             parents.append(word)
             word = ""
 
-    if word != "": # This will find the parentTags
+    if word != "":  # This will find the parentTags
         coloredWords.append(word + "\n")
-        #word = removeAfter(word)
+        # word = removeAfter(word)
         child.append(word)
         withChild.append(word)
 
 
 
-    return coloredWords #returns everything found
+    return coloredWords # returns everything found
 
 
 # def openFile(): #This will let the user pick a document from their own directory
@@ -107,7 +103,7 @@ def getcoloredTxt(runs, color): # Will look for colored text
 #                                           filetypes= (("word documents","*.docx"),
 #                                                       ("all files","*.*")))
 #     file = open(filepath,'r')
-#     #print(filepath)
+#     # print(filepath)
 #     file.close()
 #     # Will store the filepath to the document as a string
 #     filepath2 = str(filepath)
@@ -143,7 +139,7 @@ def generateReport(): #Will generate the report for tags
     nameOfDoc = (filepath3 + " added to the report\n")
     T.insert(tk.END, nameOfDoc) #print in GUI
     runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
-    runner.bold = True #makes the header bold
+    runner.bold = True  # makes the header bold
     # w will be used in the future
     w = (w.replace ('([', ''))
     w = (w.replace (',', ''))
@@ -156,6 +152,7 @@ def generateReport(): #Will generate the report for tags
     row = table.rows[0].cells
     row[0].text = 'Front Tag'
     row[1].text = 'Back Tag/tags'
+
     # Adding style to a table
     table.style = 'Colorful List'
 
@@ -608,7 +605,7 @@ if __name__ == '__main__':
     T = Text(window, height = 13, width = 52)
     T.pack()
 
-    msg3 = ('Please choose your documents by clicking on \nthe "choose document" button\n\n')
+    msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')
     T.insert(tk.END, msg3) #print in GUI
 
     window.mainloop()

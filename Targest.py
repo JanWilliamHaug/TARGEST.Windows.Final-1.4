@@ -288,6 +288,8 @@ def generateReport(): #Will generate the report for tags
     #print(text3)
     #print(dicts100)
 
+    toggle_state2() # This will enable the generate report button
+
     return filepath2, filtered_L
     return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
@@ -353,7 +355,7 @@ def generateReport2():
                         keyCheck2 = (keyCheck.replace(']', ''))
                         keyCheck3 = (keyCheck2.replace(']', ''))
                         keyCheck4 = (keyCheck3.replace(' ', ''))
-                        report3.add_paragraph(x)
+                        report3.add_paragraph(x) # display the parent tag, included brackets
 
                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
 
@@ -368,9 +370,6 @@ def generateReport2():
                         for b in PTags:
 
 
-
-
-
                             if b == dicts10[str(stringKey2)]:
                                 i += 1
                                 hx = dicts10[str(stringKey2)]
@@ -383,7 +382,7 @@ def generateReport2():
                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
-                    report3.add_paragraph("\n") # Adds a line space
+                    #report3.add_paragraph("\n") # Adds a line space
                     #print(k)
                     #print(m)
                     #report3.add_paragraph(key, style='List Bullet')
@@ -417,6 +416,7 @@ def generateReport2():
     print("Report Generated")
     print("You can now open up your report")
     report3.save('report3.docx')
+    toggle_state() #This will enable the getDoc button
     return dicts2Copy
 
     """
@@ -521,6 +521,14 @@ def createExcel():
 
     wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
+
+def toggle_state(): # this will re-enable getDoc button
+    getDoc.config(state="normal")
+
+
+def toggle_state2(): # this will re-enable generate report button
+    genRep.config(state="normal")
+
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading
     report3 = Document()
@@ -581,12 +589,13 @@ if __name__ == '__main__':
     # Creates button 1
     Button(window, text="Choose Document ", command=generateReport).pack()
     # Creates button 2
-    Button(window, text="Generate Report ", command=generateReport2).pack()
+    genRep = Button(window, text="Generate Report ", state= DISABLED, command=generateReport2)
+    genRep.pack()
     # Creates button 3
-    getDoc = Button(window, text="Open Generated Report", command=getDocument)
+    getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
     getDoc.pack()
     # Creates Excel button button 4
-    button = Button(text="Create Excel Report", command=createExcel)
+    button = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
     button.pack()
     # Creates button 5
     button = Button(text="End Program", command=window.destroy)

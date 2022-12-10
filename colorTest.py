@@ -314,8 +314,8 @@ def generateReport2():
 
     orphanTagText = removechild(filtered_LCopy)
 
-    #print(dicts10)
-    #print(dicts2Copy)
+    print(dicts10)
+    print(dicts2Copy)
     while m < len(parents2Copy):
         #print(m)
         if fullText2Copy[k] not in filtered_LCopy:
@@ -340,7 +340,7 @@ def generateReport2():
                                 PTags.pop()
 
                                 for x in PTags:
-                                    #print(x)
+                                    print(x)
                                     report3.add_paragraph(x, style='List Bullet')
                                     keyCheck = (x.replace('[', ''))
                                     keyCheck2 = (keyCheck.replace(']', ''))
@@ -376,7 +376,6 @@ def generateReport2():
             del dicts2Copy[list(dicts2Copy.keys())[0]] # deletes the first item in dicts2Copy
 
     print("Report Generated")
-    print("You can now open up your report")
     report3.save('report3.docx')
     return dicts2Copy
 
@@ -399,6 +398,7 @@ def removeParent(text): #removes parent tags or child tags
         childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
         childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
     return childAfter
+
 
 
 def removeText(text6): #this should remove everything before the parent tag
@@ -427,9 +427,7 @@ def getDocument():
 
 # Creates an excel report
 def createExcel():
-    book_arr = xw.App().books
-    wb = book_arr.add()
-    #wb = xw.Book() # Creating an new excel file.
+    wb = xw.Book() # Creating an new excel file.
     # Select the first excel sheet, and rename it
     excelReport = wb.sheets["Sheet1"]
 
@@ -438,7 +436,7 @@ def createExcel():
     excelReport.range("B1").value = "Report"
     excelReport.range("B1").api.Font.Size = 18 # Change font size
     excelReport.range("B1").api.Font.ColorIndex = 2 # Change font color
-    excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
+    excelReport.range('A1:S1').color = (0,0,255) # Change cell background color
 
 
 
@@ -448,6 +446,13 @@ def createExcel():
 
     # Dictionary For child and parent tag
     df2 = pd.DataFrame(list(dicts10.items()))
+    #for tag in list:
+    #list.append(tag)
+    #excelReport.write_column('A1', list)
+
+    #df = pd.DataFrame(list)
+
+
 
     # For childTag -Text
     excelReport.range("A3").value = df
@@ -464,8 +469,10 @@ def createExcel():
     excelReport.range("C3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
 
+
     # For the childTag - parentTag
     excelReport.range("D3").value = df2
+
 
     # Adding parentTag header
     excelReport.range("F3").value = 'Parent Tag'
@@ -481,7 +488,8 @@ def createExcel():
 
     wb.sheets["Sheet1"].autofit()
 
-    wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
+
+    wb.save('report.xlsx') # Saving excel report
 
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading
@@ -535,7 +543,7 @@ if __name__ == '__main__':
     parents = [] #Will be used for future function
 
     global orphanTagText
-    orphanTagText = []  # Will be used to hold text of orphanChildTags
+    orphanTagText = [] # Will be used to hold text of orphanChildTags
 
 
     # Creates the gui
@@ -550,10 +558,10 @@ if __name__ == '__main__':
     getDoc = Button(window, text="Open Generated Report", command=getDocument)
     getDoc.pack()
     # Creates Excel button button 4
-    button = Button(text="Create Excel Report", command=createExcel)
+    button = Button(text="Create Excel Report",command=createExcel)
     button.pack()
     # Creates button 5
-    button = Button(text="End Program", command=window.destroy)
+    button = Button(text="End Program",command=window.destroy)
     button.pack()
 
 

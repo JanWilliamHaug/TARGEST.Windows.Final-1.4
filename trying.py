@@ -427,7 +427,8 @@ def getDocument():
 def createExcel():
     book_arr = xw.App().books
     wb = book_arr.add()
-    #wb = xw.Book() # Creating an new excel file.
+    # wb = xw.Book() # Creating an new excel file.
+    wb.save('report.xlsx')
     # Select the first excel sheet, and rename it
     excelReport = wb.sheets["Sheet1"]
 
@@ -476,9 +477,9 @@ def createExcel():
     excelReport.range("E3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('E3:E3').color = (255, 0, 0) # Change cell background color
 
-    wb.sheets["Sheet1"].autofit()
+    # wb.sheets["Sheet1"].autofit()
 
-    wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
+    #wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading
@@ -500,7 +501,7 @@ if __name__ == '__main__':
     global fullText2Copy
     fullText2Copy = []
 
-    global parents2 #list of parent tags or child tags
+    global parents2 # list of parent tags or child tags
     parents2 = []
 
     # creates a dict for parent and child tags
@@ -528,7 +529,7 @@ if __name__ == '__main__':
     child = [] # Used to Store child tags
     noChild = []  # Used to Store parentTags with no child
     withChild = [] # Used to Store parentTags with child tag
-    parents = [] #Will be used for future function
+    parents = [] # Will be used for future function
 
     global orphanTagText
     orphanTagText = []  # Will be used to hold text of orphanChildTags

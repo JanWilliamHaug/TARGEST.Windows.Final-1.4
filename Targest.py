@@ -8,7 +8,7 @@
 # 5. Then you can click on the "open generated report" button, which will automatically
 # open up your word document report created from your documents
 # 6. When you are done, click "End Program"
-
+from debug import debug
 
 import docx
 from docx import Document
@@ -35,6 +35,7 @@ import xlwings as xw
 import pandas as pd
 
 # reads the text in the document and use the getcoloredTXT function
+@debug
 def readtxt(filename, color: Tuple[int, int, int]):
     doc = docx.Document(filename)
     text10 = ""
@@ -71,6 +72,7 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
     return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
 
+@debug
 def getcoloredTxt(runs, color): # Will look for colored text
 
     coloredWords, word = [], ""
@@ -110,6 +112,7 @@ def getcoloredTxt(runs, color): # Will look for colored text
 #
 #     return filepath2, filtered_L
 
+@debug
 def generateReport(): #Will generate the report for tags
     global filepath
     global filepath2
@@ -297,6 +300,7 @@ def generateReport(): #Will generate the report for tags
     return filepath2, filtered_L
     return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
+@debug
 def generateReport2():
 
     # declaring counters
@@ -427,7 +431,7 @@ def generateReport2():
                 m += 1
     """
 
-
+@debug
 def removeParent(text): #removes parent tags or child tags
     childAfter = []
     for line in text:
@@ -436,22 +440,25 @@ def removeParent(text): #removes parent tags or child tags
         childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
     return childAfter
 
-
+@debug
 def removeText(text6): #this should remove everything before the parent tag
     childAfter = [s.split(None, 1)[0] for s in text6]
     return childAfter
 
+@debug
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     seperator = ']'
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
 
+@debug
 def removechild(text): #removes child, this one needs fixing
     mylst = []
     mylst = [s.split(None, 1)[1] for s in text]
     return mylst
 
 # This function will open up the report automatically
+@debug
 def getDocument():
     if platform.system() == 'Darwin':
         subprocess.check_call(['open', 'report3.docx'])
@@ -462,6 +469,7 @@ def getDocument():
         subprocess.call('xdg-open', report3)
 
 # Creates an excel report
+@debug
 def createExcel():
     book_arr = xw.App().books
     wb = book_arr.add()
@@ -518,11 +526,11 @@ def createExcel():
 
     wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
-
+@debug
 def toggle_state(): # this will re-enable getDoc button
     getDoc.config(state="normal")
 
-
+@debug
 def toggle_state2(): # this will re-enable generate report button
     genRep.config(state="normal")
 

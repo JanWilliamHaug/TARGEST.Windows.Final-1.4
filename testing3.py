@@ -371,8 +371,7 @@ class MyApp(QWidget):
         response = QFileDialog.getSaveFileName(parent=self,
                                                caption='Select a File',
                                                directory='report3.docx',
-                                               filter=fileFilter,
-                                               initialFilter='Word Document (*.docx)')
+                                               filter=fileFilter)
         print(response)
         return response[0]
 

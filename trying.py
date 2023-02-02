@@ -426,11 +426,11 @@ def getDocument():
 # Creates an excel report
 def createExcel():
     book_arr = xw.App().books
-    wb = book_arr.add()
-    # wb = xw.Book() # Creating an new excel file.
-    wb.save('report.xlsx')
+    ws = book_arr.add()
+    # ws = xw.Book() # Creating an new excel file.
+    ws.save('report.xlsx')
     # Select the first excel sheet, and rename it
-    excelReport = wb.sheets["Sheet1"]
+    excelReport = ws.sheets["Sheet1"]
 
     report = "report"
     #excelReport.name = report
@@ -477,9 +477,9 @@ def createExcel():
     excelReport.range("E3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('E3:E3').color = (255, 0, 0) # Change cell background color
 
-    # wb.sheets["Sheet1"].autofit()
+    # ws.sheets["Sheet1"].autofit()
 
-    #wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
+    #ws.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading

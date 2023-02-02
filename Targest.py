@@ -36,6 +36,7 @@ import subprocess
 import xlwings as xw
 import pandas as pd
 
+
 # Set up the logger
 logging.basicConfig(level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -431,6 +432,11 @@ def generateReport2():
         print("You can now open up your report")
         report3.save('report3.docx')
         toggle_state() #This will enable the getDoc button
+        msg3 = ("You can now open up your excel report as well\n")
+        T.insert(tk.END, msg3) #print in GUI
+        print("Excel Report Generated")
+        toggle_state3()
+
         return dicts2Copy
 
     except Exception as e:
@@ -485,20 +491,22 @@ def getDocument():
     else:
         subprocess.call('xdg-open', report3)
 
-# Creates an excel report
-@debug
-def createExcel():
-    book_arr = xw.App().books
-    wb = book_arr.add()
-    #wb = xw.Book() # Creating an new excel file.
-    # Select the first excel sheet, and rename it
-    excelReport = wb.sheets["Sheet1"]
 
-    report = "report"
+# Creates an excel report
+def createExcel():
+    # book_arr = xw.App().books.add()
+    # wb = book_arr.add()
+    # wb.title = "Report"
+
+    wb = xw.Book()
+    excelReport = wb.sheets[0]
+    excelReport.name = "Report"
+    # excelReport = wb.sheets.add("Report")
+
     #excelReport.name = report
     excelReport.range("B1").value = "Report"
-    excelReport.range("B1").api.Font.Size = 18 # Change font size
-    excelReport.range("B1").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range("B1").font.Size = 18 # Change font size
+    excelReport.range("B1").font.ColorIndex = 2 # Change font color
     excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
 
 
@@ -514,32 +522,35 @@ def createExcel():
 
     # Adding childTag header
     excelReport.range("B3").value = 'Child Tag'
-    excelReport.range("B3").api.Font.Size = 14 # Change font size
-    excelReport.range("B3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range("B3").font.Size = 14 # Change font size
+    excelReport.range("B3").font.ColorIndex = 2 # Change font color
     excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
 
     # Adding Text header
     excelReport.range("C3").value = 'Text'
-    excelReport.range("C3").api.Font.Size = 14 # Change font size
-    excelReport.range("C3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range("C3").font.Size = 14 # Change font size
+    excelReport.range("C3").font.ColorIndex = 2 # Change font color
     excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
 
     # For the childTag - parentTag
     excelReport.range("D3").value = df2
 
+    excelReport.range("E3").value = "Child Tag"
+    excelReport.range("E3").font.Size = 14
+    excelReport.range("E3").font.ColorIndex = 2
+    excelReport.range("E3:E3").color = (255, 0, 0)
     # Adding parentTag header
     excelReport.range("F3").value = 'Parent Tag'
-    excelReport.range("F3").api.Font.Size = 14 # Change font size
-    excelReport.range("F3").api.Font.ColorIndex = 2 # Change font color
+    excelReport.range("F3").font.Size = 14 # Change font size
+    excelReport.range("F3").font.ColorIndex = 2 # Change font color
     excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
 
-    # Adding childTag header
-    excelReport.range("E3").value = 'Child Tag'
-    excelReport.range("E3").api.Font.Size = 14 # Change font size
-    excelReport.range("E3").api.Font.ColorIndex = 2 # Change font color
-    excelReport.range('E3:E3').color = (255, 0, 0) # Change cell background color
 
-    wb.sheets["Sheet1"].autofit()
+    excelReport.autofit()
+
+
+    for key in dicts2:
+        wb.sheets[0].append([key, dicts2[key]])
 
     wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
@@ -550,6 +561,10 @@ def toggle_state(): # this will re-enable getDoc button
 @debug
 def toggle_state2(): # this will re-enable generate report button
     genRep.config(state="normal")
+
+@debug
+def toggle_state3(): # this will re-enable excel report button
+    getExcel.config(state="normal")
 
 if __name__ == '__main__':
     # pdb.set_trace()
@@ -621,8 +636,8 @@ if __name__ == '__main__':
     getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
     getDoc.pack()
     # Creates Excel button button 4
-    button = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
-    button.pack()
+    getExcel = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
+    getExcel.pack()
     # Creates button 5
     button = Button(text="End Program", command=window.destroy)
     button.pack()

@@ -34,6 +34,7 @@ import subprocess
 # This library is for opening excel document automatically
 import xlwings as xw
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 # Set up the logger for catching errors
@@ -560,6 +561,12 @@ def createExcel():
         excelReport.range("F3").font.ColorIndex = 2 # Change font color
         excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
 
+        # bar plot
+        plt.bar(df['Child Tag'].value_counts().index, df['Child Tag'].value_counts().values)
+        plt.xlabel('Child Tag')
+        plt.ylabel('Count')
+        plt.title('Child Tag Counts')
+        plt.show()
 
         excelReport.autofit()
 
@@ -647,7 +654,7 @@ if __name__ == '__main__':
 
 
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.3.x ')
+        window = Tk(className=' TARGEST v.1.4.x ')
         # set window size #
         window.geometry("380x360")
 

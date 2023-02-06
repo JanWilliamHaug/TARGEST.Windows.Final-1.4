@@ -8,10 +8,10 @@
 # 5. Then you can click on the "open generated report" button, which will automatically
 # open up your word document report created from your documents
 # 6. When you are done, click "End Program"
-from debug import debug
 
+# from debug import debug
 import logging
-import pdb
+# import pdb
 import docx
 from docx import Document
 from docx.shared import RGBColor
@@ -22,27 +22,28 @@ from tkinter import filedialog
 from typing import Tuple
 
 from tkinter import scrolledtext
-
 import re
-
 import copy
 import time
 
-#This libraries are for opening word document automatically
+# This libraries are for opening word document automatically
 import os
 import platform
 import subprocess
 
+# This library is for opening excel document automatically
 import xlwings as xw
 import pandas as pd
 
 
-# Set up the logger
+# Set up the logger for catching errors
 logging.basicConfig(level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+logger = logging.getLogger(__name__)
+
 # reads the text in the document and use the getcoloredTXT function
-@debug
+# # @debug
 def readtxt(filename, color: Tuple[int, int, int]):
     try:
         doc = docx.Document(filename)
@@ -82,47 +83,38 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
     except Exception as e:
     # Log an error message
-        logging.error('An error occurred:', e)
-@debug
-def getcoloredTxt(runs, color): # Will look for colored text
+        logging.error('readtxt(): ERROR', exc_info=True)
+
+# @debug
+def getcoloredTxt(runs, color): 
     coloredWords, word = [], ""
-    for run in runs:
-        if run.font.color.rgb == RGBColor(*color):
-            word += str(run.text) # Saves everything found
+    try:
+        for run in runs:
+            if run.font.color.rgb == RGBColor(*color):
+                word += str(run.text) # Saves everything found
 
-        elif word != "":  # This will find the parentTags
-            coloredWords.append(word)
-            parentTags.append(word)
-            parents.append(word)
-            word = ""
+            elif word != "":  # This will find the parentTags
+                coloredWords.append(word)
+                parentTags.append(word)
+                parents.append(word)
+                word = ""
 
-    if word != "":  # This will find the parentTags
-        coloredWords.append(word + "\n")
-        # word = removeAfter(word)
-        child.append(word)
-        withChild.append(word)
+        if word != "":  # This will find the parentTags
+            coloredWords.append(word + "\n")
+            # word = removeAfter(word)
+            child.append(word)
+            withChild.append(word)
 
-
+    except Exception as e:
+        logging.error('getColoredText(): ERROR', e)
+    else:
+        # Log a success message
+        logging.info('getColoredText(): PASS')
 
     return coloredWords # returns everything found
 
 
-# def openFile(): #This will let the user pick a document from their own directory
-#     global filepath
-#     global filepath2
-#     filepath = filedialog.askopenfilename(initialdir="/",
-#                                           title="",
-#                                           filetypes= (("word documents","*.docx"),
-#                                                       ("all files","*.*")))
-#     file = open(filepath,'r')
-#     # print(filepath)
-#     file.close()
-#     # Will store the filepath to the document as a string
-#     filepath2 = str(filepath)
-#
-#     return filepath2, filtered_L
-
-@debug
+# @debug
 def generateReport(): #Will generate the report for tags
     try:
         global filepath
@@ -236,37 +228,15 @@ def generateReport(): #Will generate the report for tags
         dicts.update(dicts)
 
         noParent = [s.replace(" ", "") for s in noParent]
-        #dicts3 = dict(zip(noParent, noParent2))
-
-
+        #dicts3 = dict(zip(noParent, noParent2)) # dictionary for parent tags without child tags
         orphanChild = [s.replace(" ", "") for s in orphanChild]
 
         dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
         orphanDicts.update(dicts9000)
         OrphanChild2.extend(orphanChild)
 
-
-        #for x in parents2: # creates dicttionary for child tags and text
-        #   text2 = removeParent(everything)  # child tag and text
-        #text8 = [s.replace(" ", "") for s in text2]
-        #  text3 = removechild(text2)  # only text list
-        # text4 = removeText(text2)  # child tags
-        ##text8 = [s.replace(" ", "") for s in text4]
-
-        #dicts12 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
-        #sorted(dicts3.keys())  # sorts the keys in the dictionary
-        #dicts3.update(dicts12)
-
-
-        #for x, y in dicts.items():
-        #row = table.add_row().cells  # Adding a row and then adding data in it.
-        #        row[0].text = x
-        #       row[1].text = y
-        # text1 = int(str(list(fullText)))
-        # print(everything)
         text2 = removeParent(everything) # child tag and text
         #text2 = removechild(everything)  # parent tags and text
-
         # print(text2)
         #text3 = removeParent(text2)  # only text list
         #text9 = ('"""' + str(text2) + '"""')  # child tag and text
@@ -313,8 +283,12 @@ def generateReport(): #Will generate the report for tags
     
     except Exception as e:
         # Log an error message
-        logging.error('An error occurred:', e)
-@debug
+        logging.error('generateReport(): ERROR', e)
+    else:
+        # Log a success message
+        logging.info('generateReport(): PASS')
+
+# @debug
 def generateReport2():
     try:
         # declaring counters
@@ -435,13 +409,17 @@ def generateReport2():
         msg3 = ("You can now open up your excel report as well\n")
         T.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
+        print("You can now open up your excel report as well")
         toggle_state3()
 
         return dicts2Copy
 
     except Exception as e:
         # Log an error message
-        logging.error('An error occurred:', e)
+        logging.error('generateReport2(): ERROR', e)
+    else:
+        # Log a success message
+        logging.info('generateReport2(): PASS')
 
     """
         elif not dicts2Copy: # this is for orphan tags
@@ -454,200 +432,252 @@ def generateReport2():
                 m += 1
     """
 
-@debug
+# @debug
 def removeParent(text): #removes parent tags or child tags
-    childAfter = []
-    for line in text:
-        childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
-        childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
-        childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
-    return childAfter
+    try:
+        childAfter = []
+        for line in text:
+            childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
+            childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
+            childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
+        return childAfter
 
-@debug
+    except Exception as e:
+        # Log an error message
+        logging.error('removeParent(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('removeParent(): PASS')
+
+# @debug
 def removeText(text6): #this should remove everything before the parent tag
-    childAfter = [s.split(None, 1)[0] for s in text6]
-    return childAfter
+    try:
+        childAfter = [s.split(None, 1)[0] for s in text6]
+        return childAfter
+    except Exception as e:
+        # Log an error message
+        logging.error('removeText(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('removeText(): PASS')
 
-@debug
+# @debug
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
-    seperator = ']'
-    childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
-    return childAfter
+    try:
+        seperator = ']'
+        childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
+        return childAfter
+    except Exception as e:
+        # Log an error message
+        logging.error('removeAfter(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('removeAfter(): PASS')
 
-@debug
+# @debug
 def removechild(text): #removes child, this one needs fixing
-    mylst = []
-    mylst = [s.split(None, 1)[1] for s in text]
-    return mylst
+    try:
+        mylst = []
+        mylst = [s.split(None, 1)[1] for s in text]
+        return mylst
+    except Exception as e:
+        # Log an error message
+        logging.error('removechild(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('removechild(): PASS')
 
 # This function will open up the report automatically
-@debug
+# @debug
 def getDocument():
-    if platform.system() == 'Darwin':
-        subprocess.check_call(['open', 'report3.docx'])
-    elif platform.system() == 'Windows':
-        os.startfile('report3.docx')
-    # os.startfile(report3) # try either one for windows if the first option gives error
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'report3.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('report3.docx')
+        # os.startfile(report3) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', report3)
+    except Exception as e:
+        # Log an error message
+        logging.error('getDocument(): ERROR', exc_info=True)
     else:
-        subprocess.call('xdg-open', report3)
+        # Log a success message
+        logging.info('getDocument(): PASS')
 
 
 # Creates an excel report
 def createExcel():
-    # book_arr = xw.App().books.add()
-    # wb = book_arr.add()
-    # wb.title = "Report"
+    try:
+        # book_arr = xw.App().books.add()
+        # wb = book_arr.add()
+        # wb.title = "Report"
+        
+        wb = xw.Book()
+        excelReport = wb.sheets[0]
+        excelReport.name = "Report"
+        # excelReport = wb.sheets.add("Report")
 
-    wb = xw.Book()
-    excelReport = wb.sheets[0]
-    excelReport.name = "Report"
-    # excelReport = wb.sheets.add("Report")
-
-    #excelReport.name = report
-    excelReport.range("B1").value = "Report"
-    excelReport.range("B1").font.Size = 18 # Change font size
-    excelReport.range("B1").font.ColorIndex = 2 # Change font color
-    excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
-
-
-    # creating a Dataframe object from a list
-    # of tuples of key, value pair
-    df = pd.DataFrame(list(dicts2Copy.items()))
-
-    # Dictionary For child and parent tag
-    df2 = pd.DataFrame(list(dicts10.items()))
-
-    # For childTag -Text
-    excelReport.range("A3").value = df
-
-    # Adding childTag header
-    excelReport.range("B3").value = 'Child Tag'
-    excelReport.range("B3").font.Size = 14 # Change font size
-    excelReport.range("B3").font.ColorIndex = 2 # Change font color
-    excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
-
-    # Adding Text header
-    excelReport.range("C3").value = 'Text'
-    excelReport.range("C3").font.Size = 14 # Change font size
-    excelReport.range("C3").font.ColorIndex = 2 # Change font color
-    excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
-
-    # For the childTag - parentTag
-    excelReport.range("D3").value = df2
-
-    excelReport.range("E3").value = "Child Tag"
-    excelReport.range("E3").font.Size = 14
-    excelReport.range("E3").font.ColorIndex = 2
-    excelReport.range("E3:E3").color = (255, 0, 0)
-    # Adding parentTag header
-    excelReport.range("F3").value = 'Parent Tag'
-    excelReport.range("F3").font.Size = 14 # Change font size
-    excelReport.range("F3").font.ColorIndex = 2 # Change font color
-    excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
+        #excelReport.name = report
+        excelReport.range("B1").value = "Report"
+        excelReport.range("B1").font.Size = 18 # Change font size
+        excelReport.range("B1").font.ColorIndex = 2 # Change font color
+        excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
 
 
-    excelReport.autofit()
+        # creating a Dataframe object from a list
+        # of tuples of key, value pair
+        df = pd.DataFrame(list(dicts2Copy.items()))
+
+        # Dictionary For child and parent tag
+        df2 = pd.DataFrame(list(dicts10.items()))
+
+        # For childTag -Text
+        excelReport.range("A3").value = df
+
+        # Adding childTag header
+        excelReport.range("B3").value = 'Child Tag'
+        excelReport.range("B3").font.Size = 14 # Change font size
+        excelReport.range("B3").font.ColorIndex = 2 # Change font color
+        excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
+
+        # Adding Text header
+        excelReport.range("C3").value = 'Text'
+        excelReport.range("C3").font.Size = 14 # Change font size
+        excelReport.range("C3").font.ColorIndex = 2 # Change font color
+        excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
+
+        # For the childTag - parentTag
+        excelReport.range("D3").value = df2
+
+        excelReport.range("E3").value = "Child Tag"
+        excelReport.range("E3").font.Size = 14
+        excelReport.range("E3").font.ColorIndex = 2
+        excelReport.range("E3:E3").color = (255, 0, 0)
+        # Adding parentTag header
+        excelReport.range("F3").value = 'Parent Tag'
+        excelReport.range("F3").font.Size = 14 # Change font size
+        excelReport.range("F3").font.ColorIndex = 2 # Change font color
+        excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
 
 
-    for key in dicts2:
-        wb.sheets[0].append([key, dicts2[key]])
+        excelReport.autofit()
 
-    wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
-@debug
+        for key in dicts2:
+            wb.sheets[0].append([key, dicts2[key]])
+
+        wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
+    except Exception as e:
+        # Log an error message
+        logging.error('createExcel(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('createExcel(): PASS')
+
+# @debug
 def toggle_state(): # this will re-enable getDoc button
     getDoc.config(state="normal")
 
-@debug
+# @debug
 def toggle_state2(): # this will re-enable generate report button
     genRep.config(state="normal")
 
-@debug
+# @debug
 def toggle_state3(): # this will re-enable excel report button
     getExcel.config(state="normal")
 
 if __name__ == '__main__':
-    # pdb.set_trace()
-    # Creates a word document, saves it as "report 3, and also adds a heading
-    report3 = Document()
-    report3.add_heading('Report', 0) #create word document
-    paragraph = report3.add_paragraph()
-    report3.save('report3.docx')
-    dicts2Copy = {} # This will hold the dicts2 content in all documents
+    logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    # logging.disable(logging.CRITICAL) # uncomment this to disable logging
+    try:
+        # pdb.set_trace()
+        # Creates a word document, saves it as "report 3, and also adds a heading
+        report3 = Document()
+        report3.add_heading('Report', 0) #create word document
+        paragraph = report3.add_paragraph()
+        report3.save('report3.docx')
+        dicts2Copy = {} # This will hold the dicts2 content in all documents
 
-    global parents2Copy # parents2 list copy
-    parents2Copy = []
+        global parents2Copy # parents2 list copy
+        parents2Copy = []
 
-    global filtered_L # Will store the ones without a child tag
-    filtered_L = []
+        global filtered_L # Will store the ones without a child tag
+        filtered_L = []
 
-    global filtered_LCopy
-    filtered_LCopy = []
+        global filtered_LCopy
+        filtered_LCopy = []
 
-    global fullText2Copy
-    fullText2Copy = []
+        global fullText2Copy
+        fullText2Copy = []
 
-    global parents2 #list of parent tags or child tags
-    parents2 = []
+        global parents2 #list of parent tags or child tags
+        parents2 = []
 
-    # creates a dict for parent and child tags
-    global dicts
-    dicts = {}
+        # creates a dict for parent and child tags
+        global dicts
+        dicts = {}
 
-    global OrphanChild2
-    OrphanChild2 = []
+        global OrphanChild2
+        OrphanChild2 = []
 
-    global dicts10
-    dicts10 = {}
-    global dicts3
-    dicts3 = {}  # will hold parentTag and text, Orphan tags
-    global dicts2
-    dicts2 = {}  # will hold parentTag and text
-    global orphanDicts
-    orphanDicts = {}  # orphan dictionary
+        global dicts10
+        dicts10 = {}
+        global dicts3
+        dicts3 = {}  # will hold parentTag and text, Orphan tags
+        global dicts2
+        dicts2 = {}  # will hold parentTag and text
+        global orphanDicts
+        orphanDicts = {}  # orphan dictionary
 
-    global parents9
-    parents9 = []
+        global parents9
+        parents9 = []
 
-    # declaring different lists that will be used to store, tags and sentences
-    parentTags = []
-    parent = []  # This will be used to store everything
-    child = [] # Used to Store child tags
-    noChild = []  # Used to Store parentTags with no child
-    withChild = [] # Used to Store parentTags with child tag
-    parents = [] #Will be used for future function
+        # declaring different lists that will be used to store, tags and sentences
+        parentTags = []
+        parent = []  # This will be used to store everything
+        child = [] # Used to Store child tags
+        noChild = []  # Used to Store parentTags with no child
+        withChild = [] # Used to Store parentTags with child tag
+        parents = [] #Will be used for future function
 
-    global orphanTagText
-    orphanTagText = []  # Will be used to hold text of orphanChildTags
+        global orphanTagText
+        orphanTagText = []  # Will be used to hold text of orphanChildTags
 
 
 
-    # Creates the gui
-    window = Tk(className=' TARGEST v.1.3.x ')
-    # set window size #
-    window.geometry("380x360")
+        # Creates the gui
+        window = Tk(className=' TARGEST v.1.3.x ')
+        # set window size #
+        window.geometry("380x360")
 
-    # Creates button 1
-    Button(window, text="Choose Document ", command=generateReport).pack()
-    # Creates button 2
-    genRep = Button(window, text="Generate Report ", state= DISABLED, command=generateReport2)
-    genRep.pack()
-    # Creates button 3
-    getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
-    getDoc.pack()
-    # Creates Excel button button 4
-    getExcel = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
-    getExcel.pack()
-    # Creates button 5
-    button = Button(text="End Program", command=window.destroy)
-    button.pack()
+        # Creates button 1
+        Button(window, text="Choose Document ", command=generateReport).pack()
+        # Creates button 2
+        genRep = Button(window, text="Generate Report ", state= DISABLED, command=generateReport2)
+        genRep.pack()
+        # Creates button 3
+        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
+        getDoc.pack()
+        # Creates Excel button button 4
+        getExcel = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
+        getExcel.pack()
+        # Creates button 5
+        button = Button(text="End Program", command=window.destroy)
+        button.pack()
 
-    # Create text widget and specify size.
-    T = Text(window, height = 13, width = 52)
-    T.pack()
+        # Create text widget and specify size.
+        T = Text(window, height = 13, width = 52)
+        T.pack()
 
-    msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')
-    T.insert(tk.END, msg3) #print in GUI
+        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')
+        T.insert(tk.END, msg3) #print in GUI
+    except Exception as e:
+        # Log an error message
+        logging.exception('main(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('main(): PASS')
 
-    window.mainloop()
+        window.mainloop()
 

@@ -35,6 +35,7 @@ import subprocess
 import xlwings as xw
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 # Set up the logger for catching errors
@@ -164,7 +165,7 @@ def generateReport(): #Will generate the report for tags
         table.style = 'Colorful List'
 
         # Now save the document to a location
-        report3.save('report3.docx')
+        report3.save('report.docx')
         e = 0
 
         child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
@@ -222,7 +223,7 @@ def generateReport(): #Will generate the report for tags
         child2.clear()
         parentTags.clear()
         child.clear()
-        report3.save('report3.docx') #Saves in document "report3"
+        report3.save('report.docx') #Saves in document "report3"
 
         global dicts11
         dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
@@ -398,7 +399,6 @@ def generateReport2():
                         #del dicts2Copy[list(dicts2Copy.keys())[0]] # deletes the first item in dicts2Copy
 
 
-
         msg1 = ("\nReport Generated\n")
         T.insert(tk.END, msg1) #print in GUI
         msg2 = ("You can now open up your report\n")
@@ -529,7 +529,6 @@ def createExcel():
         # creating a Dataframe object from a list
         # of tuples of key, value pair
         df = pd.DataFrame(list(dicts2Copy.items()))
-
         # Dictionary For child and parent tag
         df2 = pd.DataFrame(list(dicts10.items()))
 
@@ -560,7 +559,6 @@ def createExcel():
         excelReport.range("F3").font.Size = 14 # Change font size
         excelReport.range("F3").font.ColorIndex = 2 # Change font color
         excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
-
 
         excelReport.autofit()
 
@@ -650,7 +648,7 @@ if __name__ == '__main__':
         # Creates the gui
         window = Tk(className=' TARGEST v.1.4.x ')
         # set window size #
-        window.geometry("380x360")
+        window.geometry("500x500")
 
         # Creates button 1
         Button(window, text="Choose Document ", command=generateReport).pack()
@@ -668,7 +666,7 @@ if __name__ == '__main__':
         button.pack()
 
         # Create text widget and specify size.
-        T = Text(window, height = 13, width = 52)
+        T = Text(window, height = 25, width = 55)
         T.pack()
 
         msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')

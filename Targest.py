@@ -561,12 +561,6 @@ def createExcel():
         excelReport.range("F3").font.ColorIndex = 2 # Change font color
         excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
 
-        # bar plot
-        plt.bar(df['Child Tag'].value_counts().index, df['Child Tag'].value_counts().values)
-        plt.xlabel('Child Tag')
-        plt.ylabel('Count')
-        plt.title('Child Tag Counts')
-        plt.show()
 
         excelReport.autofit()
 

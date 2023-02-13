@@ -18,11 +18,9 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from typing import Tuple
-
 from tkinter import scrolledtext
 
 import re
-
 import copy
 import time
 
@@ -36,63 +34,66 @@ import pandas as pd
 
 # reads the text in the document and use the getcoloredTXT function
 def readtxt(filename, color: Tuple[int, int, int]):
-    doc = docx.Document(filename)
+    doc = docx.Document(filename) # Saves the document to varibale "doc"
     text10 = ""
-    fullText = []
+    fullText = [] # Stores front and back tags + text
     new = []
-    global everything
-    everything = []  # list of tags and text
+    global everything # declares it as global to use globally
+    everything = []  # Stores front and back tags + text
 
     for para in doc.paragraphs:
         # Getting the colored words from the doc
         if (getcoloredTxt(para.runs, color)):
             # Concatenating list of runs between the colored text to single a string
             sentence = "".join(r.text for r in para.runs)
-            fullText.append(sentence)
+            fullText.append(sentence) # Adds line of text into "fullText"
             #print(sentence) # Prints everything in the terminal
-            everything.append(sentence)
+            everything.append(sentence)# Adds line of text into "everything"
             text10 = sentence
-            parent.append("".join(r.text for r in para.runs))
+            parent.append("".join(r.text for r in para.runs)) 
+            #adds parent tag into "parent" list
 
     #print(fullText)
     global hasChild # Will store the ones with a child tag
     global fullText2 # will store everything found
-    global children
+    global children # will store just child tags
     # Finds the lines without a childTag
-    filtered_L = [value for value in fullText if "[" not in value]
-    filtered_L = [s.replace(": ", ":") for s in filtered_L]
+    filtered_L = [value for value in fullText if "[" not in value] 
+    # removes space
+    filtered_L = [s.replace(": ", ":") for s in filtered_L] 
     # Finds the lines with a childTag
-    filtered_LCopy.extend(filtered_L)
+    filtered_LCopy.extend(filtered_L) #adds filtered_L into a copy list
+    #Finds the one with a child
     hasChild = [value for value in fullText if "[" in value]
-    # will store everything found
+    # Will store everything found
     fullText2 = [value for value in fullText]
+    # Removes spaces "fulltext2" list
     fullText2 = [s.replace(": ", ":") for s in fullText2]
+    # Adds "fullText2" into a copy list
     fullText2Copy.extend(fullText2)
 
     return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
 
 def getcoloredTxt(runs, color): # Will look for colored text
 
-    coloredWords, word = [], ""
-    for run in runs:
+    coloredWords, word = [], "" #declares two lists
+    for run in runs: # Goes through paragraph and searches for colored word
         if run.font.color.rgb == RGBColor(*color):
             word += str(run.text) # Saves everything found
 
         elif word != "":  # This will find the parentTags
+            # Adds the parent tags into these lists
             coloredWords.append(word)
             parentTags.append(word)
             parents.append(word)
-            word = ""
+            word = "" 
 
-    if word != "":  # This will find the parentTags
-        coloredWords.append(word + "\n")
-        # word = removeAfter(word)
-        child.append(word)
-        withChild.append(word)
+    if word != "":  # This will find the childTags
+        coloredWords.append(word + "\n") # Adds the colored words into list 
+        child.append(word) # into list
+        withChild.append(word) # into list
 
-
-
-    return coloredWords # returns everything found
+    return coloredWords # return colored tags and text 
 
 
 # def openFile(): #This will let the user pick a document from their own directory
@@ -235,63 +236,37 @@ def generateReport(): #Will generate the report for tags
         report3.save('report3.docx') #Saves in document "report3"
 
         global dicts11
-        dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
-        dicts.update(dicts)
-
-        noParent = [s.replace(" ", "") for s in noParent]
-        #dicts3 = dict(zip(noParent, noParent2))
-
+        dicts11 = dict(zip(parents2, childCopy)) #creates a dictionary of parents
+        #with atleast a child
+        dicts.update(dicts) #this will update dicts, if anything has been updated
+        noParent = [s.replace(" ", "") for s in noParent] #This removes the empty spaces
+        #inside of list with orphanTags
 
         orphanChild = [s.replace(" ", "") for s in orphanChild]
-
         dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
         orphanDicts.update(dicts9000)
         OrphanChild2.extend(orphanChild)
 
-
-        #for x in parents2: # creates dicttionary for child tags and text
-        #   text2 = removeParent(everything)  # child tag and text
-        #text8 = [s.replace(" ", "") for s in text2]
-        #  text3 = removechild(text2)  # only text list
-        # text4 = removeText(text2)  # child tags
-        ##text8 = [s.replace(" ", "") for s in text4]
-
-        #dicts12 = dict(zip(parents2, text3))  # creates a dictionary with child tags and text
-        #sorted(dicts3.keys())  # sorts the keys in the dictionary
-        #dicts3.update(dicts12)
-
-
-        #for x, y in dicts.items():
-        #row = table.add_row().cells  # Adding a row and then adding data in it.
-        #        row[0].text = x
-        #       row[1].text = y
-        # text1 = int(str(list(fullText)))
-        # print(everything)
-        text2 = removeParent(everything) # child tag and text
-        #text2 = removechild(everything)  # parent tags and text
-
-        # print(text2)
-        #text3 = removeParent(text2)  # only text list
-        #text9 = ('"""' + str(text2) + '"""')  # child tag and text
-        text3 = removechild(text2)  # only text list
-        # print(text3)
+       # It removes the parent tag, and saves child tag and text.
+        text2 = removeParent(everything) 
+        #Removes the child tag, and only leave the text in the list
+        text3 = removechild(text2)  
+        #Removes the text and leave the child in the list
         text4 = removeText(text2) # child tags
-        # print(text4) #only parent tag list
-        #text7 = [s.replace(" ", "") for s in text3]
-        text8 = [s.replace(" ", "") for s in text4]
+       
+        text8 = [s.replace(" ", "") for s in text4] # Removes the empty space in "text4"
 
 
-        parents9000 = [x.strip(' ') for x in parents9000]
-        #dicts3 = dict(zip(parents2, childCopy))
-        dicts3 = dict(zip(parents2, parents9000))
-
-        dicts10.update(dicts3)
+        parents9000 = [x.strip(' ') for x in parents9000] # removes spaces in "parents9000"
+        dicts3 = dict(zip(parents2, parents9000)) # creates dictionary of the two lists
+        dicts10.update(dicts3) # adds dicts3 into dicts 10
         dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
-        dicts100 = copy.deepcopy(dicts2)
+        dicts100 = copy.deepcopy(dicts2) # dicts100 becomes a copy of list "dicts2"
         sorted(dicts2.keys()) # sorts the keys in the dictionary
-        dicts2Copy.update(dicts100)
-        #print(dicts2)
+        dicts2Copy.update(dicts100) # adds "dicts100" into "dicts2Copy"
 
+        # Print statements just for debugging purposes:
+        #print(dicts2)
         #row = table.add_row().cells  # Adding a row and then adding data in it.
         #row[0].text = ""
         #row[1].text = ""
@@ -310,10 +285,10 @@ def generateReport(): #Will generate the report for tags
         #print(dicts100)
 
         toggle_state2()  # This will enable the generate report button
-        toggle_state3()
+        toggle_state3() # This will enable the generate excel report button
 
     return filepath2, filtered_L
-    return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
+    #return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
 
 
 def generateReport2():
@@ -327,6 +302,7 @@ def generateReport2():
 
     orphanTagText = removechild(filtered_LCopy)
 
+    # Print statements just for debugging purposes:
     #dict(sorted(dicts2Copy.items(), key=lambda item: item[1])) # sorts by value/parentTag, not working at the moment
     #print(parents2Copy)
     #print(dicts10)
@@ -344,9 +320,6 @@ def generateReport2():
             z += 1
 
 
-
-
-
             for key, value in dicts2Copy.items():
                 report3.add_paragraph("\n")
                 m += 1
@@ -360,8 +333,6 @@ def generateReport2():
                     PTags = [s.strip() + ']' for s in PTags]
                     PTags.pop()
 
-
-
                     for x in PTags:
 
                         keyCheck = (x.replace('[', ''))
@@ -371,7 +342,6 @@ def generateReport2():
                         report3.add_paragraph(x) # display the parent tag, included brackets
 
                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
-
                             report3.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                         else:
@@ -381,7 +351,6 @@ def generateReport2():
                         #for dicts10[str(stringKey)] in dicts10:
                         #report3.add_paragraph(dicts10[str(stringKey)])
                         for b in PTags:
-
 
                             if b == dicts10[str(stringKey2)]:
                                 i += 1
@@ -417,7 +386,7 @@ def generateReport2():
                         report3.add_paragraph(orphanTagText[o])
                     o += 1
                     if i < len(parents2Copy):
-                        report3.add_paragraph(parents2Copy[i] + " is an orphan tagg")
+                        report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
                     #m += 1
 
                     i += 1
@@ -449,12 +418,15 @@ def generateReport2():
     """
 
 
-def removeParent(text): #removes parent tags or child tags
+def removeParent(text): #removes tag
     childAfter = []
     for line in text:
-        childAfter = [i.rsplit('[', 1)[0] for i in text] # removes parent tags
-        childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter]  # removes parent tags that are left
-        childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  # removes "pass", "fail", etc.
+        # removes parent tags
+        childAfter = [i.rsplit('[', 1)[0] for i in text] 
+         # removes parent tags that are left
+        childAfter = [re.sub("[\(\[].*?[\)\]]", "", e) for e in childAfter] 
+        # removes "pass", "fail", etc.
+        childAfter = [re.sub("[\{\[].*?[\)\}]", "", e) for e in childAfter]  
     return childAfter
 
 
@@ -467,7 +439,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
     return childAfter
 
-def removechild(text): #removes child, this one needs fixing
+def removechild(text): #removes child, this one needs fixing possibly
     mylst = []
     mylst = [s.split(None, 1)[1] for s in text]
     return mylst

@@ -292,7 +292,6 @@ def generateReport(): #Will generate the report for tags
 
 
 def generateReport2():
-
     # declaring counters
     m = 0
     k = 0
@@ -300,7 +299,8 @@ def generateReport2():
     o = 0
     z = 0
 
-    orphanTagText = removechild(filtered_LCopy)
+# Calls remove child function and stores the text into a list called "orphanTagText"
+    orphanTagText = removechild(filtered_LCopy) 
 
     # Print statements just for debugging purposes:
     #dict(sorted(dicts2Copy.items(), key=lambda item: item[1])) # sorts by value/parentTag, not working at the moment
@@ -313,56 +313,68 @@ def generateReport2():
     #print(orphanTagText)
     #print(dicts2Copy)
     #report3.add_paragraph("\n") # Adds a line space from the table
-    while m < len(dicts2Copy):
-        #print(m)
+
+    while m < len(dicts2Copy): # While counter m is less than the length of the dictionary
         #if fullText2Copy[k] not in filtered_LCopy:
         if z < len(dicts2Copy) and dicts2Copy:
             z += 1
 
+            for key, value in dicts2Copy.items(): # For all the keys and values in the dict
+                report3.add_paragraph("\n") # Adds a newline to the report
+                m += 1 #Increment counter
 
-            for key, value in dicts2Copy.items():
-                report3.add_paragraph("\n")
-                m += 1
+                # Checks if counter k is less than lenght of "fullText2Copy" 
+                # and not an orphan tag
                 if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
-                    #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
+                    
+                    ##for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
 
-                    stringKey = str(key)
-                    stringKey2 = (stringKey.replace(' ', ''))
-                    text = dicts10[str(stringKey2)]
+                    stringKey = str(key) # Converts the key to a string
+                    stringKey2 = (stringKey.replace(' ', '')) # removes spaces in the string
+                    # Variable "text" get the key at "stringKey2" in dictionary dicts10
+                    text = dicts10[str(stringKey2)] 
+                    # Splits the text at the seperator "]" and stores it in PTags
                     PTags = text.split(']')
+                    #The strip() method removes spaces, then adds "]" to all the elements
+                    #in PTags
                     PTags = [s.strip() + ']' for s in PTags]
+                    # pop() removes and element
                     PTags.pop()
 
-                    for x in PTags:
-
-                        keyCheck = (x.replace('[', ''))
-                        keyCheck2 = (keyCheck.replace(']', ''))
-                        keyCheck3 = (keyCheck2.replace(']', ''))
-                        keyCheck4 = (keyCheck3.replace(' ', ''))
+                    for x in PTags: # For all the elements in PTags
+                        keyCheck = (x.replace('[', '')) # removes "[" an store in keyCheck
+                        keyCheck2 = (keyCheck.replace(']', '')) # removes "]" 
+                        keyCheck3 = (keyCheck2.replace(']', '')) # removes "]" again if necessary
+                        keyCheck4 = (keyCheck3.replace(' ', '')) # removes spaces
                         report3.add_paragraph(x) # display the parent tag, included brackets
 
                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
-                            report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                            report3.add_paragraph(dicts2Copy[str(keyCheck4)]) # add to report
 
-                        else:
-                            report3.add_paragraph("Requirement text not found")
+                        else: # if text of parent tag is not found
+                            report3.add_paragraph("Requirement text not found") 
+
                         #print(dicts10[str(key)])
                         #report3.add_paragraph(dicts10[str(stringKey)])
                         #for dicts10[str(stringKey)] in dicts10:
                         #report3.add_paragraph(dicts10[str(stringKey)])
-                        for b in PTags:
 
-                            if b == dicts10[str(stringKey2)]:
-                                i += 1
-                                hx = dicts10[str(stringKey2)]
+                        for b in PTags: # Another for loop for PTags, this time for child tags and text
+
+                            if b == dicts10[str(stringKey2)]: # Checks if b is in "dicts10" also
+                                i += 1 # Increment counter
+                                hx = dicts10[str(stringKey2)] # Assign hx to key in "dicts10"
                                 keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
-                                #print(keys)
-                                k += 1
-                                for item in keys: #keys are child tags of hx/the parent tag
-
-                                    report3.add_paragraph(item, style='List Bullet')
+                                # print(keys)
+                                k += 1 # Increment counter
+                                # keys are child tags of hx/the parent tag
+                                for item in keys: # for all the child tags in "keys"
+                                    # Add child tag as a bullet point
+                                    report3.add_paragraph(item, style='List Bullet') 
+                                    # Add text of child tag
                                     para = report3.add_paragraph(dicts2Copy[str(item)])
-                                    para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                    # adds indentation of text
+                                    para.paragraph_format.left_indent = Inches(0.25) 
 
                     #report3.add_paragraph("\n") # Adds a line space
                     #print(k)
@@ -374,35 +386,37 @@ def generateReport2():
                     #stringKey2 = (stringKey.replace(' ', ''))
                 #if k < len(fullText2Copy):
                 #elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
+                # else if counter k is less than length of fullText2Copy and fullText2Copy[k] is an orphan tag
                 elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
-                    k += 1
-                    report3.add_paragraph("\n")
-                    if i < len(parents2Copy):
-                        report3.add_paragraph(parents2Copy[i])
-                        print(parents2Copy[i])
+                    k += 1 # increment counter k
+                    report3.add_paragraph("\n") # newLine to the report
+                    if i < len(parents2Copy): # Check if counter i is less than lenght of parents2Copy
+                        report3.add_paragraph(parents2Copy[i]) # Adds the childtag
+                        #print(parents2Copy[i])
                         #print(orphanTagText[o])
-                        print("nothing")
-                    if o < len(orphanTagText):
-                        report3.add_paragraph(orphanTagText[o])
-                    o += 1
-                    if i < len(parents2Copy):
-                        report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                        #print("nothing")
+                    if o < len(orphanTagText): # Check if counter os is less than list "orphanTagText"
+                        report3.add_paragraph(orphanTagText[o]) # Adds the text of orphan tag
+                    o += 1 # Increment counter o
+                    if i < len(parents2Copy): # Checks if counter is less than "parents2Copy"
+                        # Adds text to the report saying that this tag is an orphan tag
+                        report3.add_paragraph(parents2Copy[i] + " is an orphan tag") 
                     #m += 1
 
-                    i += 1
+                    i += 1 # Increment counter i
                     #del dicts2Copy[list(dicts2Copy.keys())[0]] # deletes the first item in dicts2Copy
 
 
 
-    msg1 = ("\nReport Generated\n")
-    T.insert(tk.END, msg1) #print in GUI
-    msg2 = ("You can now open up your report\n")
-    T.insert(tk.END, msg2) #print in GUI
-    print("Report Generated")
-    print("You can now open up your report")
-    report3.save('report3.docx')
+    msg1 = ("\nReport Generated\n") # Adds string message to msg1
+    T.insert(tk.END, msg1) # displays msg1 in GUI
+    msg2 = ("You can now open up your report\n") # Adds string message to msg2
+    T.insert(tk.END, msg2) # displays msg2 in GUI
+    #print("Report Generated")
+    #print("You can now open up your report")
+    report3.save('report3.docx') # Saves report as 'report3.docx'
     toggle_state() #This will enable the getDoc button
-    toggle_state3()
+    toggle_state3() #This will enable the excel report button
     return dicts2Copy
     
 
@@ -431,44 +445,46 @@ def removeParent(text): #removes tag
 
 
 def removeText(text6): #this should remove everything before the parent tag
-    childAfter = [s.split(None, 1)[0] for s in text6]
-    return childAfter
+    # Goes trough the list "text6" and removes all the text inside the list
+    childAfter = [s.split(None, 1)[0] for s in text6] 
+    return childAfter #Returns the list without the text except tag
 
-def removeAfter(childtags): #removes everything after the  tag, example "pass"
-    seperator = ']'
+def removeAfter(childtags): #removes everything after the  tag, example "pass", "fail"
+    seperator = ']' # use ] to look for what to remove
+    # Goes trough the list "childtags" and removes all stuff like "pass", "fail", etc.
     childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
-    return childAfter
+    return childAfter #Returns the list without "pass", "fail", etc.
 
-def removechild(text): #removes child, this one needs fixing possibly
-    mylst = []
+def removechild(text): # Supposed to remove childTag, this one needs fixing possibly
+    mylst = [] # list of paragraphs after removing tag
+    # Goes trough the list "text" and removes tag
     mylst = [s.split(None, 1)[1] for s in text]
-    return mylst
+    return mylst # Returns paragraph without tge tag
 
 # This function will open up the report automatically
+# Also checks if you are using a Windows PC, Macbook, etc.
 def getDocument():
     if platform.system() == 'Darwin':
         subprocess.check_call(['open', 'report3.docx'])
     elif platform.system() == 'Windows':
         os.startfile('report3.docx')
-    # os.startfile(report3) # try either one for windows if the first option gives error
+# os.startfile(report3) # try either one for windows if the first option gives error
     else:
         subprocess.call('xdg-open', report3)
 
-# Creates an excel report
+# Creates an excel report using xlwings and pandas functions
 def createExcel():
     book_arr = xw.App().books
     wb = book_arr.add()
     #wb = xw.Book() # Creating an new excel file.
     # Select the first excel sheet, and rename it
     excelReport = wb.sheets["Sheet1"]
-
-    report = "report"
+    #report = "report" 
     #excelReport.name = report
     excelReport.range("B1").value = "Report"
     excelReport.range("B1").api.Font.Size = 18 # Change font size
     excelReport.range("B1").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
-
 
     # creating a Dataframe object from a list
     # of tuples of key, value pair
@@ -477,84 +493,86 @@ def createExcel():
     # Dictionary For child and parent tag
     df2 = pd.DataFrame(list(dicts10.items()))
 
-    # For childTag -Text
+    # Inserts the datafram "df" that has the list "dicts2Copy", into the excel report
+    # ChildTag - Text
     excelReport.range("A3").value = df
 
-    # Adding childTag header
-    excelReport.range("B3").value = 'Child Tag'
+    # Adding childTag header and specifies the font size, color and background color
+    excelReport.range("B3").value = 'Child Tag' # This is the heading 'Child Tag'
     excelReport.range("B3").api.Font.Size = 14 # Change font size
     excelReport.range("B3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
 
-    # Adding Text header
-    excelReport.range("C3").value = 'Text'
+    # Adding Text header and specifies the font size, color and background color
+    excelReport.range("C3").value = 'Text' # Header
     excelReport.range("C3").api.Font.Size = 14 # Change font size
     excelReport.range("C3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
 
-    # For the childTag - parentTag
+    # Inserts the datafram "df" that has the list "dicts10", into the excel report
+    # childTag - parentTag
     excelReport.range("D3").value = df2
 
-    # Adding parentTag header
-    excelReport.range("F3").value = 'Parent Tag'
+    # Adding parentTag header and specifies the font size, color and background color
+    excelReport.range("F3").value = 'Parent Tag' # header
     excelReport.range("F3").api.Font.Size = 14 # Change font size
     excelReport.range("F3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
 
     # Adding childTag header
-    excelReport.range("E3").value = 'Child Tag'
+    excelReport.range("E3").value = 'Child Tag' # header
     excelReport.range("E3").api.Font.Size = 14 # Change font size
     excelReport.range("E3").api.Font.ColorIndex = 2 # Change font color
     excelReport.range('E3:E3').color = (255, 0, 0) # Change cell background color
 
-    wb.sheets["Sheet1"].autofit()
-
+    wb.sheets["Sheet1"].autofit() #  autofit the width of columns
     wb.save('report.xlsx') # Saving excel report as 'report.xlsx'
 
 
 def toggle_state(): # this will re-enable getDoc button
-    getDoc.config(state="normal")
+    getDoc.config(state="normal") # Change state to "normal"
 
 
 def toggle_state2(): # this will re-enable generate report button
-    genRep.config(state="normal")
+    genRep.config(state="normal") # Change state to "normal"
 
     
 def toggle_state3(): # this will re-enable excel report button
-    getExcel.config(state="normal")
+    getExcel.config(state="normal") # Change state to "normal"
+
 
 if __name__ == '__main__':
     # Creates a word document, saves it as "report 3, and also adds a heading
-    report3 = Document()
-    report3.add_heading('Report', 0) #create word document
-    paragraph = report3.add_paragraph()
-    report3.save('report3.docx')
-    dicts2Copy = {} # This will hold the dicts2 content in all documents
+    report3 = Document() # Create word document
+    report3.add_heading('Report', 0) # Add heading "report"
+    paragraph = report3.add_paragraph() # Paragraph
+    report3.save('report3.docx') # Saves the word report as "report3.docx"
+    dicts2Copy = {} # This will hold the dicts2 content from all the files provided
 
-    global parents2Copy # parents2 list copy
-    parents2Copy = []
+    global parents2Copy # copy of parents2 list 
+    parents2Copy = [] # List used as a copy 
 
     global filtered_L # Will store the ones without a child tag
-    filtered_L = []
+    filtered_L = [] # List to store the ones without a child tags
 
-    global filtered_LCopy
-    filtered_LCopy = []
+    global filtered_LCopy # copy of "filtered_L"
+    filtered_LCopy = [] # List stores a copy of "filtered_L"
 
-    global fullText2Copy
-    fullText2Copy = []
+    global fullText2Copy # copy of list: "fullText2Copy" 
+    fullText2Copy = [] # This list will hold a copy of the list "fullText2Copy" 
 
-    global parents2 #list of parent tags or child tags
-    parents2 = []
+    global parents2 #list of tags
+    parents2 = [] # stores tags in this list
 
-    # creates a dict for parent and child tags
+    # creates a dictionary for parent and child tags
     global dicts
-    dicts = {}
+    dicts = {} # This dictionary will hold parent tags and child tags from documents
 
     global OrphanChild2
-    OrphanChild2 = []
+    OrphanChild2 = [] # This list will hold orphan tags
 
-    global dicts10
-    dicts10 = {}
+    global dicts10 
+    dicts10 = {} # Dictionary holding parent tags and child tags
     global dicts3
     dicts3 = {}  # will hold parentTag and text, Orphan tags
     global dicts2
@@ -563,7 +581,7 @@ if __name__ == '__main__':
     orphanDicts = {}  # orphan dictionary
 
     global parents9
-    parents9 = []
+    parents9 = [] # List of parentTags
 
     # declaring different lists that will be used to store, tags and sentences
     parentTags = []
@@ -576,22 +594,21 @@ if __name__ == '__main__':
     global orphanTagText
     orphanTagText = []  # Will be used to hold text of orphanChildTags
 
-
-
     # Creates the gui
     window = Tk(className=' TARGEST v.1.4.x ')
     # set window size #
     window.geometry("380x360")
-
     # Creates button 1
     Button(window, text="Choose Document ", command=generateReport).pack()
-    # Creates button 2
-    genRep = Button(window, text="Generate Report ", state= DISABLED, command=generateReport2)
+    # Creates button 2, will be disables untill activate function is called
+    genRep = Button(window, text="Generate Report ", state= DISABLED,
+                     command=generateReport2)
     genRep.pack()
-    # Creates button 3
-    getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
+    # Creates button 3, will be disables untill activate function is called
+    getDoc = Button(window, text="Open Generated Report", state= DISABLED, 
+                    command=getDocument)
     getDoc.pack()
-    # Creates Excel button button 4
+    # Creates Excel button button 4, will be disables untill activate function is called
     getExcel = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
     getExcel.pack()
     # Creates button 5
@@ -602,8 +619,9 @@ if __name__ == '__main__':
     T = Text(window, height = 13, width = 52)
     T.pack()
 
+    # Message to user on the GUI
     msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')
     T.insert(tk.END, msg3) #print in GUI
 
-    window.mainloop()
+    window.mainloop() 
 

@@ -459,7 +459,7 @@ def removechild(text): # Supposed to remove childTag, this one needs fixing poss
     mylst = [] # list of paragraphs after removing tag
     # Goes trough the list "text" and removes tag
     mylst = [s.split(None, 1)[1] for s in text]
-    return mylst # Returns paragraph without tge tag
+    return mylst # Returns paragraphs without the tag
 
 # This function will open up the report automatically
 # Also checks if you are using a Windows PC, Macbook, etc.

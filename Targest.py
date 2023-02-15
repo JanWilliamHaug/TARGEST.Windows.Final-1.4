@@ -35,7 +35,6 @@ import subprocess
 import xlwings as xw
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 
 # Set up the logger for catching errors
@@ -121,6 +120,7 @@ def generateReport(): #Will generate the report for tags
     try:
         global filepath
         global filepath2
+        # create a similar method for opening a folder
         filepath = filedialog.askopenfilename(initialdir="/",
                                             title="",
                                             filetypes = (("word documents","*.docx"),
@@ -130,7 +130,6 @@ def generateReport(): #Will generate the report for tags
         file.close()
         # Will store the filepath to the document as a string
         filepath2 = str(filepath)
-
         # return filepath2, filtered_L
 
         fullText = readtxt(filename=filepath2,
@@ -206,16 +205,6 @@ def generateReport(): #Will generate the report for tags
                         parents9000.append(child2[0])
                         noParent.append(child2[0])
                         child2.remove(child2[0])  # Removed that tag from the list
-        """
-        while parentTags: # In case there are any more parent tags left in the list
-            row = table.add_row().cells # Adding a row and then adding data in it.
-            row[0].text = parentTags[0]
-            parentTags.remove(parentTags[0])
-        while child2: #This is for orphan tags, but not finished
-            row = table.add_row().cells # Adding a row and then adding data in it.
-            row[1].text = child2[0]
-            child2.remove(child2[0])
-        """
 
         parents9.extend(parents9000)
 
@@ -238,50 +227,25 @@ def generateReport(): #Will generate the report for tags
         OrphanChild2.extend(orphanChild)
 
         text2 = removeParent(everything) # child tag and text
-        #text2 = removechild(everything)  # parent tags and text
         # print(text2)
-        #text3 = removeParent(text2)  # only text list
-        #text9 = ('"""' + str(text2) + '"""')  # child tag and text
         text3 = removechild(text2)  # only text list
         # print(text3)
         text4 = removeText(text2) # child tags
         # print(text4) #only parent tag list
-        #text7 = [s.replace(" ", "") for s in text3]
         text8 = [s.replace(" ", "") for s in text4]
-
 
         parents9000 = [x.strip(' ') for x in parents9000]
         #dicts3 = dict(zip(parents2, childCopy))
         dicts3 = dict(zip(parents2, parents9000))
-
         dicts10.update(dicts3)
         dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
         dicts100 = copy.deepcopy(dicts2)
         sorted(dicts2.keys()) # sorts the keys in the dictionary
         dicts2Copy.update(dicts100)
-        #print(dicts2)
-
-        #row = table.add_row().cells  # Adding a row and then adding data in it.
-        #row[0].text = ""
-        #row[1].text = ""
-        #print(dicts)
-        #print(parents2)
-        #print(fullText2[1])
-        #print(filtered_L)
-        #print(parents2)
-        #print(dicts2)
-        #print(dicts10)
-        #print(dicts2Copy)
-        #print(filtered_LCopy)
-        #print(orphanDicts)
-        #print(parents2)
-        #print(text3)
-        #print(dicts100)
 
         toggle_state2() # This will enable the generate report button
-
         return filepath2, filtered_L
-        return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
+        # return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
     
     except Exception as e:
         # Log an error message
@@ -653,13 +617,13 @@ if __name__ == '__main__':
         # Creates button 1
         Button(window, text="Choose Document ", command=generateReport).pack()
         # Creates button 2
-        genRep = Button(window, text="Generate Report ", state= DISABLED, command=generateReport2)
+        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=generateReport2)
         genRep.pack()
         # Creates button 3
         getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
         getDoc.pack()
         # Creates Excel button button 4
-        getExcel = Button(text="Create Excel Report", state= DISABLED, command=createExcel)
+        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=createExcel)
         getExcel.pack()
         # Creates button 5
         button = Button(text="End Program", command=window.destroy)
@@ -669,7 +633,7 @@ if __name__ == '__main__':
         T = Text(window, height = 25, width = 55)
         T.pack()
 
-        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')
+        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Reports".  \n\n')
         T.insert(tk.END, msg3) #print in GUI
     except Exception as e:
         # Log an error message

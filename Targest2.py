@@ -115,7 +115,7 @@ def generateReport(): #Will generate the report for tags
     global filepath2
     filepath = filedialog.askopenfilename(initialdir="/",
                                           title="",
-                                          filetypes = (("all files","*.*"),("word documents","*.docx")
+                                          filetypes = (("all files","*.*"),("word documents","*.docx"), ("text file", "*.txt")
                                                        ))
     file = open(filepath,'r')
     #print(filepath)

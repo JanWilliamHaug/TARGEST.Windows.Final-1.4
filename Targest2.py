@@ -115,8 +115,7 @@ def generateReport(): #Will generate the report for tags
     global filepath2
     filepath = filedialog.askopenfilename(initialdir="/",
                                           title="",
-                                          filetypes = (("all files","*.*"),("word documents","*.docx"), ("text file", "*.txt")
-                                                       ))
+                                          filetypes = (("all files","*.*"),("word documents","*.docx"), ("text file", "*.txt")))
     file = open(filepath,'r')
     #print(filepath)
     file.close()
@@ -609,7 +608,8 @@ if __name__ == '__main__':
     # Creates the gui
     window = Tk(className=' TARGEST v.1.4.x ')
     # set window size #
-    window.geometry("380x360")
+    window.geometry("480x420")
+    window['background'] = '#afeae6'
 
     # Creates button 1
     Button(window, text="Choose Document ", command=generateReport).pack()
@@ -627,7 +627,7 @@ if __name__ == '__main__':
     button.pack()
 
     # Create text widget and specify size.
-    T = Text(window, height = 13, width = 52)
+    T = Text(window, height = 20, width = 52)
     T.pack()
 
     msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Report".  \n\n')

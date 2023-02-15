@@ -123,7 +123,7 @@ def generateReport(): #Will generate the report for tags
         # create a similar method for opening a folder
         filepath = filedialog.askopenfilename(initialdir="/",
                                             title="",
-                                            filetypes = (("word documents","*.docx"),
+                                            filetypes = (("word documents","*.docx"), ("text file", "*.txt"),
                                                         ("all files","*.*")))
         file = open(filepath,'r')
         #print(filepath)

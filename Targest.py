@@ -115,7 +115,6 @@ def getcoloredTxt(runs, color):
     return coloredWords # returns everything found
 
 
-# @debug
 def generateReport(): #Will generate the report for tags
     try:
         global filepath
@@ -130,123 +129,136 @@ def generateReport(): #Will generate the report for tags
         file.close()
         # Will store the filepath to the document as a string
         filepath2 = str(filepath)
-        # return filepath2, filtered_L
+        a = (filepath2)
+        with open(a) as file_in:
+            lines = []
+            for line in file_in:
+                lines.append(line)
+        for line2 in lines:
+            print(line2)
+            line3 = str(line2)
+            line4 = line3.replace('\\', '/')
+            line5 = line4.replace('"', '')
+            line6 = line5.replace("\n", "")
+            print(line6)
+            fullText = readtxt(filename=line6,
+                            color=(255, 0, 0))
+            print(line4)
 
-        fullText = readtxt(filename=filepath2,
-                        color=(255, 0, 0))
-        #filtered_L = readtxt(filename=filepath2, #For future use
-        #                   color=(255, 0, 0))
-        fullText10 = str(fullText)
-        s = ''.join(fullText10)
-        w = (s.replace (']', ']\n\n'))
-        paragraph = report3.add_paragraph()
-        filepath3 = str(filepath2.rsplit('/', 1)[-1]) # change filepath to something.docx
-        filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
-        print(filepath3 + " added to the report")
-        nameOfDoc = (filepath3 + " added to the report\n")
-        T.insert(tk.END, nameOfDoc) #print in GUI
-        runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
-        runner.bold = True  # makes the header bold
-        # w will be used in the future
-        w = (w.replace ('([', ''))
-        w = (w.replace (',', ''))
-        w = (w.replace ('' '', ''))
+            #filtered_L = readtxt(filename=filepath2, #For future use
+            #                   color=(255, 0, 0))
+            fullText10 = str(fullText)
+            s = ''.join(fullText10)
+            w = (s.replace (']', ']\n\n'))
+            paragraph = report3.add_paragraph()
+            filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
+            filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
+            print(filepath3 + " added to the report")
+            nameOfDoc = (filepath3 + " added to the report\n")
+            T.insert(tk.END, nameOfDoc) #print in GUI
+            runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            runner.bold = True  # makes the header bold
+            # w will be used in the future
+            w = (w.replace ('([', ''))
+            w = (w.replace (',', ''))
+            w = (w.replace ('' '', ''))
 
-        # creates a table
-        table = report3.add_table(rows=1, cols=2)
+            # creates a table
+            table = report3.add_table(rows=1, cols=2)
 
-        # Adds headers in the 1st row of the table
-        row = table.rows[0].cells
-        row[0].text = 'Front Tag'
-        row[1].text = 'Back Tag/tags'
+            # Adds headers in the 1st row of the table
+            row = table.rows[0].cells
+            row[0].text = 'Front Tag'
+            row[1].text = 'Back Tag/tags'
 
-        # Adding style to a table
-        table.style = 'Colorful List'
+            # Adding style to a table
+            table.style = 'Colorful List'
 
-        # Now save the document to a location
-        report3.save('report.docx')
-        e = 0
+            # Now save the document to a location
+            report3.save('report.docx')
+            e = 0
 
-        child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
-        # while loop until all the  parentTags has been added to the report
-
-
-        parents2 = copy.deepcopy(parentTags) # copy of parent tags list
-        parents2Copy.extend(parents2)
-        childCopy = copy.deepcopy(child2)
-        noParent = []
-        noParent2 = []
-        orphanChild = []
-        orphanChildParent = []
-        parents9000 = []
-
-        parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
-        while parentTags:
-            row = table.add_row().cells # Adding a row and then adding data in it.
-            row[0].text = parentTags[0] # Adds the parentTag to the table
-            noParent.append(parentTags[0])
+            child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
+            # while loop until all the  parentTags has been added to the report
 
 
-            if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-                if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
-                    orphanChild.append(parentTags[0])
-                    parentTags.remove(parentTags[0]) # Removes that tag after use
-                    noParent2.append(" ")
-                    parents9000.append(" ")
-                    orphanChildParent.append(" ")
-                    row[1].text = " " # No parent tag, so adds empty string to that cell
-                    e += 1
+            parents2 = copy.deepcopy(parentTags) # copy of parent tags list
+            parents2Copy.extend(parents2)
+            childCopy = copy.deepcopy(child2)
+            noParent = []
+            noParent2 = []
+            orphanChild = []
+            orphanChildParent = []
+            parents9000 = []
 
-                elif fullText2[e] not in filtered_LCopy:
-                    parentTags.remove(parentTags[0]) # Removes that tag after use
-                    if child2:
-                        row[1].text = child2[0] #Adds childTag to table
+            parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
+            while parentTags:
+                row = table.add_row().cells # Adding a row and then adding data in it.
+                row[0].text = parentTags[0] # Adds the parentTag to the table
+                noParent.append(parentTags[0])
+
+
+                if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
+                    if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
+                        orphanChild.append(parentTags[0])
+                        parentTags.remove(parentTags[0]) # Removes that tag after use
+                        noParent2.append(" ")
+                        parents9000.append(" ")
+                        orphanChildParent.append(" ")
+                        row[1].text = " " # No parent tag, so adds empty string to that cell
                         e += 1
-                        parents9000.append(child2[0])
-                        noParent.append(child2[0])
-                        child2.remove(child2[0])  # Removed that tag from the list
 
-        parents9.extend(parents9000)
+                    elif fullText2[e] not in filtered_LCopy:
+                        parentTags.remove(parentTags[0]) # Removes that tag after use
+                        if child2:
+                            row[1].text = child2[0] #Adds childTag to table
+                            e += 1
+                            parents9000.append(child2[0])
+                            noParent.append(child2[0])
+                            child2.remove(child2[0])  # Removed that tag from the list
 
-        # Make sure everything is cleared before the program gets the next document
-        child2.clear()
-        parentTags.clear()
-        child.clear()
-        report3.save('report.docx') #Saves in document "report3"
+            parents9.extend(parents9000)
 
-        global dicts11
-        dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
-        dicts.update(dicts)
+            # Make sure everything is cleared before the program gets the next document
+            child2.clear()
+            parentTags.clear()
+            child.clear()
+            report3.save('report.docx') #Saves in document "report3"
 
-        noParent = [s.replace(" ", "") for s in noParent]
-        #dicts3 = dict(zip(noParent, noParent2)) # dictionary for parent tags without child tags
-        orphanChild = [s.replace(" ", "") for s in orphanChild]
+            global dicts11
+            dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
+            dicts.update(dicts)
 
-        dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
-        orphanDicts.update(dicts9000)
-        OrphanChild2.extend(orphanChild)
+            noParent = [s.replace(" ", "") for s in noParent]
+            #dicts3 = dict(zip(noParent, noParent2)) # dictionary for parent tags without child tags
+            orphanChild = [s.replace(" ", "") for s in orphanChild]
 
-        text2 = removeParent(everything) # child tag and text
-        # print(text2)
-        text3 = removechild(text2)  # only text list
-        # print(text3)
-        text4 = removeText(text2) # child tags
-        # print(text4) #only parent tag list
-        text8 = [s.replace(" ", "") for s in text4]
+            dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
+            orphanDicts.update(dicts9000)
+            OrphanChild2.extend(orphanChild)
 
-        parents9000 = [x.strip(' ') for x in parents9000]
-        #dicts3 = dict(zip(parents2, childCopy))
-        dicts3 = dict(zip(parents2, parents9000))
-        dicts10.update(dicts3)
-        dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
-        dicts100 = copy.deepcopy(dicts2)
-        sorted(dicts2.keys()) # sorts the keys in the dictionary
-        dicts2Copy.update(dicts100)
+            text2 = removeParent(everything) # child tag and text
+            # print(text2)
+            text3 = removechild(text2)  # only text list
+            # print(text3)
+            text4 = removeText(text2) # child tags
+            # print(text4) #only parent tag list
+            text8 = [s.replace(" ", "") for s in text4]
 
-        toggle_state2() # This will enable the generate report button
+            parents9000 = [x.strip(' ') for x in parents9000]
+            #dicts3 = dict(zip(parents2, childCopy))
+            dicts3 = dict(zip(parents2, parents9000))
+            dicts10.update(dicts3)
+            dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
+            dicts100 = copy.deepcopy(dicts2)
+            sorted(dicts2.keys()) # sorts the keys in the dictionary
+            dicts2Copy.update(dicts100)
+
+            toggle_state2() # This will enable the generate report button
+            toggle_state3() 
         return filepath2, filtered_L
-        # return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
-    
+        return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
+        
     except Exception as e:
         # Log an error message
         logging.error('generateReport(): ERROR', e)
@@ -282,10 +294,6 @@ def generateReport2():
             if z < len(dicts2Copy) and dicts2Copy:
                 z += 1
 
-
-
-
-
                 for key, value in dicts2Copy.items():
                     report3.add_paragraph("\n")
                     m += 1
@@ -298,8 +306,6 @@ def generateReport2():
                         PTags = text.split(']')
                         PTags = [s.strip() + ']' for s in PTags]
                         PTags.pop()
-
-
 
                         for x in PTags:
 
@@ -376,7 +382,6 @@ def generateReport2():
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
         toggle_state3()
-
         return dicts2Copy
 
     except Exception as e:
@@ -610,9 +615,10 @@ if __name__ == '__main__':
 
 
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.4.x ')
+        window = Tk(className=' TARGEST v.1.5.x ')
         # set window size #
         window.geometry("500x500")
+        window['background'] = '#afeae6'
 
         # Creates button 1
         Button(window, text="Choose Document ", command=generateReport).pack()

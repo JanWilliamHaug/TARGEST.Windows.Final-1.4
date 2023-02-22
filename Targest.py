@@ -44,7 +44,7 @@ logging.basicConfig(level=logging.ERROR,
 logger = logging.getLogger(__name__)
 
 # reads the text in the document and use the getcoloredTXT function
-# # @debug
+# 
 def readtxt(filename, color: Tuple[int, int, int]):
     try:
         doc = docx.Document(filename)
@@ -86,7 +86,7 @@ def readtxt(filename, color: Tuple[int, int, int]):
     # Log an error message
         logging.error('readtxt(): ERROR', exc_info=True)
 
-# @debug
+
 def getcoloredTxt(runs, color): 
     coloredWords, word = [], ""
     try:
@@ -255,7 +255,6 @@ def generateReport(): #Will generate the report for tags
             dicts2Copy.update(dicts100)
 
             toggle_state2() # This will enable the generate report button
-            toggle_state3() 
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
@@ -266,7 +265,7 @@ def generateReport(): #Will generate the report for tags
         # Log a success message
         logging.info('generateReport(): PASS')
 
-# @debug
+
 def generateReport2():
     try:
         # declaring counters
@@ -402,7 +401,7 @@ def generateReport2():
                 m += 1
     """
 
-# @debug
+
 def removeParent(text): #removes parent tags or child tags
     try:
         childAfter = []
@@ -419,7 +418,7 @@ def removeParent(text): #removes parent tags or child tags
         # Log a success message
         logging.info('removeParent(): PASS')
 
-# @debug
+
 def removeText(text6): #this should remove everything before the parent tag
     try:
         childAfter = [s.split(None, 1)[0] for s in text6]
@@ -431,7 +430,7 @@ def removeText(text6): #this should remove everything before the parent tag
         # Log a success message
         logging.info('removeText(): PASS')
 
-# @debug
+
 def removeAfter(childtags): #removes everything after the  tag, example "pass"
     try:
         seperator = ']'
@@ -444,7 +443,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
         # Log a success message
         logging.info('removeAfter(): PASS')
 
-# @debug
+
 def removechild(text): #removes child, this one needs fixing
     try:
         mylst = []
@@ -458,7 +457,6 @@ def removechild(text): #removes child, this one needs fixing
         logging.info('removechild(): PASS')
 
 # This function will open up the report automatically
-# @debug
 def getDocument():
     try:
         if platform.system() == 'Darwin':
@@ -543,15 +541,15 @@ def createExcel():
         # Log a success message
         logging.info('createExcel(): PASS')
 
-# @debug
+
 def toggle_state(): # this will re-enable getDoc button
     getDoc.config(state="normal")
 
-# @debug
+
 def toggle_state2(): # this will re-enable generate report button
     genRep.config(state="normal")
 
-# @debug
+
 def toggle_state3(): # this will re-enable excel report button
     getExcel.config(state="normal")
 

@@ -151,6 +151,7 @@ def generateReport(): #Will generate the report for tags
             s = ''.join(fullText10)
             w = (s.replace (']', ']\n\n'))
             paragraph = report3.add_paragraph()
+            paragraph2 = orphanReport.add_paragraph()
             filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
             filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
             print(filepath3 + " added to the report")
@@ -165,6 +166,7 @@ def generateReport(): #Will generate the report for tags
 
             # creates a table
             table = report3.add_table(rows=1, cols=2)
+            table2 = orphanReport.add_table(rows=1, cols=2)
 
             # Adds headers in the 1st row of the table
             row = table.rows[0].cells
@@ -176,6 +178,7 @@ def generateReport(): #Will generate the report for tags
 
             # Now save the document to a location
             report3.save('report.docx')
+            orphanReport.save('orphanReport.docx')
             e = 0
 
             child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
@@ -224,6 +227,7 @@ def generateReport(): #Will generate the report for tags
             parentTags.clear()
             child.clear()
             report3.save('report.docx') #Saves in document "report3"
+            orphanReport.save('orphanReport.docx') #Saves in document "orphanReport"
 
             global dicts11
             dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
@@ -254,7 +258,7 @@ def generateReport(): #Will generate the report for tags
             sorted(dicts2.keys()) # sorts the keys in the dictionary
             dicts2Copy.update(dicts100)
 
-            #toggle_state2() # This will enable the generate report button
+            toggle_state2() # This will enable the generate report button
             toggle_state5() # This will enable the generate orphan report button
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
@@ -383,6 +387,7 @@ def generateReport2():
         print("You can now open up your excel report as well")
         toggle_state3()
         toggle_state4()
+       # toggle_state5()
         return dicts2Copy
 
     except Exception as e:
@@ -420,7 +425,7 @@ def orphanReport():
                 z += 1
 
                 for key, value in dicts2Copy.items():
-                    report3.add_paragraph("\n")
+                    orphanReport.add_paragraph("\n")
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
@@ -438,14 +443,14 @@ def orphanReport():
                             keyCheck2 = (keyCheck.replace(']', ''))
                             keyCheck3 = (keyCheck2.replace(']', ''))
                             keyCheck4 = (keyCheck3.replace(' ', ''))
-                            report3.add_paragraph(x) # display the parent tag, included brackets
+                            orphanReport.add_paragraph(x) # display the parent tag, included brackets
 
                             if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
 
-                                report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                             else:
-                                report3.add_paragraph("Requirement text not found")
+                                orphanReport.add_paragraph("Requirement text not found")
                             for b in PTags:
 
 
@@ -457,23 +462,23 @@ def orphanReport():
                                     k += 1
                                     for item in keys: #keys are child tags of hx/the parent tag
 
-                                        report3.add_paragraph(item, style='List Bullet')
-                                        para = report3.add_paragraph(dicts2Copy[str(item)])
+                                        orphanReport.add_paragraph(item, style='List Bullet')
+                                        para = orphanReport.add_paragraph(dicts2Copy[str(item)])
                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
                     elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                         k += 1
-                        report3.add_paragraph("\n")
+                        orphanReport.add_paragraph("\n")
                         if i < len(parents2Copy):
-                            report3.add_paragraph(parents2Copy[i])
+                            orphanReport.add_paragraph(parents2Copy[i])
                             print(parents2Copy[i])
                             #print(orphanTagText[o])
                             print("nothing")
                         if o < len(orphanTagText):
-                            report3.add_paragraph(orphanTagText[o])
+                            orphanReport.add_paragraph(orphanTagText[o])
                         o += 1
                         if i < len(parents2Copy):
-                            report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
         msg1 = ("\nReport Generated\n")
@@ -482,7 +487,7 @@ def orphanReport():
         T.insert(tk.END, msg2) #print in GUI
         print("Report Generated")
         print("You can now open up your report")
-        report3.save('orphanReport.docx')
+        orphanReport.save('orphanReport.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
         T.insert(tk.END, msg3) #print in GUI
@@ -578,7 +583,7 @@ def getOrphanDocument():
             subprocess.check_call(['open', 'orphanReport.docx'])
         elif platform.system() == 'Windows':
             os.startfile('orphanReport.docx')
-        # os.startfile(report3) # try either one for windows if the first option gives error
+        # os.startfile(orphanReport) # try either one for windows if the first option gives error
         else:
             subprocess.call('xdg-open', orphanReport)
     except Exception as e:
@@ -686,7 +691,7 @@ if __name__ == '__main__':
 
         orphanReport = Document()
         orphanReport.add_heading('Orphan Report', 0)
-        paragraph = orphanReport.add_paragraph()
+        paragraph2 = orphanReport.add_paragraph()
         orphanReport.save('orphanReport.docx')
 
         dicts2Copy = {} # This will hold the dicts2 content in all documents
@@ -762,7 +767,7 @@ if __name__ == '__main__':
         button = Button(text="End Program", command=window.destroy)
         button.pack()
         # Creates button 7
-        getOrphanDoc = Button(text="Open Orphan Tags Excel Report", state= DISABLED, command=getOrphanDocument)
+        getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=getOrphanDocument)
         getOrphanDoc.pack()
 
         # Create text widget and specify size.

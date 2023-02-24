@@ -222,7 +222,7 @@ def generateReport(): #Will generate the report for tags
             s = ''.join(fullText10)
             w = (s.replace (']', ']\n\n'))
             paragraph = report3.add_paragraph()
-            paragraph2 = orphanReport.add_paragraph()
+            #paragraph2 = orphanReport.add_paragraph()
             filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
             filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
             print(filepath3 + " added to the report")
@@ -577,6 +577,8 @@ def orphanGenReport():
         print("You can now open up your excel report as well")
         toggle_state3()
         toggle_state4()
+        msgOrphan = ("Orphan report created\n")
+        Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
         return dicts2Copy
 
     except Exception as e:
@@ -760,3 +762,4 @@ def toggle_state4(): # this will re-enable word report button for orphan tags
 
 def toggle_state5(): # this will re-enable excel report button for orphan tags
     Gui.getOrphan.config(state="normal")
+

@@ -57,14 +57,15 @@ def GUI1():
         getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanReport, width = 26)
         getOrphan.pack()
         # Creates button 6
-        global button
-        button = Button(text="End Program", command=window.destroy, width = 26)
-        button.pack()
-        # Creates button 7
         global getOrphanDoc
         getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
-
+      
+        # Creates button 7
+        global button
+        button = Button(text="End Program", command=window.destroy, width = 26)
+        button.pack()
+       
         # Create text widget and specify size.
         global Txt
         Txt = Text(window, height = 25, width = 55)

@@ -43,6 +43,134 @@ logging.basicConfig(level=logging.ERROR,
 
 logger = logging.getLogger(__name__)
 
+global report3
+report3 = Document()
+report3.add_heading('Report', 0) #create word document
+global paragraph 
+paragraph = report3.add_paragraph()
+report3.save('report3.docx')
+
+global orphanReport
+orphanReport = Document()
+orphanReport.add_heading('Orphan Report', 0)
+global paragraph2
+paragraph2 = orphanReport.add_paragraph()
+orphanReport.save('orphanReport.docx')
+
+global dicts2Copy # This will hold the dicts2 content in all documents
+dicts2Copy = {}
+
+global parents2Copy # parents2 list copy
+parents2Copy = []
+
+global filtered_L # Will store the ones without a child tag
+filtered_L = []
+
+global filtered_LCopy
+filtered_LCopy = []
+
+global fullText2Copy
+fullText2Copy = []
+
+global parents2 #list of parent tags or child tags
+parents2 = []
+
+# creates a dict for parent and child tags
+global dicts
+dicts = {}
+
+global OrphanChild2
+OrphanChild2 = []
+
+global dicts10
+dicts10 = {}
+global dicts3
+dicts3 = {}  # will hold parentTag and text, Orphan tags
+global dicts2
+dicts2 = {}  # will hold parentTag and text
+global orphanDicts
+orphanDicts = {}  # orphan dictionary
+
+global parents9
+parents9 = []
+
+# declaring different lists that will be used to store, tags and sentences
+global parentTags
+parentTags = []
+global parent  # This will be used to store everything
+parent = []
+global child # Used to Store child tags
+child = [] 
+global noChild # Used to Store parentTags with no child
+noChild = []  
+global withChild # Used to Store parentTags with child tag
+withChild = [] 
+global parents # Will be used for future function
+parents = [] 
+
+global orphanTagText
+orphanTagText = []  # Will be used to hold text of orphanChildTags
+
+
+def GUI1():
+    try:
+        # pdb.set_trace()
+        # Creates a word document, saves it as "report 3, and also adds a heading
+        
+        # Creates the gui
+        window = Tk(className=' TARGEST v.1.5.x ')
+        # set window size #
+        window.geometry("500x500")
+        window['background'] = '#afeae6'
+
+        # Creates button 1
+        Button(window, text="Choose Document ", command=generateReport).pack()
+        # Creates button 2
+        global genRep
+        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=generateReport2)
+        genRep.pack()
+        # Creates button 3
+        global getDoc
+        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
+        getDoc.pack()
+        # Creates Excel button button 4
+        global getExcel
+        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=createExcel)
+        getExcel.pack()
+        # Creates button 5
+        global getOrphan
+        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=orphanReport)
+        getOrphan.pack()
+        # Creates button 6
+        global button
+        button = Button(text="End Program", command=window.destroy)
+        button.pack()
+        # Creates button 7
+        global getOrphanDoc
+        getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=getOrphanDocument)
+        getOrphanDoc.pack()
+
+        # Create text widget and specify size.
+        global Txt
+        Txt = Text(window, height = 25, width = 55)
+        Txt.pack()
+
+        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Reports".  \n\n')
+        Txt.insert(tk.END, msg3) #print in GUI
+        
+    except Exception as e:
+        # Log an error message
+        logging.exception('main(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('main(): PASS')
+
+        window.mainloop()
+   
+
+
+
+
 # reads the text in the document and use the getcoloredTXT function
 # 
 def readtxt(filename, color: Tuple[int, int, int]):
@@ -151,14 +279,16 @@ def generateReport(): #Will generate the report for tags
             s = ''.join(fullText10)
             w = (s.replace (']', ']\n\n'))
             paragraph = report3.add_paragraph()
-            paragraph2 = orphanReport.add_paragraph()
+            #paragraph2 = orphanReport.add_paragraph()
             filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
             filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
             print(filepath3 + " added to the report")
             nameOfDoc = (filepath3 + " added to the report\n")
-            T.insert(tk.END, nameOfDoc) #print in GUI
+            #GUI1.Txt.insert(tk.END, nameOfDoc) #print in GUI (m = main.py)
             runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            runner2 = paragraph2.add_run("\n" + "Document Name: " + filepath3 + "\n")
             runner.bold = True  # makes the header bold
+            runner2.bold = True  # makes the header bold
             # w will be used in the future
             w = (w.replace ('([', ''))
             w = (w.replace (',', ''))
@@ -166,7 +296,7 @@ def generateReport(): #Will generate the report for tags
 
             # creates a table
             table = report3.add_table(rows=1, cols=2)
-            table2 = orphanReport.add_table(rows=1, cols=2)
+            #table2 = orphanReport.add_table(rows=1, cols=2)
 
             # Adds headers in the 1st row of the table
             row = table.rows[0].cells
@@ -178,7 +308,7 @@ def generateReport(): #Will generate the report for tags
 
             # Now save the document to a location
             report3.save('report.docx')
-            orphanReport.save('orphanReport.docx')
+            #orphanReport.save('orphanReport.docx')
             e = 0
 
             child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
@@ -322,9 +452,11 @@ def generateReport2():
                             if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
 
                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                             else:
                                 report3.add_paragraph("Requirement text not found")
+                                #orphanReport.add_paragraph("Requirement text not found")
                             #print(dicts10[str(key)])
                             #report3.add_paragraph(dicts10[str(stringKey)])
                             #for dicts10[str(stringKey)] in dicts10:
@@ -374,15 +506,15 @@ def generateReport2():
 
 
         msg1 = ("\nReport Generated\n")
-        T.insert(tk.END, msg1) #print in GUI
+        Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("You can now open up your report\n")
-        T.insert(tk.END, msg2) #print in GUI
+        Txt.insert(tk.END, msg2) #print in GUI
         print("Report Generated")
         print("You can now open up your report")
         report3.save('report3.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
-        T.insert(tk.END, msg3) #print in GUI
+        Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
         toggle_state3()
@@ -408,7 +540,7 @@ def generateReport2():
                 m += 1
     """
 
-def orphanReport():
+""" def orphanReport():
     try:
         # declaring counters
         m = 0
@@ -482,15 +614,15 @@ def orphanReport():
                         i += 1
 
         msg1 = ("\nReport Generated\n")
-        T.insert(tk.END, msg1) #print in GUI
+        m.Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("You can now open up your report\n")
-        T.insert(tk.END, msg2) #print in GUI
+        m.Txt.insert(tk.END, msg2) #print in GUI
         print("Report Generated")
         print("You can now open up your report")
         orphanReport.save('orphanReport.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
-        T.insert(tk.END, msg3) #print in GUI
+        m.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
         toggle_state3()
@@ -504,7 +636,7 @@ def orphanReport():
         # Log a success message
         logging.info('orphanReport(): PASS')
 
-
+ """
 
 def removeParent(text): #removes parent tags or child tags
     try:
@@ -661,13 +793,14 @@ def createExcel():
         logging.info('createExcel(): PASS')
 
 
+
+
+
 def toggle_state(): # this will re-enable getDoc button
     getDoc.config(state="normal")
 
-
 def toggle_state2(): # this will re-enable generate report button
     genRep.config(state="normal")
-
 
 def toggle_state3(): # this will re-enable excel report button
     getExcel.config(state="normal")
@@ -678,109 +811,3 @@ def toggle_state4(): # this will re-enable word report button for orphan tags
 def toggle_state5(): # this will re-enable excel report button for orphan tags
     getOrphan.config(state="normal")
 
-if __name__ == '__main__':
-    logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    # logging.disable(logging.CRITICAL) # uncomment this to disable logging
-    try:
-        # pdb.set_trace()
-        # Creates a word document, saves it as "report 3, and also adds a heading
-        report3 = Document()
-        report3.add_heading('Report', 0) #create word document
-        paragraph = report3.add_paragraph()
-        report3.save('report3.docx')
-
-        orphanReport = Document()
-        orphanReport.add_heading('Orphan Report', 0)
-        paragraph2 = orphanReport.add_paragraph()
-        orphanReport.save('orphanReport.docx')
-
-        dicts2Copy = {} # This will hold the dicts2 content in all documents
-
-        global parents2Copy # parents2 list copy
-        parents2Copy = []
-
-        global filtered_L # Will store the ones without a child tag
-        filtered_L = []
-
-        global filtered_LCopy
-        filtered_LCopy = []
-
-        global fullText2Copy
-        fullText2Copy = []
-
-        global parents2 #list of parent tags or child tags
-        parents2 = []
-
-        # creates a dict for parent and child tags
-        global dicts
-        dicts = {}
-
-        global OrphanChild2
-        OrphanChild2 = []
-
-        global dicts10
-        dicts10 = {}
-        global dicts3
-        dicts3 = {}  # will hold parentTag and text, Orphan tags
-        global dicts2
-        dicts2 = {}  # will hold parentTag and text
-        global orphanDicts
-        orphanDicts = {}  # orphan dictionary
-
-        global parents9
-        parents9 = []
-
-        # declaring different lists that will be used to store, tags and sentences
-        parentTags = []
-        parent = []  # This will be used to store everything
-        child = [] # Used to Store child tags
-        noChild = []  # Used to Store parentTags with no child
-        withChild = [] # Used to Store parentTags with child tag
-        parents = [] #Will be used for future function
-
-        global orphanTagText
-        orphanTagText = []  # Will be used to hold text of orphanChildTags
-
-
-
-        # Creates the gui
-        window = Tk(className=' TARGEST v.1.5.x ')
-        # set window size #
-        window.geometry("500x500")
-        window['background'] = '#afeae6'
-
-        # Creates button 1
-        Button(window, text="Choose Document ", command=generateReport).pack()
-        # Creates button 2
-        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=generateReport2)
-        genRep.pack()
-        # Creates button 3
-        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
-        getDoc.pack()
-        # Creates Excel button button 4
-        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=createExcel)
-        getExcel.pack()
-        # Creates button 5
-        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=orphanReport)
-        getOrphan.pack()
-        # Creates button 6
-        button = Button(text="End Program", command=window.destroy)
-        button.pack()
-        # Creates button 7
-        getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=getOrphanDocument)
-        getOrphanDoc.pack()
-
-        # Create text widget and specify size.
-        T = Text(window, height = 25, width = 55)
-        T.pack()
-
-        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Reports".  \n\n')
-        T.insert(tk.END, msg3) #print in GUI
-    except Exception as e:
-        # Log an error message
-        logging.exception('main(): ERROR', exc_info=True)
-    else:
-        # Log a success message
-        logging.info('main(): PASS')
-
-        window.mainloop()

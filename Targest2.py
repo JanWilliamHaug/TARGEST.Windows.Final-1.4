@@ -560,7 +560,7 @@ def orphanGenReport():
                         o += 1
                         if i < len(parents2Copy):
                             print("nothing")
-                            #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
         msg1 = ("\nReport Generated\n")

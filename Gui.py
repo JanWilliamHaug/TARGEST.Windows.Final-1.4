@@ -39,30 +39,30 @@ def GUI1():
         window['background'] = '#afeae6'
 
         # Creates button 1
-        Button(window, text="Choose Document ", command=Targest2.generateReport).pack()
+        Button(window, text="Choose Document ", command=Targest2.generateReport, width = 26).pack()
         # Creates button 2
         global genRep
-        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2)
+        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2, width = 26)
         genRep.pack()
         # Creates button 3
         global getDoc
-        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument)
+        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument, width = 26)
         getDoc.pack()
         # Creates Excel button button 4
         global getExcel
-        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel)
+        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel, width = 26)
         getExcel.pack()
         # Creates button 5
         global getOrphan
-        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanReport)
+        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanReport, width = 26)
         getOrphan.pack()
         # Creates button 6
         global button
-        button = Button(text="End Program", command=window.destroy)
+        button = Button(text="End Program", command=window.destroy, width = 26)
         button.pack()
         # Creates button 7
         global getOrphanDoc
-        getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument)
+        getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
 
         # Create text widget and specify size.

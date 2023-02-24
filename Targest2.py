@@ -45,6 +45,14 @@ logging.basicConfig(level=logging.ERROR,
 
 logger = logging.getLogger(__name__)
 
+global report1
+report1 = Document()
+report1.add_heading('All Tags in each document', 0) #create word document
+global paragraph0 
+paragraph0 = report1.add_paragraph()
+report1.save('reportAllTags.docx')
+
+
 global report3
 report3 = Document()
 report3.add_heading('Report', 0) #create word document
@@ -222,34 +230,50 @@ def generateReport(): #Will generate the report for tags
             s = ''.join(fullText10)
             w = (s.replace (']', ']\n\n'))
             paragraph = report3.add_paragraph()
+            paragraph0 = report1.add_paragraph()
             #paragraph2 = orphanReport.add_paragraph()
             filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
             filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
             print(filepath3 + " added to the report")
             nameOfDoc = (filepath3 + " added to the report\n")
             Gui.Txt.insert(tk.END, nameOfDoc) #print in GUI (m = main.py)
-            runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
-            runner.bold = True  # makes the header bold
+            #runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            #runner.bold = True  # makes the header bold
+
+            runner0 = paragraph0.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            runner0.bold = True  # makes the header bold
 
             # w will be used in the future
             w = (w.replace ('([', ''))
             w = (w.replace (',', ''))
             w = (w.replace ('' '', ''))
 
-            # creates a table
-            table = report3.add_table(rows=1, cols=2)
+            # creates a table for report 1
+            #table = report3.add_table(rows=1, cols=2)
+
+            # creates a table for report 3
+            table1 = report1.add_table(rows=1, cols=2)
 
 
             # Adds headers in the 1st row of the table
-            row = table.rows[0].cells
-            row[0].text = 'Front Tag'
-            row[1].text = 'Back Tag/tags'
+            #row = table.rows[0].cells
+            #row[0].text = 'Front Tag'
+            #row[1].text = 'Back Tag/tags'
+
+            row1 = table1.rows[0].cells
+            row1[0].text = 'Front Tag'
+            row1[1].text = 'Back Tag/tags'
 
             # Adding style to a table
-            table.style = 'Colorful List'
+            #table.style = 'Colorful List'
+
+            table1.style = 'Colorful List'
 
             # Now save the document to a location
             report3.save('report.docx')
+
+            report1.save('reportAllTags.docx')
+
             #orphanReport.save('orphanReport.docx')
             # Adds headers in the 1st row of the table
 
@@ -271,9 +295,15 @@ def generateReport(): #Will generate the report for tags
 
             parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
             while parentTags:
-                row = table.add_row().cells # Adding a row and then adding data in it.
-                row[0].text = parentTags[0] # Adds the parentTag to the table
+                #row = table.add_row().cells # Adding a row and then adding data in it.
+                #row[0].text = parentTags[0] # Adds the parentTag to the table
+
+                row1 = table1.add_row().cells # Adding a row and then adding data in it.
+                row1[0].text = parentTags[0] # Adds the parentTag to the table
+                
                 noParent.append(parentTags[0])
+
+                
 
 
                 if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
@@ -283,13 +313,19 @@ def generateReport(): #Will generate the report for tags
                         noParent2.append(" ")
                         parents9000.append(" ")
                         orphanChildParent.append(" ")
-                        row[1].text = " " # No parent tag, so adds empty string to that cell
+                        #row[1].text = " " # No parent tag, so adds empty string to that cell
+
+                        row1[1].text = " " # No parent tag, so adds empty string to that cell
+
                         e += 1
 
                     elif fullText2[e] not in filtered_LCopy:
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         if child2:
-                            row[1].text = child2[0] #Adds childTag to table
+                            #row[1].text = child2[0] #Adds childTag to table
+
+                            row1[1].text = child2[0] #Adds childTag to table
+                            
                             e += 1
                             parents9000.append(child2[0])
                             noParent.append(child2[0])
@@ -303,6 +339,7 @@ def generateReport(): #Will generate the report for tags
             child.clear()
             report3.save('report.docx') #Saves in document "report3"
             orphanReport.save('orphanReport.docx') #Saves in document "orphanReport"
+            report1.save('reportAllTags.docx') #Saves in document "report3"
 
             global dicts11
             dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
@@ -335,6 +372,7 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state5() # This will enable the generate orphan report button
+            toggle_state6() # This will enable the open allTags report button
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
@@ -374,11 +412,11 @@ def generateReport2():
                 z += 1
 
                 for key, value in dicts2Copy.items():
-                    report3.add_paragraph("\n")
+                    
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
-
+                        report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
                         text = dicts10[str(stringKey2)]
@@ -395,8 +433,8 @@ def generateReport2():
                             report3.add_paragraph(x) # display the parent tag, included brackets
 
                             if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
-
-                                report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                    report3.add_paragraph(dicts2Copy[str(keyCheck4)])
                                 #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                             else:
@@ -417,9 +455,10 @@ def generateReport2():
                                     k += 1
                                     for item in keys: #keys are child tags of hx/the parent tag
 
-                                        report3.add_paragraph(item, style='List Bullet')
-                                        para = report3.add_paragraph(dicts2Copy[str(item)])
-                                        para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                        if dicts2Copy[str(item)] != "" and dicts2Copy[str(item)] != " ":
+                                            report3.add_paragraph(item, style='List Bullet')
+                                            para = report3.add_paragraph(dicts2Copy[str(item)])
+                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
                         #report3.add_paragraph("\n") # Adds a line space
                         #print(k)
@@ -433,7 +472,7 @@ def generateReport2():
                     #elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                     elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                         k += 1
-                        report3.add_paragraph("\n")
+                        #report3.add_paragraph("\n")
                         if i < len(parents2Copy):
                             report3.add_paragraph(parents2Copy[i])
                             #orphanReport.add_paragraph(parents2Copy[i])
@@ -645,6 +684,24 @@ def removechild(text): #removes child, this one needs fixing
         logging.info('removechild(): PASS')
 
 # This function will open up the report automatically
+def getDocumentTable():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', '.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('reportAllTags.docx')
+        # os.startfile(report3) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', report1)
+    except Exception as e:
+        # Log an error message
+        logging.error('getDocumentTable(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getDocumentTable(): PASS')
+
+
+# This function will open up the report automatically
 def getDocument():
     try:
         if platform.system() == 'Darwin':
@@ -762,4 +819,7 @@ def toggle_state4(): # this will re-enable word report button for orphan tags
 
 def toggle_state5(): # this will re-enable excel report button for orphan tags
     Gui.getOrphan.config(state="normal")
+
+def toggle_state6(): # this will re-enable allTags report button for tables
+    Gui.allTagsButton.config(state="normal")
 

@@ -77,7 +77,7 @@ fullText2Copy = []
 global parents2 #list of parent tags or child tags
 parents2 = []
 
-# creates a dictionary for parent and child tags
+# creates a dict for parent and child tags
 global dicts
 dicts = {}
 
@@ -246,19 +246,20 @@ def generateReport(): #Will generate the report for tags
             row[0].text = 'Front Tag'
             row[1].text = 'Back Tag/tags'
 
+            # Adding style to a table
+            table.style = 'Colorful List'
+
+            # Now save the document to a location
+            report3.save('report.docx')
+            #orphanReport.save('orphanReport.docx')
+            # Adds headers in the 1st row of the table
             row2 = table2.rows[0].cells
             row2[0].text = 'Front Tag'
             row2[1].text = 'Back Tag/tags'
 
             # Adding style to a table
-            table.style = 'Colorful List'
             table2.style = 'Colorful List'
-
-            # Now save the document to a location
-            report3.save('report.docx')
-            orphanReport.save('orphanReport.docx')
             e = 0
-
 
             child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
             # while loop until all the  parentTags has been added to the report
@@ -277,8 +278,6 @@ def generateReport(): #Will generate the report for tags
             while parentTags:
                 row = table.add_row().cells # Adding a row and then adding data in it.
                 row[0].text = parentTags[0] # Adds the parentTag to the table
-                row1 = table2.add_row().cells # Adding a row and then adding data in it.
-                row1[0].text = parentTags[0] # Adds the parentTag to the table
                 noParent.append(parentTags[0])
 
 
@@ -290,21 +289,17 @@ def generateReport(): #Will generate the report for tags
                         parents9000.append(" ")
                         orphanChildParent.append(" ")
                         row[1].text = " " # No parent tag, so adds empty string to that cell
-                        row1[1].text = " " # No parent tag, so adds empty string to that cell
-                        row2[1].text = " " # No parent tag, so adds empty string to that cell
                         e += 1
 
                     elif fullText2[e] not in filtered_LCopy:
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         if child2:
                             row[1].text = child2[0] #Adds childTag to table
-                            row2[1].text = child2[0] #Adds childTag to table
-                            row1[1].text = child2[0] #Adds childTag to table
                             e += 1
                             parents9000.append(child2[0])
                             noParent.append(child2[0])
                             child2.remove(child2[0])  # Removed that tag from the list
-            
+
             parents9.extend(parents9000)
 
             # Make sure everything is cleared before the program gets the next document
@@ -446,14 +441,17 @@ def generateReport2():
                         report3.add_paragraph("\n")
                         if i < len(parents2Copy):
                             report3.add_paragraph(parents2Copy[i])
+                            #orphanReport.add_paragraph(parents2Copy[i])
+                            #paragraph2.add_run("\n" +parents2Copy[i] + " Is an orphanTag" + "\n")
                             print(parents2Copy[i])
                             #print(orphanTagText[o])
                             print("nothing")
                         if o < len(orphanTagText):
                             report3.add_paragraph(orphanTagText[o])
+                            #orphanReport.add_paragraph(orphanTagText[o])
                         o += 1
                         if i < len(parents2Copy):
-                            report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         #m += 1
 
                         i += 1
@@ -505,14 +503,14 @@ def orphanGenReport():
         z = 0
 
         orphanTagText = removechild(filtered_LCopy)
-        while m < len(orphanDicts):
+        while m < len(dicts2Copy):
             #print(m)
             #if fullText2Copy[k] not in filtered_LCopy:
-            if z < len(orphanDicts) and orphanDicts:
+            if z < len(dicts2Copy) and dicts2Copy:
                 z += 1
 
-                for key, value in orphanDicts.items():
-                   # orphanReport.add_paragraph("\n")
+                for key, value in dicts2Copy.items():
+                    orphanReport.add_paragraph("\n")
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
@@ -532,27 +530,26 @@ def orphanGenReport():
                             keyCheck4 = (keyCheck3.replace(' ', ''))
                             #orphanReport.add_paragraph(x) # display the parent tag, included brackets
 
-                            if keyCheck4 in orphanDicts:  # Checks if text of parent tag is found
-
-                               # orphanReport.add_paragraph(orphanDicts[str(keyCheck4)])
+                            if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
+                                print("hi")
+                                #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                             #else:
                                 #orphanReport.add_paragraph("Requirement text not found")
-                                for b in PTags:
+                            for b in PTags:
 
 
-                                    if b == dicts10[str(stringKey2)]:
-                                        i += 1
-                                        hx = dicts10[str(stringKey2)]
-                                        keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
-                                        #print(keys)
-                                        k += 1
-                                        for item in keys: #keys are child tags of hx/the parent tag
-
-                                           #orphanReport.add_paragraph(item, style='List Bullet')
-                                           #para = orphanReport.add_paragraph(orphanDicts[str(item)])
-                                           #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
-                                           print(item)
+                                if b == dicts10[str(stringKey2)]:
+                                    i += 1
+                                    hx = dicts10[str(stringKey2)]
+                                    keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
+                                    #print(keys)
+                                    k += 1
+                                    for item in keys: #keys are child tags of hx/the parent tag
+                                        print(item)
+                                        #orphanReport.add_paragraph(item, style='List Bullet')
+                                        #para = orphanReport.add_paragraph(dicts2Copy[str(item)])
+                                        #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
                     elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                         k += 1
@@ -583,7 +580,7 @@ def orphanGenReport():
         print("You can now open up your excel report as well")
         toggle_state3()
         toggle_state4()
-        return orphanDicts
+        return dicts2Copy
 
     except Exception as e:
         # Log an error message
@@ -673,7 +670,7 @@ def getOrphanDocument():
             os.startfile('orphanReport.docx')
         # os.startfile(orphanReport) # try either one for windows if the first option gives error
         else:
-            subprocess.call('xdg-open', orphanReport)
+            subprocess.call('xdg-open', orphanGenReport)
     except Exception as e:
         # Log an error message
         logging.error('getOrphanDocument(): ERROR', exc_info=True)

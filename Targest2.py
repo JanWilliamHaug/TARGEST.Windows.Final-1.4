@@ -760,4 +760,3 @@ def toggle_state4(): # this will re-enable word report button for orphan tags
 
 def toggle_state5(): # this will re-enable excel report button for orphan tags
     Gui.getOrphan.config(state="normal")
-

@@ -229,9 +229,8 @@ def generateReport(): #Will generate the report for tags
             nameOfDoc = (filepath3 + " added to the report\n")
             Gui.Txt.insert(tk.END, nameOfDoc) #print in GUI (m = main.py)
             runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
-            runner2 = paragraph2.add_run("\n" + "Document Name: " + filepath3 + "\n")
             runner.bold = True  # makes the header bold
-            runner2.bold = True  # makes the header bold
+
             # w will be used in the future
             w = (w.replace ('([', ''))
             w = (w.replace (',', ''))
@@ -239,7 +238,7 @@ def generateReport(): #Will generate the report for tags
 
             # creates a table
             table = report3.add_table(rows=1, cols=2)
-            table2 = orphanReport.add_table(rows=1, cols=2)
+
 
             # Adds headers in the 1st row of the table
             row = table.rows[0].cells
@@ -253,12 +252,8 @@ def generateReport(): #Will generate the report for tags
             report3.save('report.docx')
             #orphanReport.save('orphanReport.docx')
             # Adds headers in the 1st row of the table
-            row2 = table2.rows[0].cells
-            row2[0].text = 'Front Tag'
-            row2[1].text = 'Back Tag/tags'
 
-            # Adding style to a table
-            table2.style = 'Colorful List'
+
             e = 0
 
             child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
@@ -451,7 +446,8 @@ def generateReport2():
                             #orphanReport.add_paragraph(orphanTagText[o])
                         o += 1
                         if i < len(parents2Copy):
-                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            print("nothing")
+                            #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         #m += 1
 
                         i += 1
@@ -510,7 +506,7 @@ def orphanGenReport():
                 z += 1
 
                 for key, value in dicts2Copy.items():
-                    orphanReport.add_paragraph("\n")
+                    #orphanReport.add_paragraph("\n")
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
@@ -553,7 +549,7 @@ def orphanGenReport():
 
                     elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                         k += 1
-                        orphanReport.add_paragraph("\n")
+                        #orphanReport.add_paragraph("\n")
                         if i < len(parents2Copy):
                             orphanReport.add_paragraph(parents2Copy[i])
                             print(parents2Copy[i])
@@ -563,7 +559,8 @@ def orphanGenReport():
                             orphanReport.add_paragraph(orphanTagText[o])
                         o += 1
                         if i < len(parents2Copy):
-                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            print("nothing")
+                            #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
         msg1 = ("\nReport Generated\n")

@@ -44,6 +44,9 @@ def GUI1():
         global genRep
         genRep = Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2, width = 26)
         genRep.pack()
+        global allTagsButton
+        allTagsButton = Button(text="Open all tags Report", state= DISABLED, command=Targest2.getDocumentTable, width = 26)
+        allTagsButton.pack()
         # Creates button 3
         global getDoc
         getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument, width = 26)
@@ -54,24 +57,24 @@ def GUI1():
         getExcel.pack()
         # Creates button 5
         global getOrphan
-        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanReport, width = 26)
+        getOrphan = Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 26)
         getOrphan.pack()
         # Creates button 6
         global getOrphanDoc
         getOrphanDoc = Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
-      
+        
         # Creates button 7
         global button
         button = Button(text="End Program", command=window.destroy, width = 26)
         button.pack()
-       
+
         # Create text widget and specify size.
         global Txt
         Txt = Text(window, height = 25, width = 55)
         Txt.pack()
 
-        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Reports".  \n\n')
+        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "choose document" button.\n 2. Click "Generate Reports".  \n\n')
         Txt.insert(tk.END, msg3) #print in GUI
         
     except Exception as e:

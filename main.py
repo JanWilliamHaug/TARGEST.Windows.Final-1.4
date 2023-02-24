@@ -1,4 +1,5 @@
-import Targest2
+#import Targest2
+import Gui
 
 if __name__ == "__main__" :
-    Targest2.GUI1()
+    Gui.GUI1()

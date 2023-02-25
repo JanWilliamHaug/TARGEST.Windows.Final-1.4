@@ -201,7 +201,7 @@ def generateReport(): #Will generate the report for tags
         # create a similar method for opening a folder
         filepath = filedialog.askopenfilename(initialdir="/",
                                             title="",
-                                            filetypes = (("text file", "*.txt"),("word documents","*.docx"),
+                                            filetypes = (("text file", "*.txt"),
                                                         ("all files","*.*")))
         file = open(filepath,'r')
         #print(filepath)
@@ -385,6 +385,8 @@ def generateReport(): #Will generate the report for tags
 
 
 def generateReport2():
+    # document = Document('report3.docx')
+    # document._body.clear_content()
     try:
         # declaring counters
         m = 0
@@ -537,6 +539,7 @@ def orphanGenReport():
         o = 0
         z = 0
 
+
         orphanTagText = removechild(filtered_LCopy)
         while m < len(dicts2Copy):
             #print(m)
@@ -687,7 +690,7 @@ def removechild(text): #removes child, this one needs fixing
 def getDocumentTable():
     try:
         if platform.system() == 'Darwin':
-            subprocess.check_call(['open', '.docx'])
+            subprocess.check_call(['open', 'reportAllTags.docx'])
         elif platform.system() == 'Windows':
             os.startfile('reportAllTags.docx')
         # os.startfile(report3) # try either one for windows if the first option gives error

@@ -39,7 +39,7 @@ def GUI1():
         window['background'] = '#afeae6'
 
         # Creates button 1
-        Button(window, text="Choose Document ", command=Targest2.generateReport, width = 26).pack()
+        Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 26).pack()
         # Creates button 2
         global genRep
         genRep = Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2, width = 26)

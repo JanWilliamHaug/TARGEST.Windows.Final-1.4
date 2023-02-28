@@ -147,7 +147,7 @@ def readtxt(filename, color: Tuple[int, int, int]):
         #print(fullText)
         global hasChild # Will store the ones with a child tag
         global fullText2 # will store everything found
-        global children
+        # global children
         # Finds the lines without a childTag
         filtered_L = [value for value in fullText if "[" not in value]
         filtered_L = [s.replace(": ", ":") for s in filtered_L]
@@ -569,7 +569,7 @@ def orphanGenReport():
                             #orphanReport.add_paragraph(x) # display the parent tag, included brackets
 
                             if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
-                                print("hi")
+                                print(x)
                                 #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                             #else:
@@ -825,4 +825,5 @@ def toggle_state5(): # this will re-enable excel report button for orphan tags
 
 def toggle_state6(): # this will re-enable allTags report button for tables
     Gui.allTagsButton.config(state="normal")
+
 

@@ -457,7 +457,7 @@ def generateReport2():
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
-                        report3.add_paragraph("\n")
+                        #report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
                         text = dicts10[str(stringKey2)]
@@ -482,6 +482,7 @@ def generateReport2():
 
                                 else:
                                     parentTag1 = ('['+tag+']')
+                                    
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
                                     duplicates.append(str(tag))
@@ -537,6 +538,7 @@ def generateReport2():
                                                         report3.add_paragraph(item, style='List Bullet')
                                                         para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                report3.add_paragraph("\n")
 
 
 
@@ -615,6 +617,8 @@ def generateReport2():
                                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
+                                            report3.add_paragraph("\n")
+
                             #report3.add_paragraph("\n") # Adds a line space
                             #print(k)
                             #print(m)
@@ -662,25 +666,7 @@ def generateReport2():
                 # save the modified document
            #     report3.save('report3.docx')
 
-        # get the header
-        header = report3.sections[0].header
-
-        # initialize a counter for lines
-        line_count = 0
-
-        # iterate over all the paragraphs in the document
-        for i in range(len(report3.paragraphs)):
-            # check if the paragraph is part of the header
-            if report3.paragraphs[i]._element is header._element:
-                continue  # skip header paragraphs
-            else:
-                # exclude the first two lines
-                if line_count > 1:
-                    # remove the rest of the lines
-                    report3.paragraphs[i]._element.clear()
-                line_count += 1
-                if line_count > 15:
-                    break  # stop iterating over paragraphs
+        
 
         msg1 = ("\nReport Generated\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI

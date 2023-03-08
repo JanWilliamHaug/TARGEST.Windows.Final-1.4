@@ -36,7 +36,7 @@ def GUI1():
         # Creates a word document, saves it as "report 3, and also adds a heading
         
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.6.x ')
+        window = Tk(className=' TARGEST v.1.7.x ')
         # set window size #
         window.geometry("600x600")
         window['background'] = '#afeae6'

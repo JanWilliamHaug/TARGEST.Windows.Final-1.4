@@ -36,12 +36,93 @@ import xlwings as xw
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import Gui
+
 
 # Set up the logger for catching errors
 logging.basicConfig(level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 logger = logging.getLogger(__name__)
+
+global report1
+report1 = Document()
+report1.add_heading('All Tags in each document', 0) #create word document
+global paragraph0 
+paragraph0 = report1.add_paragraph()
+report1.save('reportAllTags.docx')
+
+
+global report3
+report3 = Document()
+report3.add_heading('Report', 0) #create word document
+global paragraph 
+paragraph = report3.add_paragraph()
+report3.save('report3.docx')
+
+global orphanReport
+orphanReport = Document()
+orphanReport.add_heading('Orphan Report', 0)
+global paragraph2
+paragraph2 = orphanReport.add_paragraph()
+runnerOrphan = paragraph2.add_run("These are the orphan tags that were found in the documents: ")
+runnerOrphan.bold = True  # makes it bold
+orphanReport.save('orphanReport.docx')
+
+global dicts2Copy # This will hold the dicts2 content in all documents
+dicts2Copy = {}
+
+global parents2Copy # parents2 list copy
+parents2Copy = []
+
+global filtered_L # Will store the ones without a child tag
+filtered_L = []
+
+global filtered_LCopy
+filtered_LCopy = []
+
+global fullText2Copy
+fullText2Copy = []
+
+global parents2 #list of parent tags or child tags
+parents2 = []
+
+# creates a dict for parent and child tags
+global dicts
+dicts = {}
+
+global OrphanChild2
+OrphanChild2 = []
+
+global dicts10
+dicts10 = {}
+global dicts3
+dicts3 = {}  # will hold parentTag and text, Orphan tags
+global dicts2
+dicts2 = {}  # will hold parentTag and text
+global orphanDicts
+orphanDicts = {}  # orphan dictionary
+
+global parents9
+parents9 = []
+
+# declaring different lists that will be used to store, tags and sentences
+global parentTags
+parentTags = []
+global parent  # This will be used to store everything
+parent = []
+global child # Used to Store child tags
+child = [] 
+global noChild # Used to Store parentTags with no child
+noChild = []  
+global withChild # Used to Store parentTags with child tag
+withChild = [] 
+global parents # Will be used for future function
+parents = [] 
+
+global orphanTagText
+orphanTagText = []  # Will be used to hold text of orphanChildTags
+
 
 # reads the text in the document and use the getcoloredTXT function
 # 
@@ -122,7 +203,7 @@ def generateReport(): #Will generate the report for tags
         # create a similar method for opening a folder
         filepath = filedialog.askopenfilename(initialdir="/",
                                             title="",
-                                            filetypes = (("word documents","*.docx"), ("text file", "*.txt"),
+                                            filetypes = (("text file", "*.txt"),
                                                         ("all files","*.*")))
         file = open(filepath,'r')
         #print(filepath)
@@ -151,31 +232,54 @@ def generateReport(): #Will generate the report for tags
             s = ''.join(fullText10)
             w = (s.replace (']', ']\n\n'))
             paragraph = report3.add_paragraph()
+            paragraph0 = report1.add_paragraph()
+            #paragraph2 = orphanReport.add_paragraph()
             filepath3 = str(line4.rsplit('/', 1)[-1]) # change filepath to something.docx
             filepath3 = filepath3.split('.', 1)[0] # removes .docx of the file name
             print(filepath3 + " added to the report")
             nameOfDoc = (filepath3 + " added to the report\n")
-            T.insert(tk.END, nameOfDoc) #print in GUI
-            runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
-            runner.bold = True  # makes the header bold
+            Gui.Txt.insert(tk.END, nameOfDoc) #print in GUI (m = main.py)
+            #runner = paragraph.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            #runner.bold = True  # makes the header bold
+
+            runner0 = paragraph0.add_run("\n" + "Document Name: " + filepath3 + "\n")
+            runner0.bold = True  # makes the header bold
+
             # w will be used in the future
             w = (w.replace ('([', ''))
             w = (w.replace (',', ''))
             w = (w.replace ('' '', ''))
 
-            # creates a table
-            table = report3.add_table(rows=1, cols=2)
+            # creates a table for report 1
+            #table = report3.add_table(rows=1, cols=2)
+
+            # creates a table for report 3
+            table1 = report1.add_table(rows=1, cols=2)
+
 
             # Adds headers in the 1st row of the table
-            row = table.rows[0].cells
-            row[0].text = 'Front Tag'
-            row[1].text = 'Back Tag/tags'
+            #row = table.rows[0].cells
+            #row[0].text = 'Front Tag'
+            #row[1].text = 'Back Tag/tags'
+
+            row1 = table1.rows[0].cells
+            row1[0].text = 'Front Tag'
+            row1[1].text = 'Back Tag/tags'
 
             # Adding style to a table
-            table.style = 'Colorful List'
+            #table.style = 'Colorful List'
+
+            table1.style = 'Colorful List'
 
             # Now save the document to a location
             report3.save('report.docx')
+
+            report1.save('reportAllTags.docx')
+
+            #orphanReport.save('orphanReport.docx')
+            # Adds headers in the 1st row of the table
+
+
             e = 0
 
             child2 = removeAfter(child) #removes everything after the parent tag if there is anything to remove
@@ -193,9 +297,15 @@ def generateReport(): #Will generate the report for tags
 
             parents2 = [s.replace(" ", "") for s in parents2] # gets rid of space
             while parentTags:
-                row = table.add_row().cells # Adding a row and then adding data in it.
-                row[0].text = parentTags[0] # Adds the parentTag to the table
+                #row = table.add_row().cells # Adding a row and then adding data in it.
+                #row[0].text = parentTags[0] # Adds the parentTag to the table
+
+                row1 = table1.add_row().cells # Adding a row and then adding data in it.
+                row1[0].text = parentTags[0] # Adds the parentTag to the table
+                
                 noParent.append(parentTags[0])
+
+                
 
 
                 if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
@@ -205,13 +315,19 @@ def generateReport(): #Will generate the report for tags
                         noParent2.append(" ")
                         parents9000.append(" ")
                         orphanChildParent.append(" ")
-                        row[1].text = " " # No parent tag, so adds empty string to that cell
+                        #row[1].text = " " # No parent tag, so adds empty string to that cell
+
+                        row1[1].text = " " # No parent tag, so adds empty string to that cell
+
                         e += 1
 
                     elif fullText2[e] not in filtered_LCopy:
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         if child2:
-                            row[1].text = child2[0] #Adds childTag to table
+                            #row[1].text = child2[0] #Adds childTag to table
+
+                            row1[1].text = child2[0] #Adds childTag to table
+                            
                             e += 1
                             parents9000.append(child2[0])
                             noParent.append(child2[0])
@@ -224,6 +340,8 @@ def generateReport(): #Will generate the report for tags
             parentTags.clear()
             child.clear()
             report3.save('report.docx') #Saves in document "report3"
+            orphanReport.save('orphanReport.docx') #Saves in document "orphanReport"
+            report1.save('reportAllTags.docx') #Saves in document "report3"
 
             global dicts11
             dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
@@ -254,7 +372,11 @@ def generateReport(): #Will generate the report for tags
             sorted(dicts2.keys()) # sorts the keys in the dictionary
             dicts2Copy.update(dicts100)
 
+
+
             toggle_state2() # This will enable the generate report button
+            toggle_state5() # This will enable the generate orphan report button
+            toggle_state6() # This will enable the open allTags report button
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
@@ -268,6 +390,39 @@ def generateReport(): #Will generate the report for tags
 
 def generateReport2():
     try:
+
+        print("here is dicts10 before:")
+        print(dicts10)
+
+        pattern = r'\[([^\]]+)\]'
+        for key in dicts10:
+                if type(dicts10[key]) == str:
+                    matches2 = re.findall(pattern, (dicts10[key]))
+                if len(matches2) > 1:
+                        
+                        
+                        print("There is more than one ']' in the input string.", dicts10[key] )
+                        dicts10[key] = []
+                        parents2 = []
+                        for match in matches2:
+                            parents2.append(match)
+                            
+
+                        for tag in parents2:
+                            #parentChild2.setdefault("[PUMP:SRS:1]", ["[PUMP:PRS:0]"]).append("[PUMP:PRS:2]")
+                            #parentChild2.setdefault(key, [parentChild2[key]]).append(tag)
+                            #parentChild2[key].append(tag)
+                            tag = (tag.replace(' ', ''))
+                            dicts10[key] += [tag]
+                            #parentChild2.setdefault(key, ["[PUMP:PRS:0]"]).append(tag)
+                            #parentChild2.setdefault(key, [parentChild2[key]]).append(match)
+                            
+
+                else:
+                    print("There is only one ']' in the input string.")
+        print("here is dicts10 after:")
+        print(dicts10)
+
         # declaring counters
         m = 0
         k = 0
@@ -292,76 +447,170 @@ def generateReport2():
             #if fullText2Copy[k] not in filtered_LCopy:
             if z < len(dicts2Copy) and dicts2Copy:
                 z += 1
-
+                duplicates = []
                 for key, value in dicts2Copy.items():
-                    report3.add_paragraph("\n")
+                    
                     m += 1
                     if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
                         #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
-
+                        report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
                         text = dicts10[str(stringKey2)]
-                        PTags = text.split(']')
-                        PTags = [s.strip() + ']' for s in PTags]
-                        PTags.pop()
+                        
 
-                        for x in PTags:
+                        if isinstance(text, list):
+                            print("it is a list")
+                            #report3.add_paragraph("List tags found") # display the parent tag, included brackets
+                            
+                            for tag in text:
+                                #tag = ("[" + tag)
+                                PTags = tag.split(']')
+                                PTags = [s.strip() + ']' for s in PTags]
+                                tag.strip()
+                                if (str(tag) in duplicates):
+                                    print("in duplicates")
+                                    
+                                    
+                                    
 
-                            keyCheck = (x.replace('[', ''))
-                            keyCheck2 = (keyCheck.replace(']', ''))
-                            keyCheck3 = (keyCheck2.replace(']', ''))
-                            keyCheck4 = (keyCheck3.replace(' ', ''))
-                            report3.add_paragraph(x) # display the parent tag, included brackets
-
-                            if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
-
-                                report3.add_paragraph(dicts2Copy[str(keyCheck4)])
-
-                            else:
-                                report3.add_paragraph("Requirement text not found")
-                            #print(dicts10[str(key)])
-                            #report3.add_paragraph(dicts10[str(stringKey)])
-                            #for dicts10[str(stringKey)] in dicts10:
-                            #report3.add_paragraph(dicts10[str(stringKey)])
-                            for b in PTags:
+                                else:
+                                    parentTag1 = ('['+tag+']')
+                                    report3.add_paragraph(parentTag1)
+                                    tag.strip()
+                                    duplicates.append(str(tag))
+                                    
+                                    
+                                    
 
 
-                                if b == dicts10[str(stringKey2)]:
-                                    i += 1
-                                    hx = dicts10[str(stringKey2)]
-                                    keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
-                                    #print(keys)
-                                    k += 1
-                                    for item in keys: #keys are child tags of hx/the parent tag
+                                
+                                    for x in PTags:
+                                        #report3.add_paragraph(x)
 
-                                        report3.add_paragraph(item, style='List Bullet')
-                                        para = report3.add_paragraph(dicts2Copy[str(item)])
-                                        para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                        keyCheck = (x.replace('[', ''))
+                                        keyCheck2 = (keyCheck.replace(']', ''))
+                                        keyCheck3 = (keyCheck2.replace(']', ''))
+                                        keyCheck4 = (keyCheck3.replace(' ', ''))
+                                        keyCheck4.split()
+                                                                
+                                        
 
-                        #report3.add_paragraph("\n") # Adds a line space
-                        #print(k)
-                        #print(m)
-                        #report3.add_paragraph(key, style='List Bullet')
-                        #para = report3.add_paragraph(value)
-                        #para.paragraph_format.left_indent = Inches(0.25) # adds indentation ot text
-                        #stringKey = dicts2Copy[str(key)]
-                        #stringKey2 = (stringKey.replace(' ', ''))
-                    #if k < len(fullText2Copy):
+                                        if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
+                                            if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                                report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                            #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                        else:
+                                            report3.add_paragraph("Requirement text not found")
+                                            #orphanReport.add_paragraph("Requirement text not found")
+                                        #print(dicts10[str(key)])
+                                        #report3.add_paragraph(dicts10[str(stringKey)])
+                                        #for dicts10[str(stringKey)] in dicts10:
+                                        #report3.add_paragraph(dicts10[str(stringKey)])
+                                        for b in PTags:
+                                            b = (b.replace(']', ''))
+                                            #report3.add_paragraph("I'm b")
+                                            #report3.add_paragraph(b)
+                                            #report3.add_paragraph("I'm tag")
+                                            #report3.add_paragraph(tag)
+
+
+                                            if b == tag:
+                                                i += 1
+                                                hx = tag
+                                                #report3.add_paragraph("I'm here")
+                                                keys = [h for h, v in dicts10.items() if hx in v] # finds all the child tags
+                                                #report3.add_paragraph("I'm keys")
+                                                #report3.add_paragraph(keys)
+                                                k += 1
+                                                for item in keys: #keys are child tags of hx/the parent tag
+
+                                                    if item != "" and item!= " ":
+                                                        report3.add_paragraph(item, style='List Bullet')
+                                                        para = report3.add_paragraph(dicts2Copy[str(item)])
+                                                        para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+
+
+
+
+                        else:
+                            print("not a list")    
+                            PTags = text.split(']')
+                            PTags = [s.strip() + ']' for s in PTags]
+                            PTags.pop()
+
+                            for x in PTags:
+
+                                keyCheck = (x.replace('[', ''))
+                                keyCheck2 = (keyCheck.replace(']', ''))
+                                keyCheck3 = (keyCheck2.replace(']', ''))
+                                keyCheck4 = (keyCheck3.replace(' ', ''))
+                                report3.add_paragraph(x) # display the parent tag, included brackets
+
+                                if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
+                                    if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                        report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                    #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                else:
+                                    report3.add_paragraph("Requirement text not found")
+                                    #orphanReport.add_paragraph("Requirement text not found")
+                                #print(dicts10[str(key)])
+                                #report3.add_paragraph(dicts10[str(stringKey)])
+                                #for dicts10[str(stringKey)] in dicts10:
+                                #report3.add_paragraph(dicts10[str(stringKey)])
+                                for b in PTags:
+
+
+                                    if b == dicts10[str(stringKey2)]:
+                                        i += 1
+                                        hx = dicts10[str(stringKey2)]
+                                        keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
+                                        #print(keys)
+                                        k += 1
+
+                                        #if keys:
+                                         #   print("list is not empty")
+                                        #else:
+                                        #    report3.add_paragraph("It is an orphan tag")
+
+                                        for item in keys: #keys are child tags of hx/the parent tag
+
+                                            if item != "" and item!= " ":
+                                                report3.add_paragraph(item, style='List Bullet')
+                                                para = report3.add_paragraph(dicts2Copy[str(item)])
+                                                para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+                            #report3.add_paragraph("\n") # Adds a line space
+                            #print(k)
+                            #print(m)
+                            #report3.add_paragraph(key, style='List Bullet')
+                            #para = report3.add_paragraph(value)
+                            #para.paragraph_format.left_indent = Inches(0.25) # adds indentation ot text
+                            #stringKey = dicts2Copy[str(key)]
+                            #stringKey2 = (stringKey.replace(' ', ''))
+                        #if k < len(fullText2Copy):
                     #elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                     elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
                         k += 1
-                        report3.add_paragraph("\n")
+                        #report3.add_paragraph("\n")
                         if i < len(parents2Copy):
-                            report3.add_paragraph(parents2Copy[i])
+                            #report3.add_paragraph(parents2Copy[i])
+                            #orphanReport.add_paragraph(parents2Copy[i])
+                            #paragraph2.add("\n" +parents2Copy[i] + " Is an orphanTag" + "\n")
                             print(parents2Copy[i])
                             #print(orphanTagText[o])
                             print("nothing")
                         if o < len(orphanTagText):
-                            report3.add_paragraph(orphanTagText[o])
+                            #report3.add_paragraph(orphanTagText[o])
+                            #orphanReport.add_paragraph(orphanTagText[o])
+                            print("nothing")
                         o += 1
                         if i < len(parents2Copy):
-                            report3.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            print("nothing")
+                            #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         #m += 1
 
                         i += 1
@@ -369,18 +618,20 @@ def generateReport2():
 
 
         msg1 = ("\nReport Generated\n")
-        T.insert(tk.END, msg1) #print in GUI
+        Gui.Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("You can now open up your report\n")
-        T.insert(tk.END, msg2) #print in GUI
+        Gui.Txt.insert(tk.END, msg2) #print in GUI
         print("Report Generated")
         print("You can now open up your report")
         report3.save('report3.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
-        T.insert(tk.END, msg3) #print in GUI
+        Gui.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
         toggle_state3()
+        toggle_state4()
+       # toggle_state5()
         return dicts2Copy
 
     except Exception as e:
@@ -400,6 +651,215 @@ def generateReport2():
                 report3.add_paragraph(key + " is an orphan tags")
                 m += 1
     """
+
+def orphanGenReport():
+    duplicates = []
+    try:
+        # declaring counters
+        m = 0
+        k = 0
+        i = 0
+        o = 0
+        z = 0
+
+        orphanTagText = removechild(filtered_LCopy)
+        while m < len(dicts2Copy):
+            #print(m)
+            #if fullText2Copy[k] not in filtered_LCopy:
+            if z < len(dicts2Copy) and dicts2Copy:
+                z += 1
+
+                for key, value in dicts2Copy.items():
+                    #orphanReport.add_paragraph("\n")
+                    m += 1
+                    if k < len(fullText2Copy) and fullText2Copy[k] not in filtered_LCopy:
+                        #for key, value in dicts2Copy.items() and key, value in dicts3.items(): #work on this here and try
+                        #report3.add_paragraph("\n")
+                        stringKey = str(key)
+                        stringKey2 = (stringKey.replace(' ', ''))
+                        text = dicts10[str(stringKey2)]
+                        
+
+                        if isinstance(text, list):
+                            print("it is a list")
+                            #report3.add_paragraph("List tags found") # display the parent tag, included brackets
+                            
+                            for tag in text:
+                                #tag = ("[" + tag)
+                                PTags = tag.split(']')
+                                PTags = [s.strip() + ']' for s in PTags]
+                                tag.strip()
+                                if (str(tag) in duplicates):
+                                    print("in duplicates")
+                                    
+                                    
+                                    
+
+                                else:
+                                    
+                                    #report3.add_paragraph(tag)
+                                    #tag.strip()
+                                    duplicates.append(str(tag))
+                                    
+                                    
+                                    
+
+
+                                
+                                    for x in PTags:
+                                        #report3.add_paragraph(x)
+
+                                        keyCheck = (x.replace('[', ''))
+                                        keyCheck2 = (keyCheck.replace(']', ''))
+                                        keyCheck3 = (keyCheck2.replace(']', ''))
+                                        keyCheck4 = (keyCheck3.replace(' ', ''))
+                                        keyCheck4.split()
+                                                                
+                                        
+
+                                        if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
+                                            if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                                #report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                print("nothin")
+                                            #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                        else:
+                                            print("nothin")
+                                            #report3.add_paragraph("Requirement text not found")
+                                            #orphanReport.add_paragraph("Requirement text not found")
+                                        #print(dicts10[str(key)])
+                                        #report3.add_paragraph(dicts10[str(stringKey)])
+                                        #for dicts10[str(stringKey)] in dicts10:
+                                        #report3.add_paragraph(dicts10[str(stringKey)])
+                                        for b in PTags:
+                                            b = (b.replace(']', ''))
+                                            #report3.add_paragraph("I'm b")
+                                            #report3.add_paragraph(b)
+                                            #report3.add_paragraph("I'm tag")
+                                            #report3.add_paragraph(tag)
+
+
+                                            if b == tag:
+                                                i += 1
+                                                hx = tag
+                                                #report3.add_paragraph("I'm here")
+                                                keys = [h for h, v in dicts10.items() if hx in v] # finds all the child tags
+                                                #report3.add_paragraph("I'm keys")
+                                                #report3.add_paragraph(keys)
+                                                k += 1
+                                                for item in keys: #keys are child tags of hx/the parent tag
+
+                                                    if item != "" and item!= " ":
+                                                        print("nothin")
+                                                        #report3.add_paragraph(item, style='List Bullet')
+                                                        #para = report3.add_paragraph(dicts2Copy[str(item)])
+                                                        #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+
+
+
+
+                        else:
+                            print("not a list")    
+                            PTags = text.split(']')
+                            PTags = [s.strip() + ']' for s in PTags]
+                            PTags.pop()
+
+                            for x in PTags:
+
+                                keyCheck = (x.replace('[', ''))
+                                keyCheck2 = (keyCheck.replace(']', ''))
+                                keyCheck3 = (keyCheck2.replace(']', ''))
+                                keyCheck4 = (keyCheck3.replace(' ', ''))
+                                report3.add_paragraph(x) # display the parent tag, included brackets
+
+                                if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
+                                    if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                        print("nothin")
+                                        #report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                    #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                else:
+                                    #report3.add_paragraph("Requirement text not found")
+                                    print("nothin")
+                                    #orphanReport.add_paragraph("Requirement text not found")
+                                #print(dicts10[str(key)])
+                                #report3.add_paragraph(dicts10[str(stringKey)])
+                                #for dicts10[str(stringKey)] in dicts10:
+                                #report3.add_paragraph(dicts10[str(stringKey)])
+                                for b in PTags:
+
+                                    
+
+                                    if b == dicts10[str(stringKey2)]:
+                                        i += 1
+                                        hx = dicts10[str(stringKey2)]
+                                        keys = [h for h, v in dicts10.items() if v == hx] # finds all the child tags
+                                        #print(keys)
+                                        k += 1
+                                        for item in keys: #keys are child tags of hx/the parent tag
+
+                                            if item != "" and item!= " ":
+                                                print("nothin")
+                                                #report3.add_paragraph(item, style='List Bullet')
+                                                #para = report3.add_paragraph(dicts2Copy[str(item)])
+                                                #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+                            #report3.add_paragraph("\n") # Adds a line space
+                            #print(k)
+                            #print(m)
+                            #report3.add_paragraph(key, style='List Bullet')
+                            #para = report3.add_paragraph(value)
+                            #para.paragraph_format.left_indent = Inches(0.25) # adds indentation ot text
+                            #stringKey = dicts2Copy[str(key)]
+                            #stringKey2 = (stringKey.replace(' ', ''))
+                        #if k < len(fullText2Copy):
+                    #elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
+                
+                        
+                    elif k < len(fullText2Copy) and fullText2Copy[k] in filtered_LCopy:
+                        k += 1
+                        #orphanReport.add_paragraph("\n")
+                        if i < len(parents2Copy):
+                            orphanReport.add_paragraph(parents2Copy[i])
+                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                            print(parents2Copy[i])
+                            #print(orphanTagText[o])
+                            print("nothing")
+                        if o < len(orphanTagText):
+                            orphanReport.add_paragraph(orphanTagText[o])
+                            orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                        o += 1
+                        if i < len(parents2Copy):
+                            print("nothing")
+                            #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
+                        i += 1
+
+        msg1 = ("\nReport Generated\n")
+        Gui.Txt.insert(tk.END, msg1) #print in GUI
+        msg2 = ("You can now open up your report\n")
+        Gui.Txt.insert(tk.END, msg2) #print in GUI
+        print("Report Generated")
+        print("You can now open up your report")
+        orphanReport.save('orphanReport.docx')
+        toggle_state() #This will enable the getDoc button
+        msg3 = ("You can now open up your excel report as well\n")
+        Gui.Txt.insert(tk.END, msg3) #print in GUI
+        print("Excel Report Generated")
+        print("You can now open up your excel report as well")
+        toggle_state3()
+        toggle_state4()
+        msgOrphan = ("Orphan report created\n")
+        Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
+        return dicts2Copy
+
+    except Exception as e:
+        # Log an error message
+        logging.error('orphanReport(): ERROR', e)
+    else:
+        # Log a success message
+        logging.info('orphanReport(): PASS')
+
 
 
 def removeParent(text): #removes parent tags or child tags
@@ -457,6 +917,24 @@ def removechild(text): #removes child, this one needs fixing
         logging.info('removechild(): PASS')
 
 # This function will open up the report automatically
+def getDocumentTable():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', '.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('reportAllTags.docx')
+        # os.startfile(report3) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', report1)
+    except Exception as e:
+        # Log an error message
+        logging.error('getDocumentTable(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getDocumentTable(): PASS')
+
+
+# This function will open up the report automatically
 def getDocument():
     try:
         if platform.system() == 'Darwin':
@@ -473,6 +951,21 @@ def getDocument():
         # Log a success message
         logging.info('getDocument(): PASS')
 
+def getOrphanDocument():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'orphanReport.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('orphanReport.docx')
+        # os.startfile(orphanReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', orphanGenReport)
+    except Exception as e:
+        # Log an error message
+        logging.error('getOrphanDocument(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getOrphanDocument(): PASS')
 
 # Creates an excel report
 def createExcel():
@@ -542,109 +1035,24 @@ def createExcel():
         logging.info('createExcel(): PASS')
 
 
-def toggle_state(): # this will re-enable getDoc button
-    getDoc.config(state="normal")
 
+
+
+def toggle_state(): # this will re-enable getDoc button
+    Gui.getDoc.config(state="normal")
 
 def toggle_state2(): # this will re-enable generate report button
-    genRep.config(state="normal")
-
+    Gui.genRep.config(state="normal")
 
 def toggle_state3(): # this will re-enable excel report button
-    getExcel.config(state="normal")
+    Gui.getExcel.config(state="normal")
 
-if __name__ == '__main__':
-    logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    # logging.disable(logging.CRITICAL) # uncomment this to disable logging
-    try:
-        # pdb.set_trace()
-        # Creates a word document, saves it as "report 3, and also adds a heading
-        report3 = Document()
-        report3.add_heading('Report', 0) #create word document
-        paragraph = report3.add_paragraph()
-        report3.save('report3.docx')
-        dicts2Copy = {} # This will hold the dicts2 content in all documents
+def toggle_state4(): # this will re-enable word report button for orphan tags
+    Gui.getOrphanDoc.config(state="normal")
 
-        global parents2Copy # parents2 list copy
-        parents2Copy = []
+def toggle_state5(): # this will re-enable excel report button for orphan tags
+    Gui.getOrphan.config(state="normal")
 
-        global filtered_L # Will store the ones without a child tag
-        filtered_L = []
-
-        global filtered_LCopy
-        filtered_LCopy = []
-
-        global fullText2Copy
-        fullText2Copy = []
-
-        global parents2 #list of parent tags or child tags
-        parents2 = []
-
-        # creates a dict for parent and child tags
-        global dicts
-        dicts = {}
-
-        global OrphanChild2
-        OrphanChild2 = []
-
-        global dicts10
-        dicts10 = {}
-        global dicts3
-        dicts3 = {}  # will hold parentTag and text, Orphan tags
-        global dicts2
-        dicts2 = {}  # will hold parentTag and text
-        global orphanDicts
-        orphanDicts = {}  # orphan dictionary
-
-        global parents9
-        parents9 = []
-
-        # declaring different lists that will be used to store, tags and sentences
-        parentTags = []
-        parent = []  # This will be used to store everything
-        child = [] # Used to Store child tags
-        noChild = []  # Used to Store parentTags with no child
-        withChild = [] # Used to Store parentTags with child tag
-        parents = [] #Will be used for future function
-
-        global orphanTagText
-        orphanTagText = []  # Will be used to hold text of orphanChildTags
-
-
-
-        # Creates the gui
-        window = Tk(className=' TARGEST v.1.5.x ')
-        # set window size #
-        window.geometry("500x500")
-        window['background'] = '#afeae6'
-
-        # Creates button 1
-        Button(window, text="Choose Document ", command=generateReport).pack()
-        # Creates button 2
-        genRep = Button(window, text="Generate Reports ", state= DISABLED, command=generateReport2)
-        genRep.pack()
-        # Creates button 3
-        getDoc = Button(window, text="Open Generated Report", state= DISABLED, command=getDocument)
-        getDoc.pack()
-        # Creates Excel button button 4
-        getExcel = Button(text="Open Generated Excel Report", state= DISABLED, command=createExcel)
-        getExcel.pack()
-        # Creates button 5
-        button = Button(text="End Program", command=window.destroy)
-        button.pack()
-
-        # Create text widget and specify size.
-        T = Text(window, height = 25, width = 55)
-        T.pack()
-
-        msg3 = ('1. Please choose your documents by clicking on \nthe "choose document" button.\n2. Click "Generate Reports".  \n\n')
-        T.insert(tk.END, msg3) #print in GUI
-    except Exception as e:
-        # Log an error message
-        logging.exception('main(): ERROR', exc_info=True)
-    else:
-        # Log a success message
-        logging.info('main(): PASS')
-
-        window.mainloop()
+def toggle_state6(): # this will re-enable allTags report button for tables
+    Gui.allTagsButton.config(state="normal")
 

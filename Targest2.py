@@ -375,7 +375,7 @@ def generateReport(): #Will generate the report for tags
             toggle_state5() # This will enable the generate orphan report button
             toggle_state6() # This will enable the open allTags report button
         return filepath2, filtered_L
-        return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
+        # return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
     except Exception as e:
         # Log an error message
@@ -996,7 +996,7 @@ def removechild(text): #removes child, this one needs fixing
 def getDocumentTable():
     try:
         if platform.system() == 'Darwin':
-            subprocess.check_call(['open', '.docx'])
+            subprocess.check_call(['open', 'reportAllTags.docx'])
         elif platform.system() == 'Windows':
             os.startfile('reportAllTags.docx')
         # os.startfile(report3) # try either one for windows if the first option gives error
@@ -1059,7 +1059,7 @@ def createExcel():
         excelReport.range("B1").value = "Report"
         excelReport.range("B1").font.Size = 18 # Change font size
         excelReport.range("B1").font.ColorIndex = 2 # Change font color
-        excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
+        # excelReport.range('B1:S1').color = (0, 0, 255) # Change cell background color
 
 
         # creating a Dataframe object from a list
@@ -1070,7 +1070,11 @@ def createExcel():
 
         # FOr Orphan Tags
         df3 = pd.DataFrame(orphanss)
-        
+        # i = 7
+        # df3 = df3.drop(df3.columns[i], axis=1)
+        # df4 = df3.drop('7', axis=1, inplace=True)
+
+
 
         # For childTag -Text
         excelReport.range("A3").value = df
@@ -1082,7 +1086,8 @@ def createExcel():
 
         # Listing out the Orphan Tags
         excelReport.range("H3").value = df3
-        df3 = df.reset_index(drop=True)
+        df = df.reset_index(drop=True)
+        # df.drop(df.columns[7], axis=1, inplace=True)
 
         # Adding childTag header
         excelReport.range("B3").value = 'Child Tag'

@@ -124,8 +124,7 @@ global orphanTagText
 orphanTagText = []  # Will be used to hold text of orphanChildTags
 
 
-# reads the text in the document and use the getcoloredTXT function
-# 
+# reads the text in the document and use the getcoloredTXT function to get the colored text
 def readtxt(filename, color: Tuple[int, int, int]):
     try:
         doc = docx.Document(filename)
@@ -259,11 +258,6 @@ def generateReport(): #Will generate the report for tags
             # creates a table for report 3
             table1 = report1.add_table(rows=1, cols=2)
 
-
-            # Adds headers in the 1st row of the table
-            #row = table.rows[0].cells
-            #row[0].text = 'Front Tag'
-            #row[1].text = 'Back Tag/tags'
 
             row1 = table1.rows[0].cells
             row1[0].text = 'Front Tag'
@@ -400,7 +394,6 @@ def generateReport2():
         dicts11111 = {}
         dicts11111 = copy.deepcopy(dicts10)
 
-
         pattern = r'\[([^\]]+)\]'  
         for key in dicts10:
                 if type(dicts10[key]) == str:
@@ -414,7 +407,6 @@ def generateReport2():
                         for match in matches2:
                             parents2.append(match)
                             
-
                         for tag in parents2:
                             #parentChild2.setdefault("[PUMP:SRS:1]", ["[PUMP:PRS:0]"]).append("[PUMP:PRS:2]")
                             #parentChild2.setdefault(key, [parentChild2[key]]).append(tag)
@@ -424,7 +416,6 @@ def generateReport2():
                             #parentChild2.setdefault(key, ["[PUMP:PRS:0]"]).append(tag)
                             #parentChild2.setdefault(key, [parentChild2[key]]).append(match)
                             
-
                 else:
                     print("There is only one ']' in the input string.")
         
@@ -433,7 +424,7 @@ def generateReport2():
 
 
         # create a list of all the values in the dictionary
-        #values_list = list(dicts10.values())
+        #values_list = list(dicts10.keys())
 
         # create an empty list to store keys that match values
         #matched_keys = []
@@ -447,10 +438,31 @@ def generateReport2():
            # else:
             #    childless.append(val)
 
-        #report3.add_paragraph("chlidless tags:")    
-        #report3.add_paragraph(childless[0])
-        
+        #report3.add_paragraph("childless tags:")  
 
+        #for key, value in dicts10.items():
+                    
+         #               stringKey23 = str(key)
+          #              stringKey24 = (stringKey23.replace(' ', ''))
+           #             text = dicts10[str(stringKey24)]
+
+            #            if isinstance(text, list):
+             #               for tag in text:
+              #                  for val in values_list:
+               #                     if val in dicts10.values():
+                #                        matched_keys.append(val)
+                 #                   else:
+                  #                      childless.append(val)
+                        
+                   #     else:
+                    #       for val in values_list:
+                     #           if val in dicts10.keys():
+                      #              matched_keys.append(val)
+                       #         else:
+                        #            childless.append(val)
+        
+        #for tagC in childless:
+         #   report3.add_paragraph(tagC)  
 
         # declaring counters
         m = 0
@@ -1105,7 +1117,6 @@ def createExcel():
 
 
         
-
         excelReport.autofit()
 
 
@@ -1119,7 +1130,6 @@ def createExcel():
     else:
         # Log a success message
         logging.info('createExcel(): PASS')
-
 
 
 

@@ -69,6 +69,15 @@ runnerOrphan = paragraph2.add_run("These are the orphan tags that were found in 
 runnerOrphan.bold = True  # makes it bold
 orphanReport.save('orphanReport.docx')
 
+global childlessReport
+childlessReport = Document()
+childlessReport.add_heading('Childless Report', 0)
+global paragraph3
+paragraph3 = childlessReport.add_paragraph()
+runnerOrphan = paragraph3.add_run("These are the childless tags that were found in the documents: ")
+runnerOrphan.bold = True  # makes it bold
+childlessReport.save('childless.docx')
+
 global dicts2Copy # This will hold the dicts2 content in all documents
 dicts2Copy = {}
 
@@ -372,10 +381,9 @@ def generateReport(): #Will generate the report for tags
 
 
             toggle_state2() # This will enable the generate report button
-            toggle_state5() # This will enable the generate orphan report button
             toggle_state6() # This will enable the open allTags report button
         return filepath2, filtered_L
-        # return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
+        return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
     except Exception as e:
         # Log an error message
@@ -423,46 +431,42 @@ def generateReport2():
         print(dicts10)
 
 
-        # create a list of all the values in the dictionary
-        #values_list = list(dicts10.keys())
+        #report3.add_paragraph("all parents:") # header for all parents
 
-        # create an empty list to store keys that match values
-        #matched_keys = []
+        parents10 = [] # list of all the parent tag tags
+        for value11 in dicts10.values():
+            # if the value is a list, extend the parents list with the list
+            if isinstance(value11, list):
+                parents10.extend(value11)
+                
+            # if the value is not a list, append the value to the parents list
+            else:
+                parents10.append(value11)
 
-        #childless = []
-
-        # loop through the values in the list and check if they exist as keys in dicts10
-        #for val in values_list:
-         #   if val in dicts10.keys():
-          #      matched_keys.append(val)
-           # else:
-            #    childless.append(val)
-
-        #report3.add_paragraph("childless tags:")  
-
-        #for key, value in dicts10.items():
-                    
-         #               stringKey23 = str(key)
-          #              stringKey24 = (stringKey23.replace(' ', ''))
-           #             text = dicts10[str(stringKey24)]
-
-            #            if isinstance(text, list):
-             #               for tag in text:
-              #                  for val in values_list:
-               #                     if val in dicts10.values():
-                #                        matched_keys.append(val)
-                 #                   else:
-                  #                      childless.append(val)
-                        
-                   #     else:
-                    #       for val in values_list:
-                     #           if val in dicts10.keys():
-                      #              matched_keys.append(val)
-                       #         else:
-                        #            childless.append(val)
+        # for loop to add the parents to the report
+        #for parent in parents10:
+         #   report3.add_paragraph(parent)
         
-        #for tagC in childless:
-         #   report3.add_paragraph(tagC)  
+
+        # create a list of all the keys in the dictionary (all child tags)
+        values_list = list(dicts2Copy.keys())
+        #  creates a list of all the child tags that are not in the parents list
+        childless = [] 
+        # header for childless tags
+        childlessReport.add_paragraph("childless tags:") 
+                    
+        # for loop to check if the child tag is in the parents list
+        for element in values_list:
+            if "".join(element) not in "".join(parents10):
+                childless.append(element)
+
+        # for loop to add the childless tags to the report
+        for child0 in childless:
+            childlessReport.add_paragraph(child0) 
+
+        childlessReport.save('childless.docx') #Saves in document "orphanReport"
+
+        
 
         # declaring counters
         m = 0
@@ -710,11 +714,11 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
-        toggle_state3()
-        toggle_state4()
-       # toggle_state5()
-        return dicts2Copy
-
+        toggle_state3() # this will re-enable excel report button
+        toggle_state5() # This will enable the generate orphan report button
+        toggle_state4() # This will enable the open orphan report button
+        toggle_state7() #This will enable the getChildless document button
+        
     except Exception as e:
         # Log an error message
         logging.error('generateReport2(): ERROR', e)
@@ -841,7 +845,6 @@ def orphanGenReport():
                             PTags.pop()
 
                             for x in PTags:
-
                                 keyCheck = (x.replace('[', ''))
                                 keyCheck2 = (keyCheck.replace(']', ''))
                                 keyCheck3 = (keyCheck2.replace(']', ''))
@@ -1043,6 +1046,23 @@ def getOrphanDocument():
         # Log a success message
         logging.info('getOrphanDocument(): PASS')
 
+
+def getChildlessDocument():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'childless.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('childless.docx')
+        # os.startfile(orphanReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', generateReport2)
+    except Exception as e:
+        # Log an error message
+        logging.error('getChildlessDocument(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getChildlessDocument(): PASS')
+
 # Creates an excel report
 def createExcel():
     try:
@@ -1059,7 +1079,7 @@ def createExcel():
         excelReport.range("B1").value = "Report"
         excelReport.range("B1").font.Size = 18 # Change font size
         excelReport.range("B1").font.ColorIndex = 2 # Change font color
-        # excelReport.range('B1:S1').color = (0, 0, 255) # Change cell background color
+        excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
 
 
         # creating a Dataframe object from a list
@@ -1070,11 +1090,7 @@ def createExcel():
 
         # FOr Orphan Tags
         df3 = pd.DataFrame(orphanss)
-        # i = 7
-        # df3 = df3.drop(df3.columns[i], axis=1)
-        # df4 = df3.drop('7', axis=1, inplace=True)
-
-
+        
 
         # For childTag -Text
         excelReport.range("A3").value = df
@@ -1086,8 +1102,8 @@ def createExcel():
 
         # Listing out the Orphan Tags
         excelReport.range("H3").value = df3
-        df = df.reset_index(drop=True)
-        # df.drop(df.columns[7], axis=1, inplace=True)
+        df3 = df.reset_index(drop=True)
+        
 
         # Adding childTag header
         excelReport.range("B3").value = 'Child Tag'
@@ -1156,4 +1172,7 @@ def toggle_state5(): # this will re-enable excel report button for orphan tags
 
 def toggle_state6(): # this will re-enable allTags report button for tables
     Gui.allTagsButton.config(state="normal")
+
+def toggle_state7(): # this will re-enable childless report button
+    Gui.getChildlessDoc.config(state="normal")
 

@@ -450,7 +450,9 @@ def generateReport2():
 
         # create a list of all the keys in the dictionary (all child tags)
         values_list = list(dicts2Copy.keys())
+
         #  creates a list of all the child tags that are not in the parents list
+        global childless
         childless = [] 
         # header for childless tags
         childlessReport.add_paragraph("childless tags:") 
@@ -716,7 +718,6 @@ def generateReport2():
         print("You can now open up your excel report as well")
         toggle_state3() # this will re-enable excel report button
         toggle_state5() # This will enable the generate orphan report button
-        toggle_state4() # This will enable the open orphan report button
         toggle_state7() #This will enable the getChildless document button
         
     except Exception as e:
@@ -905,7 +906,8 @@ def orphanGenReport():
                             #print(orphanTagText[o])
                             print("nothing")
                         if o < len(orphanTagText):
-                            orphanReport.add_paragraph(orphanTagText[o])
+                            #orphanReport.add_paragraph(orphanTagText[o])
+                            print("nothing")
                             
                         o += 1
                         if i < len(parents2Copy):
@@ -926,8 +928,7 @@ def orphanGenReport():
         Gui.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
-        toggle_state3()
-        toggle_state4()
+        toggle_state4() # This will enable the open orphan report button
         msgOrphan = ("Orphan report created\n")
         Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
         return dicts2Copy
@@ -1088,8 +1089,12 @@ def createExcel():
         # Dictionary For child and parent tag
         df2 = pd.DataFrame(list(dicts11111.items()))
 
-        # FOr Orphan Tags
+        # For Orphan Tags
         df3 = pd.DataFrame(orphanss)
+
+        # For Childless Tags
+        df4 = pd.DataFrame(childless)
+        
         
 
         # For childTag -Text
@@ -1103,6 +1108,10 @@ def createExcel():
         # Listing out the Orphan Tags
         excelReport.range("H3").value = df3
         df3 = df.reset_index(drop=True)
+
+        # Listing out the Childless Tags
+        excelReport.range("K3").value = df4
+        df4 = df.reset_index(drop=True)
         
 
         # Adding childTag header
@@ -1136,7 +1145,13 @@ def createExcel():
         excelReport.range("I3").font.ColorIndex = 2 # Change font color
         excelReport.range('I3:I3').color = (255, 128, 0) # Change cell background color
 
+        # Adding OrphanTags header
+        excelReport.range("L3").value = 'Childless Tags'
+        excelReport.range("L3").font.Size = 14 # Change font size
+        excelReport.range("L3").font.ColorIndex = 2 # Change font color
+        excelReport.range('L3:L3').color = (150, 75, 0) # Change cell background color
 
+        
         
         excelReport.autofit()
 

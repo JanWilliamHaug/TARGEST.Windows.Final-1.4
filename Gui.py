@@ -41,7 +41,7 @@ def GUI1():
         window.geometry("600x600")
         window['background'] = '#afeae6'
 
-         # Create a style for the widgets
+        # Create a style for the widgets
         style = ttk.Style()
         #style.configure('Emergency.TButton', font='helvetica 24', foreground='red', padding=10)
         style.configure("TButton", font=("Segoe UI", 10), background="#4CAF50", foreground="green")
@@ -59,7 +59,7 @@ def GUI1():
         # Place your anime figures on the canvas
         #canvas.create_image(50, 50, image=figure1)
 
-        # Creates button 1
+        # Creates button 1pi
         ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 26).pack()
         # Creates button 2
         global genRep
@@ -84,10 +84,18 @@ def GUI1():
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
-        
+
         # Creates button 7
+        global getChildlessDoc
+        getChildlessDoc = ttk.Button(text="Open childless tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
+        getChildlessDoc.pack()
+        
+        # Creates button 8
+        #global button
+        #button = Button(text="End Program", command=window.destroy, width = 26, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
+        #button.pack()
         global button
-        button = Button(text="End Program", command=window.destroy, width = 26, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
+        button = ttk.Button(text="End Program", command=window.destroy, width = 26)
         button.pack()
 
 

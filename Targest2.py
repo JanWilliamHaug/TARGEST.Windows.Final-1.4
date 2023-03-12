@@ -78,6 +78,11 @@ runnerOrphan = paragraph3.add_run("These are the childless tags that were found 
 runnerOrphan.bold = True  # makes it bold
 childlessReport.save('childless.docx')
 
+wb2 = xw.Book()
+global excelReport2
+excelReport2 = wb2.sheets[0]
+excelReport2.name = "Report"
+
 global dicts2Copy # This will hold the dicts2 content in all documents
 dicts2Copy = {}
 
@@ -408,6 +413,7 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
+            toggle_state8() # This will enable the getExcel2 report button
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
@@ -427,6 +433,23 @@ def generateReport2():
         global dicts11111 # Will be used for the excel report later for child - parent
         dicts11111 = {}
         dicts11111 = copy.deepcopy(dicts10)
+
+        # counters for Excel report2
+
+        global counter1
+        counter1 = 2
+        global counter2
+        counter2 = 1
+        global counter3
+        counter3 = 0
+        global cell
+        cell = 0;
+        global cell2
+        cell2 = 0;
+
+
+
+        #excelReport2.range("A3").value = 'Childless Tags'
 
         pattern = r'\[([^\]]+)\]'  
         for key in dicts10:
@@ -535,6 +558,7 @@ def generateReport2():
                         if str(stringKey2) in dicts10: # if the key is in the dictionary
                             text = dicts10[str(stringKey2)]
                         
+                        
 
                         if isinstance(text, list):
                             print("it is a list")
@@ -556,6 +580,14 @@ def generateReport2():
                                 else:
                                     parentTag1 = ('['+tag+']')
                                     
+                                    cell = str('A'+ str(counter1))
+                                    cell2 = str(str(parentTag1))
+                                    excelReport2.range(cell).value = cell2
+                                    counter1 += 2 # counter for excel report
+                                    counter2 += 1 # counter for excel report
+
+                                    wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
                                     duplicates.append(str(tag))
@@ -576,6 +608,9 @@ def generateReport2():
                                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                             if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
                                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                                
+                                            
                                             #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                         else:
@@ -608,7 +643,21 @@ def generateReport2():
                                                         report3.add_paragraph(item, style='List Bullet')
                                                         para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                        
+                                                        counter2 = counter1 - 1
+                                                        cell = str('B'+ str(counter2))
+                                                        cell2 = str(item)
+                                                        excelReport2.range(cell).value = cell2
+                                                        counter2 += 1
+                                                        counter1 += 1
+
+
+                                                        wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+
                                                 report3.add_paragraph("\n")
+                                                counter2 += 1
+                                                counter1 += 1
+                                                excelReport2.autofit()
 
 
 
@@ -639,6 +688,13 @@ def generateReport2():
                                     keyCheck3 = (keyCheck2.replace(']', ''))
                                     keyCheck4 = (keyCheck3.replace(' ', ''))
                                     report3.add_paragraph(x) # display the parent tag, included brackets
+                                    cell = str('A'+ str(counter1))
+                                    cell2 = str(str(x))
+                                    excelReport2.range(cell).value = cell2
+                                    counter1 += 2 # counter for excel report
+                                    counter2 += 1 # counter for excel report
+
+                                    wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
 
                                     if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                         if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
@@ -682,8 +738,18 @@ def generateReport2():
                                                     report3.add_paragraph(item, style='List Bullet')
                                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                    
+                                                    counter2 = counter1 - 1
+                                                    cell = str('B'+ str(counter2))
+                                                    cell2 = str(item)
+                                                    excelReport2.range(cell).value = cell2
+                                                    counter2 += 1
+                                                    counter1 += 1
 
                                             report3.add_paragraph("\n")
+                                            counter2 += 1
+                                            counter1 += 1
+                                            excelReport2.autofit()
 
                             #report3.add_paragraph("\n") # Adds a line space
                             #print(k)
@@ -1202,7 +1268,79 @@ def createExcel():
         # Log a success message
         logging.info('createExcel(): PASS')
 
+# Creates an excel report
+def createExcel2():
+    try:
+        # book_arr = xw.App().books.add()
+        # wb = book_arr.add()
+        # wb.title = "Report"
+        
+        
+        
+        # excelReport = wb.sheets.add("Report")
 
+        #excelReport.name = report
+        excelReport2.range("B1").value = "Children"
+        excelReport2.range("B1").font.Size = 18 # Change font size
+        excelReport2.range("B1").font.ColorIndex = 2 # Change font color
+        excelReport2.range('B1:B1').color = (255, 0, 0) # Change cell background color
+
+        excelReport2.range("A1").value = 'Parents'
+        excelReport2.range("A1").font.Size = 18 # Change font size
+        excelReport2.range("A1").font.ColorIndex = 2 # Change font color
+        excelReport2.range('A1:A1').color = (0, 0, 255) # Change cell background color
+
+
+
+        # For Orphan Tags
+        df3 = pd.DataFrame(orphanss)
+
+        # For Childless Tags
+        df4 = pd.DataFrame(childless)
+        
+        
+
+
+        # Select the range with the dataframe
+        #data_range = ws.range('A1').expand()
+        # Drop the indexes
+        #data_range.options(index=False).value
+
+        # Listing out the Orphan Tags
+        excelReport2.range("H3").value = df3
+        df3 = df3.reset_index(drop=True)
+
+        # Listing out the Childless Tags
+        excelReport2.range("K3").value = df4
+        df4 = df4.reset_index(drop=True)
+        
+
+        
+        # Adding OrphanTags header
+        excelReport2.range("I3").value = 'Orphan Tags'
+        excelReport2.range("I3").font.Size = 14 # Change font size
+        excelReport2.range("I3").font.ColorIndex = 2 # Change font color
+        excelReport2.range('I3:I3').color = (255, 128, 0) # Change cell background color
+
+        # Adding OrphanTags header
+        excelReport2.range("L3").value = 'Childless Tags'
+        excelReport2.range("L3").font.Size = 14 # Change font size
+        excelReport2.range("L3").font.ColorIndex = 2 # Change font color
+        excelReport2.range('L3:L3').color = (150, 75, 0) # Change cell background color
+
+        
+        
+        excelReport2.autofit()
+
+
+
+        wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+    except Exception as e:
+        # Log an error message
+        logging.error('createExcel2(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('createExcel2(): PASS')
 
 
 def toggle_state(): # this will re-enable getDoc button
@@ -1225,4 +1363,7 @@ def toggle_state6(): # this will re-enable allTags report button for tables
 
 def toggle_state7(): # this will re-enable childless report button
     Gui.getChildlessDoc.config(state="normal")
+
+def toggle_state8(): # this will re-enable excelreport 2 button
+    Gui.getExcel2.config(state="normal")
 

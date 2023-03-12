@@ -148,7 +148,8 @@ def readtxt(filename, color: Tuple[int, int, int]):
             if (getcoloredTxt(para.runs, color)):
                 # Concatenating list of runs between the colored text to single a string
                 sentence = "".join(r.text for r in para.runs)
-                fullText.append(sentence)
+                if len(sentence) > 5:  # this chcekcts if sentence has atleast 5 characters
+                    fullText.append(sentence)
                 #print(sentence) # Prints everything in the terminal
                 everything.append(sentence)
                 text10 = sentence
@@ -161,15 +162,17 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
         global orphanss
         orphanss = []
-        # Finds the lines without a childTag
+        # Finds the lines without a parentTag
         filtered_L = [value for value in fullText if "[" not in value]
         filtered_L = [s.replace(": ", ":") for s in filtered_L]
-        # Finds the lines with a childTag
+        # Finds the lines with a parentTag
         filtered_LCopy.extend(filtered_L)
         hasChild = [value for value in fullText if "[" in value]
         # will store everything found
         fullText2 = [value for value in fullText]
         fullText2 = [s.replace(": ", ":") for s in fullText2]
+        fullText2 = [s.replace("[ ", "[") for s in fullText2]
+        fullText2 = [s.replace("] ", "]") for s in fullText2]
         fullText2Copy.extend(fullText2)
         
         return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
@@ -197,6 +200,8 @@ def getcoloredTxt(runs, color):
             # word = removeAfter(word)
             child.append(word)
             withChild.append(word)
+
+            
 
     except Exception as e:
         logging.error('getColoredText(): ERROR', e)
@@ -305,25 +310,43 @@ def generateReport(): #Will generate the report for tags
             while parentTags:
                 #row = table.add_row().cells # Adding a row and then adding data in it.
                 #row[0].text = parentTags[0] # Adds the parentTag to the table
-
+                #report3.add_paragraph(parentTags[0])
                 row1 = table1.add_row().cells # Adding a row and then adding data in it.
+                
+
                 row1[0].text = parentTags[0] # Adds the parentTag to the table
+                
                 
                 noParent.append(parentTags[0])
 
-                
 
+                #for child100 in child2:
+                 #   report3.add_paragraph(child100)
+                for ch in child2:
+                    if "[" not in ch:
+                        child2.remove(ch)
+                    
+                           
 
                 if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
                     if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
+                        #report3.add_paragraph(parentTags[0] + " has no child tag")
                         orphanChild.append(parentTags[0])
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         noParent2.append(" ")
                         parents9000.append(" ")
                         orphanChildParent.append(" ")
                         #row[1].text = " " # No parent tag, so adds empty string to that cell
+                        if child2:
+                            if "[" not in child2[0]:
+                                row1[1].text = " " # No parent tag, so adds empty string to that cell
+                        if child2:
+                            if "[" not in child2[0]:
+                                child2.remove(child2[0])  # Removed that tag from the list
 
-                        row1[1].text = " " # No parent tag, so adds empty string to that cell
+                        
+                        #if child2:
+                         #   child2.remove(child2[0])  # Removed that tag from the list
 
                         e += 1
 
@@ -331,13 +354,16 @@ def generateReport(): #Will generate the report for tags
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         if child2:
                             #row[1].text = child2[0] #Adds childTag to table
-
-                            row1[1].text = child2[0] #Adds childTag to table
                             
-                            e += 1
+                            if "[" not in child2[0]:
+                                child2.remove(child2[0])  # Removed that tag from the list
+                                #report3.add_paragraph(child2[0])
+                            #report3.add_paragraph(child2[0])
+                            row1[1].text = child2[0] #Adds childTag to table                        
                             parents9000.append(child2[0])
                             noParent.append(child2[0])
                             child2.remove(child2[0])  # Removed that tag from the list
+                            e += 1
 
             parents9.extend(parents9000)
 
@@ -350,7 +376,7 @@ def generateReport(): #Will generate the report for tags
             report1.save('reportAllTags.docx') #Saves in document "report3"
 
             global dicts11
-            dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
+            dicts11 = dict(zip(parents2, childCopy)) #creates a dictionary if there is a child tag and parent tag
             dicts.update(dicts)
 
             noParent = [s.replace(" ", "") for s in noParent]
@@ -367,7 +393,7 @@ def generateReport(): #Will generate the report for tags
             # print(text3)
             text4 = removeText(text2) # child tags
             # print(text4) #only parent tag list
-            text8 = [s.replace(" ", "") for s in text4]
+            #text8 = [s.replace(" ", "") for s in text4]
 
             parents9000 = [x.strip(' ') for x in parents9000]
             #dicts3 = dict(zip(parents2, childCopy))
@@ -454,14 +480,17 @@ def generateReport2():
         #  creates a list of all the child tags that are not in the parents list
         global childless
         childless = [] 
-        # header for childless tags
-        childlessReport.add_paragraph("childless tags:") 
+
                     
         # for loop to check if the child tag is in the parents list
         for element in values_list:
             if "".join(element) not in "".join(parents10):
                 childless.append(element)
 
+
+        # sorts the childless list
+        childless.sort()
+        
         # for loop to add the childless tags to the report
         for child0 in childless:
             childlessReport.add_paragraph(child0) 
@@ -503,7 +532,8 @@ def generateReport2():
                         #report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
-                        text = dicts10[str(stringKey2)]
+                        if str(stringKey2) in dicts10: # if the key is in the dictionary
+                            text = dicts10[str(stringKey2)]
                         
 
                         if isinstance(text, list):
@@ -675,7 +705,7 @@ def generateReport2():
                             print(parents2Copy[i])
                             #print(orphanTagText[o])
                             print("nothing")
-                            orphanss.append(parents2Copy[i])
+                            #orphanss.append(parents2Copy[i])
                         if o < len(orphanTagText):
                             #report3.add_paragraph(orphanTagText[o])
                             #orphanReport.add_paragraph(orphanTagText[o])
@@ -900,7 +930,8 @@ def orphanGenReport():
                         k += 1
                         #orphanReport.add_paragraph("\n")
                         if i < len(parents2Copy):
-                            orphanReport.add_paragraph(parents2Copy[i])
+                            orphanss.append(parents2Copy[i]) # adds orphan tags to a list
+                            #orphanReport.add_paragraph(parents2Copy[i])
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                             print(parents2Copy[i])
                             #print(orphanTagText[o])
@@ -915,6 +946,9 @@ def orphanGenReport():
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
+        orphanss.sort() # sorts the list of orphan tags
+        for orph in orphanss:
+            orphanReport.add_paragraph(orph)
 
         msg1 = ("\nReport Generated\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
@@ -961,7 +995,7 @@ def removeParent(text): #removes parent tags or child tags
 
 def removeText(text6): #this should remove everything before the parent tag
     try:
-        childAfter = [s.split(None, 1)[0] for s in text6]
+        childAfter = [s.split(None, 1)[0] if len(s.split(None, 1)) >= 2 else '' for s in text6]
         return childAfter
     except Exception as e:
         # Log an error message
@@ -975,6 +1009,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
     try:
         seperator = ']'
         childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
+
         return childAfter
     except Exception as e:
         # Log an error message
@@ -987,7 +1022,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
 def removechild(text): #removes child, this one needs fixing
     try:
         mylst = []
-        mylst = [s.split(None, 1)[1] for s in text]
+        mylst = [s.split(None, 1)[1] if len(s.split(None, 1)) >= 2 else '' for s in text]
         return mylst
     except Exception as e:
         # Log an error message

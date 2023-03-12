@@ -72,25 +72,29 @@ def GUI1():
         global getDoc
         getDoc = ttk.Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument, width = 26)
         getDoc.pack()
-        # Creates Excel button button 4
-        global getExcel
-        getExcel = ttk.Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel, width = 26)
-        getExcel.pack()
-        # Creates button 5
+        # Creates button 4
         global getOrphan
         getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 26)
         getOrphan.pack()
-        # Creates button 6
+        # Creates button 5
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
-
-        # Creates button 7
+        # Creates button 6
         global getChildlessDoc
         getChildlessDoc = ttk.Button(text="Open childless tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
         getChildlessDoc.pack()
+        # Creates Excel button button 7
+        global getExcel
+        getExcel = ttk.Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel, width = 26)
+        getExcel.pack()
+
+        # Creates Excel button button 7
+        global getExcel2
+        getExcel2 = ttk.Button(text="Open Generated Excel Report2", state= DISABLED, command=Targest2.createExcel2, width = 26)
+        getExcel2.pack()
         
-        # Creates button 8
+        # Creates button 9
         #global button
         #button = Button(text="End Program", command=window.destroy, width = 26, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
         #button.pack()

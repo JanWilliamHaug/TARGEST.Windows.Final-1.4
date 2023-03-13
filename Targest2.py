@@ -830,8 +830,9 @@ def generateReport2():
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
         toggle_state3() # this will re-enable excel report button
-        toggle_state5() # This will enable the generate orphan report button
+        #toggle_state5() # This will enable the generate orphan report button
         toggle_state7() #This will enable the getChildless document button
+        orphanGenReport()
         
     except Exception as e:
         # Log an error message
@@ -1381,8 +1382,8 @@ def toggle_state3(): # this will re-enable excel report button
 def toggle_state4(): # this will re-enable word report button for orphan tags
     Gui.getOrphanDoc.config(state="normal")
 
-def toggle_state5(): # this will re-enable excel report button for orphan tags
-    Gui.getOrphan.config(state="normal")
+#def toggle_state5(): # this will re-enable excel report button for orphan tags
+ #   Gui.getOrphan.config(state="normal")
 
 def toggle_state6(): # this will re-enable allTags report button for tables
     Gui.allTagsButton.config(state="normal")

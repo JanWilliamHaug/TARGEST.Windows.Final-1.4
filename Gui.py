@@ -60,29 +60,29 @@ def GUI1():
         #canvas.create_image(50, 50, image=figure1)
 
         # Creates button 1pi
-        ttk.Button(window, text="Choose List of Documents", command=Targest2.generateReport, width = 26).pack()
+        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 26).pack()
         # Creates button 2
         global genRep
         genRep = ttk.Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2, width = 26)
         genRep.pack()
         global allTagsButton
-        allTagsButton = ttk.Button(text="Open Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 26)
+        allTagsButton = ttk.Button(text="Open all tags Report", state= DISABLED, command=Targest2.getDocumentTable, width = 26)
         allTagsButton.pack()
         # Creates button 3
         global getDoc
         getDoc = ttk.Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument, width = 26)
         getDoc.pack()
         # Creates button 4
-        global getOrphan
-        getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 26)
-        getOrphan.pack()
+        #global getOrphan
+        #getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 26)
+        #getOrphan.pack()
         # Creates button 5
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
         getOrphanDoc.pack()
         # Creates button 6
         global getChildlessDoc
-        getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
+        getChildlessDoc = ttk.Button(text="Open childless tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
         getChildlessDoc.pack()
         # Creates Excel button button 7
         global getExcel
@@ -91,7 +91,7 @@ def GUI1():
 
         # Creates Excel button button 7
         global getExcel2
-        getExcel2 = ttk.Button(text="Open Generated Excel Report #2", state= DISABLED, command=Targest2.createExcel2, width = 26)
+        getExcel2 = ttk.Button(text="Open Generated Excel Report2", state= DISABLED, command=Targest2.createExcel2, width = 26)
         getExcel2.pack()
         
         # Creates button 9

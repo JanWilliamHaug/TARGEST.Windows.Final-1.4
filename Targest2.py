@@ -107,6 +107,8 @@ dicts = {}
 
 global OrphanChild2
 OrphanChild2 = []
+global OrphanChild2Copy
+orphanChildren2Copy = []
 
 global dicts10
 dicts10 = {}
@@ -167,8 +169,12 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
         global orphanss
         orphanss = []
+
+        global orphanChildren2 # Will store the orphan child tags for orphanReport
+        orphanChildren2 = []
         # Finds the lines without a parentTag
         filtered_L = [value for value in fullText if "[" not in value]
+
         filtered_L = [s.replace(": ", ":") for s in filtered_L]
         # Finds the lines with a parentTag
         filtered_LCopy.extend(filtered_L)
@@ -307,6 +313,7 @@ def generateReport(): #Will generate the report for tags
             childCopy = copy.deepcopy(child2)
             noParent = []
             noParent2 = []
+            global orphanChild
             orphanChild = []
             orphanChildParent = []
             parents9000 = []
@@ -334,9 +341,11 @@ def generateReport(): #Will generate the report for tags
                            
 
                 if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-                    if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
+                    if fullText2[e] in filtered_LCopy: #filtered_L contains the child tags without a parent tag
                         #report3.add_paragraph(parentTags[0] + " has no child tag")
                         orphanChild.append(parentTags[0])
+                        orphanChildren2.append(parentTags[0])
+                        #orphanReport.add_paragraph(parentTags[0] + " has no child tag")
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         noParent2.append(" ")
                         parents9000.append(" ")
@@ -346,7 +355,7 @@ def generateReport(): #Will generate the report for tags
                             if "[" not in child2[0]:
                                 row1[1].text = " " # No parent tag, so adds empty string to that cell
                         if child2:
-                            if "[" not in child2[0]:
+                            if "[" not in child2[0]: # if it is not a parent tag
                                 child2.remove(child2[0])  # Removed that tag from the list
 
                         
@@ -371,6 +380,7 @@ def generateReport(): #Will generate the report for tags
                             e += 1
 
             parents9.extend(parents9000)
+            orphanChildren2Copy.extend(orphanChildren2)
 
             # Make sure everything is cleared before the program gets the next document
             child2.clear()
@@ -387,6 +397,9 @@ def generateReport(): #Will generate the report for tags
             noParent = [s.replace(" ", "") for s in noParent]
             #dicts3 = dict(zip(noParent, noParent2)) # dictionary for parent tags without child tags
             orphanChild = [s.replace(" ", "") for s in orphanChild]
+
+            
+            #orphanChildren2Copy = copy.deepcopy(orphanChildren2) # copy of orphanChildren2 list
 
             dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
             orphanDicts.update(dicts9000)
@@ -406,6 +419,7 @@ def generateReport(): #Will generate the report for tags
             dicts10.update(dicts3)
             dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
             dicts100 = copy.deepcopy(dicts2)
+            
             sorted(dicts2.keys()) # sorts the keys in the dictionary
             dicts2Copy.update(dicts100)
 
@@ -414,7 +428,7 @@ def generateReport(): #Will generate the report for tags
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
             
-        return filepath2, filtered_L
+        return filepath2, filtered_L, orphanChild
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
     except Exception as e:
@@ -519,7 +533,7 @@ def generateReport2():
         for child0 in childless:
             childlessReport.add_paragraph(child0) 
 
-        childlessReport.save('childless.docx') #Saves in document "orphanReport"
+        childlessReport.save('childless.docx') #Saves in document "childless.docx"
 
         
 
@@ -1017,9 +1031,15 @@ def orphanGenReport():
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
-        orphanss.sort() # sorts the list of orphan tags
-        for orph in orphanss:
-            orphanReport.add_paragraph(orph)
+        #orphanss.sort() # sorts the list of orphan tags
+        #orphanChildren2Copy.sort() # sorts the list of orphan child tags
+        
+        
+        #for orph in orphanss:
+        #    orphanReport.add_paragraph(orph)
+        #orphanReport.add_paragraph("Orphan Tags2: ")
+        for orph5 in orphanChildren2Copy:
+            orphanReport.add_paragraph(orph5)
 
         msg1 = ("\nReport Generated\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
@@ -1197,7 +1217,7 @@ def createExcel():
         df2 = pd.DataFrame(list(dicts11111.items()))
 
         # For Orphan Tags
-        df3 = pd.DataFrame(orphanss)
+        df3 = pd.DataFrame(orphanChildren2Copy)
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)
@@ -1299,7 +1319,7 @@ def createExcel2():
 
 
         # For Orphan Tags
-        df3 = pd.DataFrame(orphanss)
+        df3 = pd.DataFrame(orphanChildren2Copy)
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)

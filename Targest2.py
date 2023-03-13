@@ -495,7 +495,6 @@ def generateReport2():
         #print(dicts10)
 
 
-        #report3.add_paragraph("all parents:") # header for all parents
 
         parents10 = [] # list of all the parent tag tags
         for value11 in dicts10.values():

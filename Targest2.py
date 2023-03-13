@@ -413,7 +413,7 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
-            toggle_state8() # This will enable the getExcel2 report button
+            
         return filepath2, filtered_L
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
@@ -1034,6 +1034,7 @@ def orphanGenReport():
         #print("Excel Report Generated")
         #print("You can now open up your excel report as well")
         toggle_state4() # This will enable the open orphan report button
+        toggle_state8() # This will enable the getExcel2 report button
         msgOrphan = ("Orphan report created\n")
         Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
         return dicts2Copy

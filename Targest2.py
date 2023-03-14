@@ -91,7 +91,7 @@ TBDReport = Document()
 TBDReport.add_heading('TBD Tags', 0) #create word document
 global paragraph6 
 paragraph6 = TBDReport.add_paragraph()
-TBVReport.save('TBDReport.docx')
+TBDReport.save('TBDReport.docx')
 
 wb2 = xw.Book()
 global excelReport2
@@ -442,10 +442,10 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
-            for tg in parents2:
-                if "TBV:" in tg:
-                    TBVReport.add_paragraph(tg)
-            TBVReport.save('TBVReport.docx')
+            # for tg in parents2:
+            #     if "TBV:" in tg:
+            #         TBVReport.add_paragraph(tg)
+            # TBVReport.save('TBVReport.docx')
             
         return filepath2, filtered_L, orphanChild
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
@@ -625,6 +625,9 @@ def generateReport2():
                                     if "TBV:" in parentTag1:
                                         TBVReport.add_paragraph(parentTag1)
                                         TBVReport.save('TBVReport.docx')
+                                    if "TBD:" in parentTag1:
+                                        TBDReport.add_paragraph(parentTag1)
+                                        TBDReport.save('TBDReport.docx')
 
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
@@ -648,6 +651,11 @@ def generateReport2():
                                                 if "TBV:" in parentTag1:
                                                     TBVReport.add_paragraph(dicts2Copy[str(keyCheck4)])
                                                     TBVReport.save('TBVReport.docx')
+                                                if "TBD:" in parentTag1:
+                                                    TBDReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                    TBDReport.save('TBDReport.docx')
+
+                                            
                                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                                 
@@ -686,8 +694,16 @@ def generateReport2():
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
 
                                                         if "TBV:" in parentTag1:
-                                                            TBVReport.add_paragraph(item)
+                                                            TBVReport.add_paragraph(item, style='List Bullet')
+                                                            para2 = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBVReport.save('TBVReport.docx')
+                                                        if "TBD:" in parentTag1:
+                                                            TBDReport.add_paragraph(item, style='List Bullet')
+                                                            para3 = report3.add_paragraph(dicts2Copy[str(item)])
+                                                            para3.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+                                                        
                                                         
                                                         counter2 = counter1 - 1
                                                         cell = str('B'+ str(counter2))
@@ -734,6 +750,12 @@ def generateReport2():
                                     keyCheck3 = (keyCheck2.replace(']', ''))
                                     keyCheck4 = (keyCheck3.replace(' ', ''))
                                     report3.add_paragraph(x) # display the parent tag, included brackets
+                                    if "TBV:" in x:
+                                                            TBVReport.add_paragraph(x)
+                                                            TBVReport.save('TBVReport.docx')
+                                    if "TBD:" in x:
+                                                            TBDReport.add_paragraph(item)
+                                                            TBDReport.save('TBDReport.docx')
                                     cell = str('A'+ str(counter1))
                                     cell2 = str(str(x))
                                     excelReport2.range(cell).value = cell2
@@ -745,6 +767,12 @@ def generateReport2():
                                     if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                         if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
                                             report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                            if "TBD:" in keyCheck4:
+                                                            TBDReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                            TBDReport.save('TBDReport.docx')
+                                            if "TBV:" in keyCheck4:
+                                                            TBVReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                            TBVReport.save('TBVReport.docx')
                                         #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                     else:
@@ -784,6 +812,17 @@ def generateReport2():
                                                     report3.add_paragraph(item, style='List Bullet')
                                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                    if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item, style='List Bullet')
+                                                            para = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+                                                    if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item, style='List Bullet')
+                                                            para = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBVReport.save('TBVReport.docx')
+                                                    
                                                     
                                                     counter2 = counter1 - 1
                                                     cell = str('B'+ str(counter2))
@@ -814,6 +853,14 @@ def generateReport2():
                             #report3.add_paragraph(parents2Copy[i])
                             #orphanReport.add_paragraph(parents2Copy[i])
                             #paragraph2.add("\n" +parents2Copy[i] + " Is an orphanTag" + "\n")
+                            
+                            #if "TBV:" in parentTag1:
+                            #    TBVReport.add_paragraph(item, style='List Bullet')
+                            #    TBVReport.save('TBVReport.docx')
+                           # if "TBV:" in parentTag1:
+                            #    TBVReport.add_paragraph(item, style='List Bullet')
+                            
+                            TBVReport.save('TBVReport.docx')
                             #print(parents2Copy[i])
                             #print(orphanTagText[o])
                             print("")
@@ -863,6 +910,9 @@ def generateReport2():
         #toggle_state5() # This will enable the generate orphan report button
         toggle_state7() #This will enable the getChildless document button
         orphanGenReport()
+        toggle_state9() # This will enable the get TBV button
+        toggle_state10() # This will enable the get TBD button
+
         
     except Exception as e:
         # Log an error message
@@ -1456,4 +1506,10 @@ def toggle_state7(): # this will re-enable childless report button
 
 def toggle_state8(): # this will re-enable excelreport 2 button
     Gui.getExcel2.config(state="normal")
+
+def toggle_state9(): # this will re-enable tbv report button
+    Gui.getTBVdoc.config(state="normal")
+
+def toggle_state10(): # this will renable tbd report button
+    Gui.getTBDdoc.config(state="normal")
 

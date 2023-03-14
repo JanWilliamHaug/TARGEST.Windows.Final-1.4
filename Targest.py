@@ -718,7 +718,8 @@ def generateReport2():
         print("You can now open up your excel report as well")
         toggle_state3() # this will re-enable excel report button
         toggle_state5() # This will enable the generate orphan report button
-        toggle_state7() #This will enable the getChildless document button
+        toggle_state7() # This will enable the getChildless document button
+        toggle_state8() # 
         
     except Exception as e:
         # Log an error message

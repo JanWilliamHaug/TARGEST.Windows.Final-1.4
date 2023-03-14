@@ -87,13 +87,13 @@ def GUI1():
 
         # Creates TBV report button
         global getTBVdoc
-        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= ACTIVE, command=Targest2.getTBV, width = 26)
+        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 26)
         getTBVdoc.pack()
 
         # Creates TBV report button
         global getTBDdoc
-        getTBVdoc = ttk.Button(text="Open TBD Word Report", state= ACTIVE, command=Targest2.getTBD, width = 26)
-        getTBVdoc.pack()
+        getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 26)
+        getTBDdoc.pack()
 
         # Creates Excel button button 7
         global getExcel

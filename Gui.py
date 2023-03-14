@@ -84,6 +84,17 @@ def GUI1():
         global getChildlessDoc
         getChildlessDoc = ttk.Button(text="Open childless tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
         getChildlessDoc.pack()
+
+        # Creates TBV report button
+        global getTBVdoc
+        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= ACTIVE, command=Targest2.getTBV, width = 26)
+        getTBVdoc.pack()
+
+        # Creates TBV report button
+        global getTBDdoc
+        getTBVdoc = ttk.Button(text="Open TBD Word Report", state= ACTIVE, command=Targest2.getTBD, width = 26)
+        getTBVdoc.pack()
+
         # Creates Excel button button 7
         global getExcel
         getExcel = ttk.Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel, width = 26)

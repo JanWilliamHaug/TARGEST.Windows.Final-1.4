@@ -72,11 +72,26 @@ orphanReport.save('orphanReport.docx')
 global childlessReport
 childlessReport = Document()
 childlessReport.add_heading('Childless Report', 0)
+
 global paragraph3
 paragraph3 = childlessReport.add_paragraph()
 runnerOrphan = paragraph3.add_run("These are the childless tags that were found in the documents: ")
 runnerOrphan.bold = True  # makes it bold
 childlessReport.save('childless.docx')
+
+global TBVReport
+TBVReport = Document()
+TBVReport.add_heading('TBV Tags', 0) #create word document
+global paragraph5 
+paragraph5 = TBVReport.add_paragraph()
+TBVReport.save('TBVReport.docx')
+
+global TBDReport
+TBDReport = Document()
+TBDReport.add_heading('TBD Tags', 0) #create word document
+global paragraph6 
+paragraph6 = TBDReport.add_paragraph()
+TBVReport.save('TBDReport.docx')
 
 wb2 = xw.Book()
 global excelReport2
@@ -427,6 +442,10 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
+            for tg in parents2:
+                if "TBV:" in tg:
+                    TBVReport.add_paragraph(tg)
+            TBVReport.save('TBVReport.docx')
             
         return filepath2, filtered_L, orphanChild
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
@@ -495,6 +514,7 @@ def generateReport2():
         #print(dicts10)
 
 
+        #report3.add_paragraph("all parents:") # header for all parents
 
         parents10 = [] # list of all the parent tag tags
         for value11 in dicts10.values():
@@ -828,6 +848,7 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
+        TBVReport.save('TBVReport.docx') # saves the TBV report
         toggle_state3() # this will re-enable excel report button
         #toggle_state5() # This will enable the generate orphan report button
         toggle_state7() #This will enable the getChildless document button
@@ -1191,6 +1212,38 @@ def getChildlessDocument():
         # Log a success message
         logging.info('getChildlessDocument(): PASS')
 
+def getTBV():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'TBVReport.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('TBVReport.docx')
+        # os.startfile(tbvReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', generateReport2)
+    except Exception as e:
+        # Log an error message
+        logging.error('getTBV(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getTBV(): PASS')
+        
+def getTBD():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'TBDReport.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('TBDReport.docx') 
+        # os.startfile(tbvReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', generateReport2)
+    except Exception as e:
+        # Log an error message
+        logging.error('getTBD(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getTBD(): PASS')
+
 # Creates an excel report
 def createExcel():
     try:
@@ -1293,6 +1346,7 @@ def createExcel():
     else:
         # Log a success message
         logging.info('createExcel(): PASS')
+
 
 # Creates an excel report
 def createExcel2():

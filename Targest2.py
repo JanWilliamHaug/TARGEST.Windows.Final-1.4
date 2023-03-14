@@ -622,6 +622,9 @@ def generateReport2():
                                     counter2 += 1 # counter for excel report
 
                                     wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+                                    if "TBV:" in parentTag1:
+                                        TBVReport.add_paragraph(parentTag1)
+                                        TBVReport.save('TBVReport.docx')
 
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
@@ -642,6 +645,9 @@ def generateReport2():
 
                                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                             if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                                if "TBV:" in parentTag1:
+                                                    TBVReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                    TBVReport.save('TBVReport.docx')
                                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                                 
@@ -678,6 +684,10 @@ def generateReport2():
                                                         report3.add_paragraph(item, style='List Bullet')
                                                         para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+                                                        if "TBV:" in parentTag1:
+                                                            TBVReport.add_paragraph(item)
+                                                            TBVReport.save('TBVReport.docx')
                                                         
                                                         counter2 = counter1 - 1
                                                         cell = str('B'+ str(counter2))

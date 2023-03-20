@@ -72,11 +72,31 @@ orphanReport.save('orphanReport.docx')
 global childlessReport
 childlessReport = Document()
 childlessReport.add_heading('Childless Report', 0)
+
 global paragraph3
 paragraph3 = childlessReport.add_paragraph()
 runnerOrphan = paragraph3.add_run("These are the childless tags that were found in the documents: ")
 runnerOrphan.bold = True  # makes it bold
 childlessReport.save('childless.docx')
+
+global TBVReport
+TBVReport = Document()
+TBVReport.add_heading('TBV Tags', 0) #create word document
+global paragraph5 
+paragraph5 = TBVReport.add_paragraph()
+TBVReport.save('TBVReport.docx')
+
+global TBDReport
+TBDReport = Document()
+TBDReport.add_heading('TBD Tags', 0) #create word document
+global paragraph6 
+paragraph6 = TBDReport.add_paragraph()
+TBDReport.save('TBDReport.docx')
+
+wb2 = xw.Book()
+global excelReport2
+excelReport2 = wb2.sheets[0]
+excelReport2.name = "Report"
 
 global dicts2Copy # This will hold the dicts2 content in all documents
 dicts2Copy = {}
@@ -102,6 +122,8 @@ dicts = {}
 
 global OrphanChild2
 OrphanChild2 = []
+global OrphanChild2Copy
+orphanChildren2Copy = []
 
 global dicts10
 dicts10 = {}
@@ -148,7 +170,8 @@ def readtxt(filename, color: Tuple[int, int, int]):
             if (getcoloredTxt(para.runs, color)):
                 # Concatenating list of runs between the colored text to single a string
                 sentence = "".join(r.text for r in para.runs)
-                fullText.append(sentence)
+                if len(sentence) > 5:  # this chcekcts if sentence has atleast 5 characters
+                    fullText.append(sentence)
                 #print(sentence) # Prints everything in the terminal
                 everything.append(sentence)
                 text10 = sentence
@@ -161,15 +184,21 @@ def readtxt(filename, color: Tuple[int, int, int]):
 
         global orphanss
         orphanss = []
-        # Finds the lines without a childTag
+
+        global orphanChildren2 # Will store the orphan child tags for orphanReport
+        orphanChildren2 = []
+        # Finds the lines without a parentTag
         filtered_L = [value for value in fullText if "[" not in value]
+
         filtered_L = [s.replace(": ", ":") for s in filtered_L]
-        # Finds the lines with a childTag
+        # Finds the lines with a parentTag
         filtered_LCopy.extend(filtered_L)
         hasChild = [value for value in fullText if "[" in value]
         # will store everything found
         fullText2 = [value for value in fullText]
         fullText2 = [s.replace(": ", ":") for s in fullText2]
+        fullText2 = [s.replace("[ ", "[") for s in fullText2]
+        fullText2 = [s.replace("] ", "]") for s in fullText2]
         fullText2Copy.extend(fullText2)
         
         return fullText, filtered_L, hasChild, filtered_LCopy, fullText2Copy, fullText2
@@ -197,6 +226,8 @@ def getcoloredTxt(runs, color):
             # word = removeAfter(word)
             child.append(word)
             withChild.append(word)
+
+            
 
     except Exception as e:
         logging.error('getColoredText(): ERROR', e)
@@ -297,6 +328,7 @@ def generateReport(): #Will generate the report for tags
             childCopy = copy.deepcopy(child2)
             noParent = []
             noParent2 = []
+            global orphanChild
             orphanChild = []
             orphanChildParent = []
             parents9000 = []
@@ -305,25 +337,45 @@ def generateReport(): #Will generate the report for tags
             while parentTags:
                 #row = table.add_row().cells # Adding a row and then adding data in it.
                 #row[0].text = parentTags[0] # Adds the parentTag to the table
-
+                #report3.add_paragraph(parentTags[0])
                 row1 = table1.add_row().cells # Adding a row and then adding data in it.
+                
+
                 row1[0].text = parentTags[0] # Adds the parentTag to the table
+                
                 
                 noParent.append(parentTags[0])
 
-                
 
+                #for child100 in child2:
+                 #   report3.add_paragraph(child100)
+                for ch in child2:
+                    if "[" not in ch:
+                        child2.remove(ch)
+                    
+                           
 
                 if e < len(fullText2):  #as long as variable e is not higher than the lines in fullText2
-                    if fullText2[e] in filtered_LCopy: #filtered_L contains the parent tags without a child tag
+                    if fullText2[e] in filtered_LCopy: #filtered_L contains the child tags without a parent tag
+                        #report3.add_paragraph(parentTags[0] + " has no child tag")
                         orphanChild.append(parentTags[0])
+                        orphanChildren2.append(parentTags[0])
+                        #orphanReport.add_paragraph(parentTags[0] + " has no child tag")
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         noParent2.append(" ")
                         parents9000.append(" ")
                         orphanChildParent.append(" ")
                         #row[1].text = " " # No parent tag, so adds empty string to that cell
+                        if child2:
+                            if "[" not in child2[0]:
+                                row1[1].text = " " # No parent tag, so adds empty string to that cell
+                        if child2:
+                            if "[" not in child2[0]: # if it is not a parent tag
+                                child2.remove(child2[0])  # Removed that tag from the list
 
-                        row1[1].text = " " # No parent tag, so adds empty string to that cell
+                        
+                        #if child2:
+                         #   child2.remove(child2[0])  # Removed that tag from the list
 
                         e += 1
 
@@ -331,15 +383,19 @@ def generateReport(): #Will generate the report for tags
                         parentTags.remove(parentTags[0]) # Removes that tag after use
                         if child2:
                             #row[1].text = child2[0] #Adds childTag to table
-
-                            row1[1].text = child2[0] #Adds childTag to table
                             
-                            e += 1
+                            if "[" not in child2[0]:
+                                child2.remove(child2[0])  # Removed that tag from the list
+                                #report3.add_paragraph(child2[0])
+                            #report3.add_paragraph(child2[0])
+                            row1[1].text = child2[0] #Adds childTag to table                        
                             parents9000.append(child2[0])
                             noParent.append(child2[0])
                             child2.remove(child2[0])  # Removed that tag from the list
+                            e += 1
 
             parents9.extend(parents9000)
+            orphanChildren2Copy.extend(orphanChildren2)
 
             # Make sure everything is cleared before the program gets the next document
             child2.clear()
@@ -350,12 +406,15 @@ def generateReport(): #Will generate the report for tags
             report1.save('reportAllTags.docx') #Saves in document "report3"
 
             global dicts11
-            dicts11 = dict(zip(parents2, childCopy)) #creates a dictrionary if there is a child tag and parent tag
+            dicts11 = dict(zip(parents2, childCopy)) #creates a dictionary if there is a child tag and parent tag
             dicts.update(dicts)
 
             noParent = [s.replace(" ", "") for s in noParent]
             #dicts3 = dict(zip(noParent, noParent2)) # dictionary for parent tags without child tags
             orphanChild = [s.replace(" ", "") for s in orphanChild]
+
+            
+            #orphanChildren2Copy = copy.deepcopy(orphanChildren2) # copy of orphanChildren2 list
 
             dicts9000 = dict(zip(orphanChild, orphanChildParent)) # orphan dictionary
             orphanDicts.update(dicts9000)
@@ -367,7 +426,7 @@ def generateReport(): #Will generate the report for tags
             # print(text3)
             text4 = removeText(text2) # child tags
             # print(text4) #only parent tag list
-            text8 = [s.replace(" ", "") for s in text4]
+            #text8 = [s.replace(" ", "") for s in text4]
 
             parents9000 = [x.strip(' ') for x in parents9000]
             #dicts3 = dict(zip(parents2, childCopy))
@@ -375,6 +434,7 @@ def generateReport(): #Will generate the report for tags
             dicts10.update(dicts3)
             dicts2 = dict(zip(parents2, text3)) # creates a dictionary with child tags and text
             dicts100 = copy.deepcopy(dicts2)
+            
             sorted(dicts2.keys()) # sorts the keys in the dictionary
             dicts2Copy.update(dicts100)
 
@@ -382,7 +442,12 @@ def generateReport(): #Will generate the report for tags
 
             toggle_state2() # This will enable the generate report button
             toggle_state6() # This will enable the open allTags report button
-        return filepath2, filtered_L
+            # for tg in parents2:
+            #     if "TBV:" in tg:
+            #         TBVReport.add_paragraph(tg)
+            # TBVReport.save('TBVReport.docx')
+            
+        return filepath2, filtered_L, orphanChild
         return parents2, dicts2, dicts10, dicts2Copy, parents2Copy, fullText2, filtered_LCopy, dicts3, orphanDicts, OrphanChild2
         
     except Exception as e:
@@ -396,11 +461,28 @@ def generateReport(): #Will generate the report for tags
 def generateReport2():
     try:
 
-        print("here is dicts10 before:")
-        print(dicts10)
+        #print("here is dicts10 before:")
+        #print(dicts10)
         global dicts11111 # Will be used for the excel report later for child - parent
         dicts11111 = {}
         dicts11111 = copy.deepcopy(dicts10)
+
+        # counters for Excel report2
+
+        global counter1
+        counter1 = 2
+        global counter2
+        counter2 = 1
+        global counter3
+        counter3 = 0
+        global cell
+        cell = 0;
+        global cell2
+        cell2 = 0;
+
+
+
+        #excelReport2.range("A3").value = 'Childless Tags'
 
         pattern = r'\[([^\]]+)\]'  
         for key in dicts10:
@@ -409,7 +491,7 @@ def generateReport2():
                 if len(matches2) > 1:
                         
                         
-                        print("There is more than one ']' in the input string.", dicts10[key] )
+                        #print("There is more than one ']' in the input string.", dicts10[key] )
                         dicts10[key] = []
                         parents2 = []
                         for match in matches2:
@@ -425,10 +507,11 @@ def generateReport2():
                             #parentChild2.setdefault(key, [parentChild2[key]]).append(match)
                             
                 else:
-                    print("There is only one ']' in the input string.")
+                    #print("There is only one ']' in the input string.")
+                    print("")
         
-        print("here is dicts10 after:")
-        print(dicts10)
+        #print("here is dicts10 after:")
+        #print(dicts10)
 
 
         #report3.add_paragraph("all parents:") # header for all parents
@@ -454,19 +537,22 @@ def generateReport2():
         #  creates a list of all the child tags that are not in the parents list
         global childless
         childless = [] 
-        # header for childless tags
-        childlessReport.add_paragraph("childless tags:") 
+
                     
         # for loop to check if the child tag is in the parents list
         for element in values_list:
             if "".join(element) not in "".join(parents10):
                 childless.append(element)
 
+
+        # sorts the childless list
+        childless.sort()
+        
         # for loop to add the childless tags to the report
         for child0 in childless:
             childlessReport.add_paragraph(child0) 
 
-        childlessReport.save('childless.docx') #Saves in document "orphanReport"
+        childlessReport.save('childless.docx') #Saves in document "childless.docx"
 
         
 
@@ -503,11 +589,13 @@ def generateReport2():
                         #report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
-                        text = dicts10[str(stringKey2)]
+                        if str(stringKey2) in dicts10: # if the key is in the dictionary
+                            text = dicts10[str(stringKey2)]
+                        
                         
 
                         if isinstance(text, list):
-                            print("it is a list")
+                            #print("it is a list")
                             #report3.add_paragraph("List tags found") # display the parent tag, included brackets
                             
                             for tag in text:
@@ -518,7 +606,8 @@ def generateReport2():
                             
                                 #report3.add_paragraph(tag)
                                 if (str(tag) in duplicates):
-                                    print("in duplicates")
+                                    #print("in duplicates")
+                                    print("")
                                     
                                     
                                     
@@ -526,6 +615,20 @@ def generateReport2():
                                 else:
                                     parentTag1 = ('['+tag+']')
                                     
+                                    cell = str('A'+ str(counter1))
+                                    cell2 = str(str(parentTag1))
+                                    excelReport2.range(cell).value = cell2
+                                    counter1 += 2 # counter for excel report
+                                    counter2 += 1 # counter for excel report
+
+                                    wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+                                    if "TBV:" in parentTag1:
+                                        TBVReport.add_paragraph(parentTag1)
+                                        TBVReport.save('TBVReport.docx')
+                                    if "TBD:" in parentTag1:
+                                        TBDReport.add_paragraph(parentTag1)
+                                        TBDReport.save('TBDReport.docx')
+
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
                                     duplicates.append(str(tag))
@@ -545,11 +648,23 @@ def generateReport2():
 
                                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                             if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
+                                                if "TBV:" in parentTag1:
+                                                    TBVReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                    TBVReport.save('TBVReport.docx')
+                                                if "TBD:" in parentTag1:
+                                                    TBDReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                    TBDReport.save('TBDReport.docx')
+
+                                            
                                                 report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+
+                                                
+                                            
                                             #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                         else:
                                             report3.add_paragraph("Requirement text not found")
+                                            orphanChildren2Copy.append(str(keyCheck4))
                                             #orphanReport.add_paragraph("Requirement text not found")
                                         #print(dicts10[str(key)])
                                         #report3.add_paragraph(dicts10[str(stringKey)])
@@ -578,12 +693,38 @@ def generateReport2():
                                                         report3.add_paragraph(item, style='List Bullet')
                                                         para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+
+                                                        if "TBV:" in parentTag1:
+                                                            TBVReport.add_paragraph(item, style='List Bullet')
+                                                            para2 = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBVReport.save('TBVReport.docx')
+                                                        if "TBD:" in parentTag1:
+                                                            TBDReport.add_paragraph(item, style='List Bullet')
+                                                            para3 = report3.add_paragraph(dicts2Copy[str(item)])
+                                                            para3.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+                                                        
+                                                        
+                                                        counter2 = counter1 - 1
+                                                        cell = str('B'+ str(counter2))
+                                                        cell2 = str(item)
+                                                        excelReport2.range(cell).value = cell2
+                                                        counter2 += 1
+                                                        counter1 += 1
+
+
+                                                        wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+
                                                 report3.add_paragraph("\n")
+                                                counter2 += 1
+                                                counter1 += 1
+                                                excelReport2.autofit()
 
 
 
                         else:
-                            print("not a list")    
+                            #print("not a list")    
                             PTags = text.split(']')
                             PTags = [s.strip() + ']' for s in PTags]
                             PTags.pop()
@@ -592,7 +733,8 @@ def generateReport2():
                             hx10 = hx10.replace(']', '')
                             #tag.strip()
                             if (str(hx10) in duplicates):
-                                print("in duplicates")
+                                #print("in duplicates")
+                                print("")
                                     
 
                             else:
@@ -609,14 +751,34 @@ def generateReport2():
                                     keyCheck3 = (keyCheck2.replace(']', ''))
                                     keyCheck4 = (keyCheck3.replace(' ', ''))
                                     report3.add_paragraph(x) # display the parent tag, included brackets
+                                    if "TBV:" in x:
+                                                            TBVReport.add_paragraph(x)
+                                                            TBVReport.save('TBVReport.docx')
+                                    if "TBD:" in x:
+                                                            TBDReport.add_paragraph(item)
+                                                            TBDReport.save('TBDReport.docx')
+                                    cell = str('A'+ str(counter1))
+                                    cell2 = str(str(x))
+                                    excelReport2.range(cell).value = cell2
+                                    counter1 += 2 # counter for excel report
+                                    counter2 += 1 # counter for excel report
+
+                                    wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
 
                                     if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                         if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
                                             report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                            if "TBD:" in keyCheck4:
+                                                            TBDReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                            TBDReport.save('TBDReport.docx')
+                                            if "TBV:" in keyCheck4:
+                                                            TBVReport.add_paragraph(dicts2Copy[str(keyCheck4)])
+                                                            TBVReport.save('TBVReport.docx')
                                         #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                     else:
                                         report3.add_paragraph("Requirement text not found")
+                                        orphanChildren2Copy.append(str(keyCheck4))
                                         #orphanReport.add_paragraph("Requirement text not found")
                                     #print(dicts10[str(key)])
                                     #report3.add_paragraph(dicts10[str(stringKey)])
@@ -652,8 +814,29 @@ def generateReport2():
                                                     report3.add_paragraph(item, style='List Bullet')
                                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                    if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item, style='List Bullet')
+                                                            para = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+                                                    if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item, style='List Bullet')
+                                                            para = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBVReport.save('TBVReport.docx')
+                                                    
+                                                    
+                                                    counter2 = counter1 - 1
+                                                    cell = str('B'+ str(counter2))
+                                                    cell2 = str(item)
+                                                    excelReport2.range(cell).value = cell2
+                                                    counter2 += 1
+                                                    counter1 += 1
 
                                             report3.add_paragraph("\n")
+                                            counter2 += 1
+                                            counter1 += 1
+                                            excelReport2.autofit()
 
                             #report3.add_paragraph("\n") # Adds a line space
                             #print(k)
@@ -672,17 +855,25 @@ def generateReport2():
                             #report3.add_paragraph(parents2Copy[i])
                             #orphanReport.add_paragraph(parents2Copy[i])
                             #paragraph2.add("\n" +parents2Copy[i] + " Is an orphanTag" + "\n")
-                            print(parents2Copy[i])
+                            
+                            #if "TBV:" in parentTag1:
+                            #    TBVReport.add_paragraph(item, style='List Bullet')
+                            #    TBVReport.save('TBVReport.docx')
+                           # if "TBV:" in parentTag1:
+                            #    TBVReport.add_paragraph(item, style='List Bullet')
+                            
+                            TBVReport.save('TBVReport.docx')
+                            #print(parents2Copy[i])
                             #print(orphanTagText[o])
-                            print("nothing")
-                            orphanss.append(parents2Copy[i])
+                            print("")
+                            #orphanss.append(parents2Copy[i])
                         if o < len(orphanTagText):
                             #report3.add_paragraph(orphanTagText[o])
                             #orphanReport.add_paragraph(orphanTagText[o])
-                            print("nothing")
+                            print("")
                         o += 1
                         if i < len(parents2Copy):
-                            print("nothing")
+                            print("")
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         #m += 1
 
@@ -716,10 +907,14 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg3) #print in GUI
         print("Excel Report Generated")
         print("You can now open up your excel report as well")
+        TBVReport.save('TBVReport.docx') # saves the TBV report
         toggle_state3() # this will re-enable excel report button
-        toggle_state5() # This will enable the generate orphan report button
-        toggle_state7() # This will enable the getChildless document button
-        toggle_state8() # 
+        #toggle_state5() # This will enable the generate orphan report button
+        toggle_state7() #This will enable the getChildless document button
+        orphanGenReport()
+        toggle_state9() # This will enable the get TBV button
+        toggle_state10() # This will enable the get TBD button
+
         
     except Exception as e:
         # Log an error message
@@ -768,7 +963,8 @@ def orphanGenReport():
                         
 
                         if isinstance(text, list):
-                            print("it is a list")
+                            #print("it is a list")
+                            print("")
                             #report3.add_paragraph("List tags found") # display the parent tag, included brackets
                             
                             for tag in text:
@@ -777,7 +973,8 @@ def orphanGenReport():
                                 PTags = [s.strip() + ']' for s in PTags]
                                 tag.strip()
                                 if (str(tag) in duplicates):
-                                    print("in duplicates")
+                                    #print("in duplicates")
+                                    print("")
                                     
 
                                 else:
@@ -801,11 +998,12 @@ def orphanGenReport():
                                         if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                             if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
                                                 #report3.add_paragraph(dicts2Copy[str(keyCheck4)])
-                                                print("nothin")
+                                                print("")
                                             #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                         else:
-                                            print("nothin")
+                                            print("")
+                                            #orphanChildren2Copy.append(str(keyCheck4))
                                             #report3.add_paragraph("Requirement text not found")
                                             #orphanReport.add_paragraph("Requirement text not found")
                                         #print(dicts10[str(key)])
@@ -831,7 +1029,7 @@ def orphanGenReport():
                                                 for item in keys: #keys are child tags of hx/the parent tag
 
                                                     if item != "" and item!= " ":
-                                                        print("nothin")
+                                                        print("")
                                                         #report3.add_paragraph(item, style='List Bullet')
                                                         #para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
@@ -841,7 +1039,7 @@ def orphanGenReport():
 
 
                         else:
-                            print("not a list")    
+                            print("")    
                             PTags = text.split(']')
                             PTags = [s.strip() + ']' for s in PTags]
                             PTags.pop()
@@ -855,13 +1053,14 @@ def orphanGenReport():
 
                                 if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                     if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
-                                        print("nothin")
+                                        print("")
                                         #report3.add_paragraph(dicts2Copy[str(keyCheck4)])
                                     #orphanReport.add_paragraph(dicts2Copy[str(keyCheck4)])
 
                                 else:
                                     #report3.add_paragraph("Requirement text not found")
-                                    print("nothin")
+                                    #orphanChildren2Copy.append(str(keyCheck4))
+                                    print("")
                                     #orphanReport.add_paragraph("Requirement text not found")
                                 #print(dicts10[str(key)])
                                 #report3.add_paragraph(dicts10[str(stringKey)])
@@ -880,7 +1079,7 @@ def orphanGenReport():
                                         for item in keys: #keys are child tags of hx/the parent tag
 
                                             if item != "" and item!= " ":
-                                                print("nothin")
+                                                print("")
                                                 #report3.add_paragraph(item, style='List Bullet')
                                                 #para = report3.add_paragraph(dicts2Copy[str(item)])
                                                 #para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
@@ -901,35 +1100,46 @@ def orphanGenReport():
                         k += 1
                         #orphanReport.add_paragraph("\n")
                         if i < len(parents2Copy):
-                            orphanReport.add_paragraph(parents2Copy[i])
+                            orphanss.append(parents2Copy[i]) # adds orphan tags to a list
+                            #orphanReport.add_paragraph(parents2Copy[i])
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
-                            print(parents2Copy[i])
+                            #print(parents2Copy[i])
                             #print(orphanTagText[o])
-                            print("nothing")
+                            print("")
                         if o < len(orphanTagText):
                             #orphanReport.add_paragraph(orphanTagText[o])
-                            print("nothing")
+                            print("")
                             
                         o += 1
                         if i < len(parents2Copy):
-                            print("nothing")
+                            print("")
                             #orphanReport.add_paragraph(parents2Copy[i] + " is an orphan tag")
                         i += 1
 
+        #orphanss.sort() # sorts the list of orphan tags
+        #orphanChildren2Copy.sort() # sorts the list of orphan child tags
+        
+        
+        #for orph in orphanss:
+        #    orphanReport.add_paragraph(orph)
+        #orphanReport.add_paragraph("Orphan Tags2: ")
+        for orph5 in orphanChildren2Copy:
+            orphanReport.add_paragraph(orph5)
 
         msg1 = ("\nReport Generated\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("You can now open up your report\n")
         Gui.Txt.insert(tk.END, msg2) #print in GUI
-        print("Report Generated")
-        print("You can now open up your report")
+        #print("Report Generated")
+        #print("You can now open up your report")
         orphanReport.save('orphanReport.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
         Gui.Txt.insert(tk.END, msg3) #print in GUI
-        print("Excel Report Generated")
-        print("You can now open up your excel report as well")
+        #print("Excel Report Generated")
+        #print("You can now open up your excel report as well")
         toggle_state4() # This will enable the open orphan report button
+        toggle_state8() # This will enable the getExcel2 report button
         msgOrphan = ("Orphan report created\n")
         Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
         return dicts2Copy
@@ -962,7 +1172,7 @@ def removeParent(text): #removes parent tags or child tags
 
 def removeText(text6): #this should remove everything before the parent tag
     try:
-        childAfter = [s.split(None, 1)[0] for s in text6]
+        childAfter = [s.split(None, 1)[0] if len(s.split(None, 1)) >= 2 else '' for s in text6]
         return childAfter
     except Exception as e:
         # Log an error message
@@ -976,6 +1186,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
     try:
         seperator = ']'
         childAfter = [i.rsplit(']', 1)[0] + seperator for i in childtags]
+
         return childAfter
     except Exception as e:
         # Log an error message
@@ -988,7 +1199,7 @@ def removeAfter(childtags): #removes everything after the  tag, example "pass"
 def removechild(text): #removes child, this one needs fixing
     try:
         mylst = []
-        mylst = [s.split(None, 1)[1] for s in text]
+        mylst = [s.split(None, 1)[1] if len(s.split(None, 1)) >= 2 else '' for s in text]
         return mylst
     except Exception as e:
         # Log an error message
@@ -1065,6 +1276,38 @@ def getChildlessDocument():
         # Log a success message
         logging.info('getChildlessDocument(): PASS')
 
+def getTBV():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'TBVReport.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('TBVReport.docx')
+        # os.startfile(tbvReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', generateReport2)
+    except Exception as e:
+        # Log an error message
+        logging.error('getTBV(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getTBV(): PASS')
+        
+def getTBD():
+    try:
+        if platform.system() == 'Darwin':
+            subprocess.check_call(['open', 'TBDReport.docx'])
+        elif platform.system() == 'Windows':
+            os.startfile('TBDReport.docx') 
+        # os.startfile(tbvReport) # try either one for windows if the first option gives error
+        else:
+            subprocess.call('xdg-open', generateReport2)
+    except Exception as e:
+        # Log an error message
+        logging.error('getTBD(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('getTBD(): PASS')
+
 # Creates an excel report
 def createExcel():
     try:
@@ -1091,7 +1334,7 @@ def createExcel():
         df2 = pd.DataFrame(list(dicts11111.items()))
 
         # For Orphan Tags
-        df3 = pd.DataFrame(orphanss)
+        df3 = pd.DataFrame(orphanChildren2Copy)
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)
@@ -1169,6 +1412,79 @@ def createExcel():
         logging.info('createExcel(): PASS')
 
 
+# Creates an excel report
+def createExcel2():
+    try:
+        # book_arr = xw.App().books.add()
+        # wb = book_arr.add()
+        # wb.title = "Report"
+        
+        
+        
+        # excelReport = wb.sheets.add("Report")
+
+        #excelReport.name = report
+        excelReport2.range("B1").value = "Children"
+        excelReport2.range("B1").font.Size = 18 # Change font size
+        excelReport2.range("B1").font.ColorIndex = 2 # Change font color
+        excelReport2.range('B1:B1').color = (255, 0, 0) # Change cell background color
+
+        excelReport2.range("A1").value = 'Parents'
+        excelReport2.range("A1").font.Size = 18 # Change font size
+        excelReport2.range("A1").font.ColorIndex = 2 # Change font color
+        excelReport2.range('A1:A1').color = (0, 0, 255) # Change cell background color
+
+
+
+        # For Orphan Tags
+        df3 = pd.DataFrame(orphanChildren2Copy)
+
+        # For Childless Tags
+        df4 = pd.DataFrame(childless)
+        
+        
+
+
+        # Select the range with the dataframe
+        #data_range = ws.range('A1').expand()
+        # Drop the indexes
+        #data_range.options(index=False).value
+
+        # Listing out the Orphan Tags
+        excelReport2.range("H3").value = df3
+        df3 = df3.reset_index(drop=True)
+
+        # Listing out the Childless Tags
+        excelReport2.range("K3").value = df4
+        df4 = df4.reset_index(drop=True)
+        
+
+        
+        # Adding OrphanTags header
+        excelReport2.range("I3").value = 'Orphan Tags'
+        excelReport2.range("I3").font.Size = 14 # Change font size
+        excelReport2.range("I3").font.ColorIndex = 2 # Change font color
+        excelReport2.range('I3:I3').color = (255, 128, 0) # Change cell background color
+
+        # Adding OrphanTags header
+        excelReport2.range("L3").value = 'Childless Tags'
+        excelReport2.range("L3").font.Size = 14 # Change font size
+        excelReport2.range("L3").font.ColorIndex = 2 # Change font color
+        excelReport2.range('L3:L3').color = (150, 75, 0) # Change cell background color
+
+        
+        
+        excelReport2.autofit()
+
+
+
+        wb2.save('report2.xlsx') # Saving excel report as 'report2.xlsx'
+    except Exception as e:
+        # Log an error message
+        logging.error('createExcel2(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('createExcel2(): PASS')
 
 
 def toggle_state(): # this will re-enable getDoc button
@@ -1183,12 +1499,21 @@ def toggle_state3(): # this will re-enable excel report button
 def toggle_state4(): # this will re-enable word report button for orphan tags
     Gui.getOrphanDoc.config(state="normal")
 
-def toggle_state5(): # this will re-enable excel report button for orphan tags
-    Gui.getOrphan.config(state="normal")
+#def toggle_state5(): # this will re-enable excel report button for orphan tags
+ #   Gui.getOrphan.config(state="normal")
 
 def toggle_state6(): # this will re-enable allTags report button for tables
     Gui.allTagsButton.config(state="normal")
 
 def toggle_state7(): # this will re-enable childless report button
     Gui.getChildlessDoc.config(state="normal")
+
+def toggle_state8(): # this will re-enable excelreport 2 button
+    Gui.getExcel2.config(state="normal")
+
+def toggle_state9(): # this will re-enable tbv report button
+    Gui.getTBVdoc.config(state="normal")
+
+def toggle_state10(): # this will renable tbd report button
+    Gui.getTBDdoc.config(state="normal")
 

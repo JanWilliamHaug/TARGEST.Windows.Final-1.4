@@ -1,6 +1,4 @@
-# from debug import debug
 import logging
-# import pdb
 import docx
 from docx import Document
 from docx.shared import RGBColor
@@ -31,15 +29,17 @@ import Targest2
 def GUI1():
    
     try:
-       
-            # pdb.set_trace()
-        # Creates a word document, saves it as "report 3, and also adds a heading
         
+
         # Creates the gui
         window = Tk(className=' TARGEST v.1.7.x ')
         # set window size #
         window.geometry("600x600")
         window['background'] = '#afeae6'
+
+        #icon = tk.PhotoImage(file='itachiakatttt.png')
+        icon = PhotoImage(file='itachiakatttt.png')
+        window.iconphoto(True, icon)
 
         # Create a style for the widgets
         style = ttk.Style()

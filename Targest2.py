@@ -664,6 +664,7 @@ def generateReport2():
 
                                         else:
                                             report3.add_paragraph("Requirement text not found")
+                                            orphanChildren2Copy.append(str(keyCheck4))
                                             #orphanReport.add_paragraph("Requirement text not found")
                                         #print(dicts10[str(key)])
                                         #report3.add_paragraph(dicts10[str(stringKey)])
@@ -682,7 +683,7 @@ def generateReport2():
                                                 hx = tag
                                                 #report3.add_paragraph("I'm here")
     
-                                                keys = [h for h, v in dicts10.items() if hx in v] # finds all the child tags
+                                                keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
                                                 #report3.add_paragraph("I'm keys")
                                                 #report3.add_paragraph(keys)
                                                 k += 1
@@ -777,6 +778,7 @@ def generateReport2():
 
                                     else:
                                         report3.add_paragraph("Requirement text not found")
+                                        orphanChildren2Copy.append(str(keyCheck4))
                                         #orphanReport.add_paragraph("Requirement text not found")
                                     #print(dicts10[str(key)])
                                     #report3.add_paragraph(dicts10[str(stringKey)])
@@ -1001,6 +1003,7 @@ def orphanGenReport():
 
                                         else:
                                             print("")
+                                            #orphanChildren2Copy.append(str(keyCheck4))
                                             #report3.add_paragraph("Requirement text not found")
                                             #orphanReport.add_paragraph("Requirement text not found")
                                         #print(dicts10[str(key)])
@@ -1019,7 +1022,7 @@ def orphanGenReport():
                                                 i += 1
                                                 hx = tag
                                                 #report3.add_paragraph("I'm here")
-                                                keys = [h for h, v in dicts10.items() if hx in v] # finds all the child tags
+                                                keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
                                                 #report3.add_paragraph("I'm keys")
                                                 #report3.add_paragraph(keys)
                                                 k += 1
@@ -1056,6 +1059,7 @@ def orphanGenReport():
 
                                 else:
                                     #report3.add_paragraph("Requirement text not found")
+                                    #orphanChildren2Copy.append(str(keyCheck4))
                                     print("")
                                     #orphanReport.add_paragraph("Requirement text not found")
                                 #print(dicts10[str(key)])
@@ -1512,4 +1516,14 @@ def toggle_state9(): # this will re-enable tbv report button
 
 def toggle_state10(): # this will renable tbd report button
     Gui.getTBDdoc.config(state="normal")
+
+def check_string(string1, string2): # checks if a string1 is in string2
+    if isinstance(string2, str): 
+        string2 = [string2]
+    pattern = r'{}(?!\d)'.format(re.escape(string1))
+    for s in string2:
+        match = re.search(pattern, s)
+        if match is not None:
+            return True
+    return False
 

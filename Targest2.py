@@ -50,7 +50,7 @@ report1 = Document()
 report1.add_heading('All Tags in each document', 0) #create word document
 global paragraph0 
 paragraph0 = report1.add_paragraph()
-report1.save('reportAllTags.docx')
+report1.save('ChildandParentTagsTables.docx')
 
 
 global report3
@@ -58,7 +58,7 @@ report3 = Document()
 report3.add_heading('Report', 0) #create word document
 global paragraph 
 paragraph = report3.add_paragraph()
-report3.save('report3.docx')
+report3.save('AllChildandParentTags.docx')
 
 global orphanReport
 orphanReport = Document()
@@ -77,7 +77,7 @@ global paragraph3
 paragraph3 = childlessReport.add_paragraph()
 runnerOrphan = paragraph3.add_run("These are the childless tags that were found in the documents: ")
 runnerOrphan.bold = True  # makes it bold
-childlessReport.save('childless.docx')
+childlessReport.save('ChildlessTags.docx')
 
 global TBVReport
 TBVReport = Document()
@@ -311,7 +311,7 @@ def generateReport(): #Will generate the report for tags
             # Now save the document to a location
             #report3.save('report.docx')
 
-            report1.save('reportAllTags.docx')
+            report1.save('ChildandParentTagsTables.docx')
 
             #orphanReport.save('orphanReport.docx')
             # Adds headers in the 1st row of the table
@@ -403,7 +403,7 @@ def generateReport(): #Will generate the report for tags
             child.clear()
             #report3.save('report.docx') #Saves in document "report3"
             orphanReport.save('orphanReport.docx') #Saves in document "orphanReport"
-            report1.save('reportAllTags.docx') #Saves in document "report3"
+            report1.save('ChildandParentTagsTables.docx') #Saves in document "report3"
 
             global dicts11
             dicts11 = dict(zip(parents2, childCopy)) #creates a dictionary if there is a child tag and parent tag
@@ -552,7 +552,7 @@ def generateReport2():
         for child0 in childless:
             childlessReport.add_paragraph(child0) 
 
-        childlessReport.save('childless.docx') #Saves in document "childless.docx"
+        childlessReport.save('ChildlessTags.docx') #Saves in document "ChildlessTags.docx"
 
         
 
@@ -891,7 +891,7 @@ def generateReport2():
                 # remove the paragraph
           #      report3.paragraphs[i]._element.clear()
                 # save the modified document
-           #     report3.save('report3.docx')
+           #     report3.save('AllChildandParentTags.docx')
 
         
 
@@ -901,7 +901,7 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg2) #print in GUI
         print("Report Generated")
         print("You can now open up your report")
-        report3.save('report3.docx')
+        report3.save('AllChildandParentTags.docx')
         toggle_state() #This will enable the getDoc button
         msg3 = ("You can now open up your excel report as well\n")
         Gui.Txt.insert(tk.END, msg3) #print in GUI
@@ -1212,9 +1212,9 @@ def removechild(text): #removes child, this one needs fixing
 def getDocumentTable():
     try:
         if platform.system() == 'Darwin':
-            subprocess.check_call(['open', 'reportAllTags.docx'])
+            subprocess.check_call(['open', 'ChildandParentTagsTables.docx'])
         elif platform.system() == 'Windows':
-            os.startfile('reportAllTags.docx')
+            os.startfile('ChildandParentTagsTables.docx')
         # os.startfile(report3) # try either one for windows if the first option gives error
         else:
             subprocess.call('xdg-open', report1)
@@ -1230,9 +1230,9 @@ def getDocumentTable():
 def getDocument():
     try:
         if platform.system() == 'Darwin':
-            subprocess.check_call(['open', 'report3.docx'])
+            subprocess.check_call(['open', 'AllChildandParentTags.docx'])
         elif platform.system() == 'Windows':
-            os.startfile('report3.docx')
+            os.startfile('AllChildandParentTags.docx')
         # os.startfile(report3) # try either one for windows if the first option gives error
         else:
             subprocess.call('xdg-open', report3)
@@ -1263,9 +1263,9 @@ def getOrphanDocument():
 def getChildlessDocument():
     try:
         if platform.system() == 'Darwin':
-            subprocess.check_call(['open', 'childless.docx'])
+            subprocess.check_call(['open', 'ChildlessTags.docx'])
         elif platform.system() == 'Windows':
-            os.startfile('childless.docx')
+            os.startfile('ChildlessTags.docx')
         # os.startfile(orphanReport) # try either one for windows if the first option gives error
         else:
             subprocess.call('xdg-open', generateReport2)

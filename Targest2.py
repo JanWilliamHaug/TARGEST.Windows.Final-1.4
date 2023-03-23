@@ -476,9 +476,9 @@ def generateReport2():
         global counter3
         counter3 = 0
         global cell
-        cell = 0;
+        cell = 0
         global cell2
-        cell2 = 0;
+        cell2 = 0
 
 
 

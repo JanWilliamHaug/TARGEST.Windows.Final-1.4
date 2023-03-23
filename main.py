@@ -1,4 +1,3 @@
-#import Targest2
 import Gui # Imports the Gui.py file
 
 if __name__ == "__main__" :

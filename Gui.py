@@ -130,9 +130,9 @@ def GUI1():
         
     except Exception as e:
         # Log an error message
-        logging.exception('main(): ERROR', exc_info=True)
+        logging.exception('GUI1(): ERROR', exc_info=True)
     else:
         # Log a success message
-        logging.info('main(): PASS')
+        logging.info('GUI1(): PASS')
 
         window.mainloop()

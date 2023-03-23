@@ -122,7 +122,7 @@ def GUI1():
         Txt.pack()
 
         
-        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "choose document" button.\n 2. Click "Generate Reports".  \n\n')
+        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "choose list of documents" button.\n 2. Click "Generate Reports".  \n\n')
         Txt.insert(tk.END, msg3) #print in GUI
 
         # show a pop-up message

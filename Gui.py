@@ -1,6 +1,4 @@
-# from debug import debug
 import logging
-# import pdb
 import docx
 from docx import Document
 from docx.shared import RGBColor
@@ -28,21 +26,22 @@ import matplotlib.pyplot as plt
 
 import Targest2
 
-# import messagebox from tkinter module
-import tkinter.messagebox
 from tkinter import messagebox
 
 def GUI1():
    
     try:
+        
 
-        
-        
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.9.x ')
+        window = Tk(className=' TARGEST v.1.7.x ')
         # set window size #
         window.geometry("600x600")
         window['background'] = '#afeae6'
+
+        #icon = tk.PhotoImage(file='itachiakatttt.png')
+        icon = PhotoImage(file='itachiakatttt.png')
+        window.iconphoto(True, icon)
 
         # Create a style for the widgets
         style = ttk.Style()
@@ -63,57 +62,57 @@ def GUI1():
         #canvas.create_image(50, 50, image=figure1)
 
         # Creates button 1pi
-        ttk.Button(window, text="Choose list of Documents", command=lambda: [Targest2.generateReport(), onClick()], width = 26).pack()
+        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 30).pack()
         # Creates button 2
         global genRep
-        genRep = ttk.Button(window, text="Generate Reports ", state= DISABLED, command=Targest2.generateReport2, width = 26)
+        genRep = ttk.Button(window, text="Generate Reports", state= DISABLED, command=Targest2.generateReport2, width = 30)
         genRep.pack()
         global allTagsButton
-        allTagsButton = ttk.Button(text="Open all tags Report", state= DISABLED, command=Targest2.getDocumentTable, width = 26)
+        allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 30)
         allTagsButton.pack()
         # Creates button 3
         global getDoc
-        getDoc = ttk.Button(window, text="Open Generated Report", state= DISABLED, command=Targest2.getDocument, width = 26)
+        getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 30)
         getDoc.pack()
         # Creates button 4
         #global getOrphan
-        #getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 26)
+        #getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 30)
         #getOrphan.pack()
         # Creates button 5
         global getOrphanDoc
-        getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 26)
+        getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 30)
         getOrphanDoc.pack()
         # Creates button 6
         global getChildlessDoc
-        getChildlessDoc = ttk.Button(text="Open childless tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 26)
+        getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 30)
         getChildlessDoc.pack()
 
         # Creates TBV report button
         global getTBVdoc
-        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 26)
+        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 30)
         getTBVdoc.pack()
 
         # Creates TBV report button
         global getTBDdoc
-        getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 26)
+        getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 30)
         getTBDdoc.pack()
 
         # Creates Excel button button 7
         global getExcel
-        getExcel = ttk.Button(text="Open Generated Excel Report", state= DISABLED, command=Targest2.createExcel, width = 26)
+        getExcel = ttk.Button(text="Open Tags and Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 30)
         getExcel.pack()
 
         # Creates Excel button button 7
         global getExcel2
-        getExcel2 = ttk.Button(text="Open Generated Excel Report2", state= DISABLED, command=Targest2.createExcel2, width = 26)
+        getExcel2 = ttk.Button(text="Open All Tags Excel Report", state= DISABLED, command=Targest2.createExcel2, width = 30)
         getExcel2.pack()
         
         # Creates button 9
         #global button
-        #button = Button(text="End Program", command=window.destroy, width = 26, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
+        #button = Button(text="End Program", command=window.destroy, width = 30, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
         #button.pack()
         global button
-        button = ttk.Button(text="End Program", command=window.destroy, width = 26)
+        button = ttk.Button(text="End Program", command=window.destroy, width = 30)
         button.pack()
 
 
@@ -137,6 +136,3 @@ def GUI1():
         logging.info('main(): PASS')
 
         window.mainloop()
-
-#def onClick():
- #           tkinter.messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous reports, before running this application")

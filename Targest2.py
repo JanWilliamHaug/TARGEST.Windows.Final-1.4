@@ -1588,12 +1588,16 @@ def check_string(string1, string2): # checks if a string1 is in string2
 
 
 import platform
-import win32com.client
+try:
+    import win32com.client
+    win32com_available = True
+except ModuleNotFoundError:
+    win32com_available = False
 import subprocess
 
 def closeReports():
     try:
-        if platform.system() == 'Windows':
+        if platform.system() == 'Windows' and win32com_available:
             word = win32com.client.Dispatch("Word.Application")
             for doc in word.Documents:
                 doc.Close()
@@ -1608,13 +1612,9 @@ def closeReports():
         # Log a success message
         logging.info('closeDocuments(): PASS')
 
-import platform
-import win32com.client
-import subprocess
-
 def closeExcelWorkbooks():
     try:
-        if platform.system() == 'Windows':
+        if platform.system() == 'Windows' and win32com_available:
             excel = win32com.client.Dispatch("Excel.Application")
             for book in excel.Workbooks:
                 book.Close(SaveChanges=False)
@@ -1628,3 +1628,4 @@ def closeExcelWorkbooks():
     else:
         # Log a success message
         logging.info('closeExcelWorkbooks(): PASS')
+

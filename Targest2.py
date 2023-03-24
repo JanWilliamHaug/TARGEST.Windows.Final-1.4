@@ -695,17 +695,46 @@ def generateReport2():
                                                         report3.add_paragraph(item, style='List Bullet')
                                                         para = report3.add_paragraph(dicts2Copy[str(item)])
                                                         para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
-
-                                                        if "TBV:" in parentTag1:
-                                                            TBVReport.add_paragraph(item, style='List Bullet')
-                                                            para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
-                                                            para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
-                                                            TBVReport.save('TBVReport.docx')
                                                         if "TBD:" in parentTag1:
                                                             TBDReport.add_paragraph(item, style='List Bullet')
                                                             para3 = report3.add_paragraph(dicts2Copy[str(item)])
                                                             para3.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBDReport.save('TBDReport.docx')
+
+                                                        if "TBV:" in parentTag1:
+                                                            TBVReport.add_paragraph(item, style='List Bullet')
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            #TBVReport.add_paragraph("here1")
+                                                            TBVReport.save('TBVReport.docx')
+                                                            stringKey = str(item)
+                                                            stringKey2 = (stringKey.replace(' ', ''))
+                                                            duplicates2 = []
+                                                            if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                                #for key in dicts10:
+                                                                    if item in dicts10:
+                                                                        hx = item
+                                                                                        #report3.add_paragraph("I'm here")
+        
+                                                                        keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+                                                                                        #report3.add_paragraph("I'm keys")
+                                                                                        #report3.add_paragraph(keys)
+                                                                        k += 1
+                                                                        for item1 in keys: #keys are child tags of hx/the parent tag
+
+                                                                            if item1 != "" and item1!= " ":
+                                                                                if item1 not in duplicates2:
+                                                                                    duplicates2.append(item1)
+                                                                                    tag2 = TBVReport.add_paragraph(item1)
+                                                                                    tag2.paragraph_format.left_indent = Inches(0.50) # adds indentation of text
+                                                                                    para = TBVReport.add_paragraph(dicts2Copy[str(item1)])
+                                                                                    para.paragraph_format.left_indent = Inches(0.50) # adds indentation of text
+                                                                                    TBVReport.save('TBVReport.docx')
+                                                                        
+                                                                
+                                                                    TBVReport.save('TBVReport.docx')
+                                                        
                                                         
                                                         
                                                         counter2 = counter1 - 1
@@ -800,7 +829,7 @@ def generateReport2():
                                             duplicates.append(str(hx))
                                             #report3.add_paragraph(str(hx))
                                             
-                                            keys = [h for h, v in dicts10.items() if hx in v]
+                                            keys = [h for h, v in dicts10.items() if check_string(hx, v)]
                                             # finds all the child tags
                                             #print(keys)
                                             k += 1
@@ -816,16 +845,44 @@ def generateReport2():
                                                     report3.add_paragraph(item, style='List Bullet')
                                                     para = report3.add_paragraph(dicts2Copy[str(item)])
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
-                                                    if "TBD:" in item:
+                                                    if "TBD:" in x:
                                                             TBDReport.add_paragraph(item, style='List Bullet')
                                                             para = TBDReport.add_paragraph(dicts2Copy[str(item)])
                                                             para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBDReport.save('TBDReport.docx')
-                                                    if "TBV:" in item:
+                                                    if "TBV:" in x:
                                                             TBVReport.add_paragraph(item, style='List Bullet')
-                                                            para = TBVReport.add_paragraph(dicts2Copy[str(item)])
-                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            #TBVReport.add_paragraph("here1")
                                                             TBVReport.save('TBVReport.docx')
+                                                            stringKey = str(item)
+                                                            stringKey2 = (stringKey.replace(' ', ''))
+                                                            duplicates2 = []
+                                                            if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                                #for key in dicts10:
+                                                                    if item in dicts10:
+                                                                        hx = item
+                                                                                        #report3.add_paragraph("I'm here")
+        
+                                                                        keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+                                                                                        #report3.add_paragraph("I'm keys")
+                                                                                        #report3.add_paragraph(keys)
+                                                                        k += 1
+                                                                        for item1 in keys: #keys are child tags of hx/the parent tag
+
+                                                                            if item1 != "" and item1!= " ":
+                                                                                if item1 not in duplicates2:
+                                                                                    duplicates2.append(item1)
+                                                                                    tag2 = TBVReport.add_paragraph(item1)
+                                                                                    tag2.paragraph_format.left_indent = Inches(0.50) # adds indentation of text
+                                                                                    para = TBVReport.add_paragraph(dicts2Copy[str(item1)])
+                                                                                    para.paragraph_format.left_indent = Inches(0.50) # adds indentation of text
+                                                                                    TBVReport.save('TBVReport.docx')
+                                                                        
+                                                                
+                                                                    TBVReport.save('TBVReport.docx')
                                                     
                                                     
                                                     counter2 = counter1 - 1
@@ -1534,7 +1591,7 @@ import platform
 import win32com.client
 import subprocess
 
-def closeReports(): # Close Word Reports
+def closeReports():
     try:
         if platform.system() == 'Windows':
             word = win32com.client.Dispatch("Word.Application")
@@ -1555,7 +1612,7 @@ import platform
 import win32com.client
 import subprocess
 
-def closeExcelWorkbooks(): # Close Excel Reports
+def closeExcelWorkbooks():
     try:
         if platform.system() == 'Windows':
             excel = win32com.client.Dispatch("Excel.Application")

@@ -34,7 +34,7 @@ def GUI1():
         
 
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.9.x ')
+        window = Tk(className=' TARGEST v.1.7.x ')
         # set window size #
         window.geometry("600x600")
         window['background'] = '#afeae6'
@@ -112,7 +112,7 @@ def GUI1():
         #button = Button(text="End Program", command=window.destroy, width = 30, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
         #button.pack()
         global button
-        button = ttk.Button(text="End Program", command=window.destroy, width = 30)
+        button = ttk.Button(text="End Program", command=lambda:[window.destroy(), Targest2.closeReports(), Targest2.closeExcelWorkbooks()], width = 30)
         button.pack()
 
 
@@ -126,13 +126,14 @@ def GUI1():
         Txt.insert(tk.END, msg3) #print in GUI
 
         # show a pop-up message
-        messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous Word Reports and Excel Reports, before running this application")
+        #messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous Word Reports and Excel Reports, before running this application")
+        messagebox.showinfo("Welcome to TARGEST",  "Make sure you have saved a text file with the paths to your documents")
         
     except Exception as e:
         # Log an error message
-        logging.exception('GUI1(): ERROR', exc_info=True)
+        logging.exception('main(): ERROR', exc_info=True)
     else:
         # Log a success message
-        logging.info('GUI1(): PASS')
+        logging.info('main(): PASS')
 
         window.mainloop()

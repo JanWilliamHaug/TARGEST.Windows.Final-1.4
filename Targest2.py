@@ -38,6 +38,8 @@ import matplotlib.pyplot as plt
 
 import Gui
 
+from tkinter import messagebox
+
 
 # Set up the logger for catching errors
 logging.basicConfig(level=logging.ERROR,
@@ -476,9 +478,9 @@ def generateReport2():
         global counter3
         counter3 = 0
         global cell
-        cell = 0
+        cell = 0;
         global cell2
-        cell2 = 0
+        cell2 = 0;
 
 
 
@@ -696,7 +698,7 @@ def generateReport2():
 
                                                         if "TBV:" in parentTag1:
                                                             TBVReport.add_paragraph(item, style='List Bullet')
-                                                            para2 = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                            para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
                                                             para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBVReport.save('TBVReport.docx')
                                                         if "TBD:" in parentTag1:
@@ -1527,3 +1529,45 @@ def check_string(string1, string2): # checks if a string1 is in string2
             return True
     return False
 
+
+import platform
+import win32com.client
+import subprocess
+
+def closeReports(): # Close Word Reports
+    try:
+        if platform.system() == 'Windows':
+            word = win32com.client.Dispatch("Word.Application")
+            for doc in word.Documents:
+                doc.Close()
+            word.Quit()
+        elif platform.system() == 'Darwin':
+            # Use subprocess to control Microsoft Word on macOS
+            subprocess.call(['osascript', '-e', 'tell application "Microsoft Word" to quit'])
+    except Exception as e:
+        # Log an error message
+        logging.error('closeDocuments(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('closeDocuments(): PASS')
+
+import platform
+import win32com.client
+import subprocess
+
+def closeExcelWorkbooks(): # Close Excel Reports
+    try:
+        if platform.system() == 'Windows':
+            excel = win32com.client.Dispatch("Excel.Application")
+            for book in excel.Workbooks:
+                book.Close(SaveChanges=False)
+            excel.Quit()
+        elif platform.system() == 'Darwin':
+            # Use subprocess to control Microsoft Excel on macOS
+            subprocess.call(['osascript', '-e', 'tell application "Microsoft Excel" to quit'])
+    except Exception as e:
+        # Log an error message
+        logging.error('closeExcelWorkbooks(): ERROR', exc_info=True)
+    else:
+        # Log a success message
+        logging.info('closeExcelWorkbooks(): PASS')

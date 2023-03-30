@@ -46,7 +46,7 @@ def GUI1():
         # Create a style for the widgets
         style = ttk.Style()
         #style.configure('Emergency.TButton', font='helvetica 24', foreground='red', padding=10)
-        style.configure("TButton", font=("Segoe UI", 10), background="#FFFFFF", foreground="green")
+        style.configure("TButton", font=("Segoe UI", 10), background="#afeae6", foreground="green")
 
 
         # Create a canvas on the left side of the window

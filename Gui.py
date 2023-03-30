@@ -34,9 +34,9 @@ def GUI1():
         
 
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.10.x ')
+        window = Tk(className=' TARGEST v.1.10.1 ')
         # set window size #
-        window.geometry("600x600")
+        window.geometry("900x650")
         window['background'] = '#afeae6'
 
         #icon = tk.PhotoImage(file='itachiakatttt.png')
@@ -46,7 +46,7 @@ def GUI1():
         # Create a style for the widgets
         style = ttk.Style()
         #style.configure('Emergency.TButton', font='helvetica 24', foreground='red', padding=10)
-        style.configure("TButton", font=("Segoe UI", 10), background="#4CAF50", foreground="green")
+        style.configure("TButton", font=("Segoe UI", 10), background="#FFFFFF", foreground="green")
 
 
         # Create a canvas on the left side of the window
@@ -61,68 +61,71 @@ def GUI1():
         # Place your anime figures on the canvas
         #canvas.create_image(50, 50, image=figure1)
 
-        # Creates button 1pi
-        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 30).pack()
-        # Creates button 2
+        # button 1
+        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 20).place(x=100, y=10)
+
+        # button 2
         global genRep
-        genRep = ttk.Button(window, text="Generate Reports", state= DISABLED, command=Targest2.generateReport2, width = 30)
-        genRep.pack()
+        genRep = ttk.Button(window, text="Generate Reports", state= DISABLED, command=Targest2.generateReport2, width = 20)
+        genRep.place(x=280, y=10)
+
+        # button 3
         global allTagsButton
         allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 30)
-        allTagsButton.pack()
-        # Creates button 3
+        allTagsButton.place(x=600, y=10)
+
+        # button 4
         global getDoc
         getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 30)
-        getDoc.pack()
-        # Creates button 4
-        #global getOrphan
-        #getOrphan = ttk.Button(text="Generate Orphan Report", state= DISABLED, command=Targest2.orphanGenReport, width = 30)
-        #getOrphan.pack()
-        # Creates button 5
+        getDoc.place(x=600, y=35)
+
+        # button 5
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 30)
-        getOrphanDoc.pack()
-        # Creates button 6
+        getOrphanDoc.place(x=600, y=60)
+
+        # button 6
         global getChildlessDoc
         getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 30)
-        getChildlessDoc.pack()
+        getChildlessDoc.place(x=600, y=85)
 
-        # Creates TBV report button
+        # button 7
         global getTBVdoc
         getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 30)
-        getTBVdoc.pack()
+        getTBVdoc.place(x=600, y=110)
 
-        # Creates TBV report button
+        # button 8
         global getTBDdoc
         getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 30)
-        getTBDdoc.pack()
+        getTBDdoc.place(x=600, y=135)
 
-        # Creates Excel button button 7
+        # button 9
         global getExcel
         getExcel = ttk.Button(text="Open Tags and Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 30)
-        getExcel.pack()
+        getExcel.place(x=600, y=160)
 
-        # Creates Excel button button 7
+        # button 10
         global getExcel2
         getExcel2 = ttk.Button(text="Open All Tags Excel Report", state= DISABLED, command=Targest2.createExcel2, width = 30)
-        getExcel2.pack()
-        
-        # Creates button 9
+        getExcel2.place(x=600, y=185)
+
         #global button
         #button = Button(text="End Program", command=window.destroy, width = 30, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
-        #button.pack()
-        global button
-        button = ttk.Button(text="End Program", command=lambda:[window.destroy(), Targest2.closeReports(), Targest2.closeExcelWorkbooks()], width = 30)
-        button.pack()
+        #button.place()
 
+        # button 11
+        global button
+        button = ttk.Button(text="End Program", command=lambda:[window.destroy(), Targest2.closeReports(), Targest2.closeExcelWorkbooks()], width = 20)
+        button.place(x=190, y=40)
 
         # Create text widget and specify size.
         global Txt
-        Txt = Text(window, height = 25, width = 55)
-        Txt.pack()
+        Txt = Text(window, height = 40, width = 75)
+        Txt.place(x=30, y=80)
+        Txt.configure(bg='grey', fg='white')
 
         
-        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "choose list of documents" button.\n 2. Click "Generate Reports".  \n\n')
+        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "Choose list of Documents" button.\n 2. Once your documents are displayed, Click "Generate Reports"\n\n')
         Txt.insert(tk.END, msg3) #print in GUI
 
         # show a pop-up message

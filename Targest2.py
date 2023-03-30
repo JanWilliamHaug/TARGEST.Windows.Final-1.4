@@ -954,18 +954,28 @@ def generateReport2():
 
         
 
-        msg1 = ("\nReport Generated\n")
+        msg1 = ("\nYou can now open up your Word and Excel reports\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
-        msg2 = ("You can now open up your report\n")
+        msg2 = ("\nDifferent reports include:\n")
         Gui.Txt.insert(tk.END, msg2) #print in GUI
-        print("Report Generated")
-        print("You can now open up your report")
+        msg3 = ("a. All of the Tags found organized in tables\n")
+        Gui.Txt.insert(tk.END, msg3) #print in GUI
+        msg4 = ("b. All Child and Parent Tags\n")
+        Gui.Txt.insert(tk.END, msg4) #print in GUI
+        msg5 = ("c. Orphan Tags\n")
+        Gui.Txt.insert(tk.END, msg5) #print in GUI
+        msg6 = ("d. Childless Tags\n")
+        Gui.Txt.insert(tk.END, msg6) #print in GUI
+        msg7 = ("e. TBV Tags\n")
+        Gui.Txt.insert(tk.END, msg7) #print in GUI
+        msg8 = ("f. TBD Tags\n")
+        Gui.Txt.insert(tk.END, msg8) #print in GUI
+        msg9 = ("g. Tags and Requirements Excel report\n")
+        Gui.Txt.insert(tk.END, msg9) #print in GUI
+        msg10 = ("h. Tag Relation Excel report\n")
+        Gui.Txt.insert(tk.END, msg10) #print in GUI
         report3.save('AllChildandParentTags.docx')
         toggle_state() #This will enable the getDoc button
-        msg3 = ("You can now open up your excel report as well\n")
-        Gui.Txt.insert(tk.END, msg3) #print in GUI
-        print("Excel Report Generated")
-        print("You can now open up your excel report as well")
         TBVReport.save('TBVReport.docx') # saves the TBV report
         toggle_state3() # this will re-enable excel report button
         #toggle_state5() # This will enable the generate orphan report button
@@ -1185,22 +1195,10 @@ def orphanGenReport():
         for orph5 in orphanChildren2Copy:
             orphanReport.add_paragraph(orph5)
 
-        msg1 = ("\nReport Generated\n")
-        Gui.Txt.insert(tk.END, msg1) #print in GUI
-        msg2 = ("You can now open up your report\n")
-        Gui.Txt.insert(tk.END, msg2) #print in GUI
-        #print("Report Generated")
-        #print("You can now open up your report")
         orphanReport.save('orphanReport.docx')
         toggle_state() #This will enable the getDoc button
-        msg3 = ("You can now open up your excel report as well\n")
-        Gui.Txt.insert(tk.END, msg3) #print in GUI
-        #print("Excel Report Generated")
-        #print("You can now open up your excel report as well")
         toggle_state4() # This will enable the open orphan report button
         toggle_state8() # This will enable the getExcel2 report button
-        msgOrphan = ("Orphan report created\n")
-        Gui.Txt.insert(tk.END, msgOrphan) #print in GUI
         return dicts2Copy
 
     except Exception as e:
@@ -1397,7 +1395,6 @@ def createExcel():
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)
-        
         
 
         # For childTag -Text

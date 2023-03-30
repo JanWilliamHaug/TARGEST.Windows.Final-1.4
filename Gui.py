@@ -127,8 +127,8 @@ def GUI1():
 
         # show a pop-up message
         #messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous Word Reports and Excel Reports, before running this application")
-        messagebox.showinfo("Welcome to TARGEST",  "Make sure you have saved a text file with the paths to your documents")
-        
+        messagebox.showinfo("Welcome to TARGEST",  "Make sure to save a text file with the paths to the documents you want to use, if you haven't already")
+
     except Exception as e:
         # Log an error message
         logging.exception('main(): ERROR', exc_info=True)

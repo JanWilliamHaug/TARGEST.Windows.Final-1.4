@@ -38,7 +38,7 @@ def GUI1():
         window['background'] = '#afeae6'
 
         #icon = tk.PhotoImage(file='itachiakatttt.png')
-        icon = PhotoImage(file='itachiakatttt.png')
+        icon = PhotoImage(file='TARGEST2.png')
         window.iconphoto(True, icon)
 
         # Create a style for the widgets

@@ -40,7 +40,7 @@ def GUI1():
         window['background'] = '#afeae6'
 
         #icon = tk.PhotoImage(file='itachiakatttt.png')
-        icon = PhotoImage(file='itachiakatttt.png')
+        icon = PhotoImage(file='TARGEST.png')
         window.iconphoto(True, icon)
 
         # Create a style for the widgets
@@ -49,65 +49,66 @@ def GUI1():
         style.configure("TButton", font=("Segoe UI", 10), background="#afeae6", foreground="green")
 
 
-        # Create a canvas on the left side of the window
+        # Create a canvas 
         #canvas = tk.Canvas(window, width=200, height=400)
+        #canvas.place(x=500, y=500)
         #canvas.pack(side='left')
 
 
         # Load your anime figures as image files
-        #figure1 = tk.PhotoImage(file='eren.png')
+        #figure1 = tk.PhotoImage(file='TARGEST2.png', width=200, height=400)
         #figure2 = tk.PhotoImage(file='eren.png')
 
         # Place your anime figures on the canvas
-        #canvas.create_image(50, 50, image=figure1)
+        #canvas.create_image(100, 100, image=figure1)
 
         # button 1
-        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 20).place(x=100, y=10)
+        ttk.Button(window, text="Choose list of Documents", command=Targest2.generateReport, width = 24).place(x=105, y=10)
 
         # button 2
         global genRep
-        genRep = ttk.Button(window, text="Generate Reports", state= DISABLED, command=Targest2.generateReport2, width = 20)
-        genRep.place(x=280, y=10)
+        genRep = ttk.Button(window, text="Generate Reports", state= DISABLED, command=Targest2.generateReport2, width = 24)
+        genRep.place(x=285, y=10)
 
         # button 3
         global allTagsButton
         allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 30)
-        allTagsButton.place(x=600, y=10)
+        allTagsButton.place(x=620, y=10)
 
         # button 4
         global getDoc
         getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 30)
-        getDoc.place(x=600, y=35)
+        getDoc.place(x=620, y=35)
 
         # button 5
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 30)
-        getOrphanDoc.place(x=600, y=60)
+        getOrphanDoc.place(x=620, y=60)
 
         # button 6
         global getChildlessDoc
         getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 30)
-        getChildlessDoc.place(x=600, y=85)
+        getChildlessDoc.place(x=620, y=85)
 
         # button 7
         global getTBVdoc
         getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 30)
-        getTBVdoc.place(x=600, y=110)
+        getTBVdoc.place(x=620, y=110)
 
         # button 8
         global getTBDdoc
         getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 30)
-        getTBDdoc.place(x=600, y=135)
+        getTBDdoc.place(x=620, y=135)
 
         # button 9
         global getExcel
         getExcel = ttk.Button(text="Open Tags and Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 30)
-        getExcel.place(x=600, y=160)
+        getExcel.place(x=620, y=160)
 
         # button 10
         global getExcel2
         getExcel2 = ttk.Button(text="Open All Tags Excel Report", state= DISABLED, command=Targest2.createExcel2, width = 30)
-        getExcel2.place(x=600, y=185)
+        getExcel2.place(x=620, y=185)
 
         #global button
         #button = Button(text="End Program", command=window.destroy, width = 30, font=("Segoe UI", 10), background="#4CAF50", foreground="white")
@@ -115,12 +116,12 @@ def GUI1():
 
         # button 11
         global button
-        button = ttk.Button(text="End Program", command=lambda:[window.destroy(), Targest2.closeReports(), Targest2.closeExcelWorkbooks()], width = 20)
-        button.place(x=190, y=40)
+        button = ttk.Button(text="End Program", command=lambda:[window.destroy(), Targest2.closeReports(), Targest2.closeExcelWorkbooks()], width = 30)
+        button.place(x=175, y=40)
 
         # Create text widget and specify size.
         global Txt
-        Txt = Text(window, height = 40, width = 75)
+        Txt = Text(window, height = 40, width = 65)
         Txt.place(x=30, y=80)
         Txt.configure(bg='grey', fg='white')
 

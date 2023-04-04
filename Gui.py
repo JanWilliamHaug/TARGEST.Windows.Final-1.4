@@ -31,8 +31,6 @@ from tkinter import messagebox
 def GUI1():
    
     try:
-        
-
         # Creates the gui
         window = Tk(className=' TARGEST v.1.10.1 ')
         # set window size #

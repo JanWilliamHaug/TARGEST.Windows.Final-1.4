@@ -540,11 +540,17 @@ def generateReport2():
         global childless
         childless = [] 
 
+        #  creates a list of all the TBV tags that are not in the parents list
+        global TBVTags
+        TBVTags = [] 
+
                     
         # for loop to check if the child tag is in the parents list
         for element in values_list:
             if "".join(element) not in "".join(parents10):
                 childless.append(element)
+
+
 
 
         # sorts the childless list
@@ -627,6 +633,7 @@ def generateReport2():
                                     if "TBV:" in parentTag1:
                                         TBVReport.add_paragraph(parentTag1)
                                         TBVReport.save('TBVReport.docx')
+                                        TBVTags.append(parentTag1)
                                     if "TBD:" in parentTag1:
                                         TBDReport.add_paragraph(parentTag1)
                                         TBDReport.save('TBDReport.docx')
@@ -785,6 +792,7 @@ def generateReport2():
                                     if "TBV:" in x:
                                                             TBVReport.add_paragraph(x)
                                                             TBVReport.save('TBVReport.docx')
+                                                            TBVTags.append(x)
                                     if "TBD:" in x:
                                                             TBDReport.add_paragraph(item)
                                                             TBDReport.save('TBDReport.docx')
@@ -1395,6 +1403,9 @@ def createExcel():
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)
+
+        # For TBV Tags
+        df5 = pd.DataFrame(TBVTags)
         
 
         # For childTag -Text
@@ -1412,6 +1423,12 @@ def createExcel():
         # Listing out the Childless Tags
         excelReport.range("K3").value = df4
         df4 = df.reset_index(drop=True)
+
+        # Listing out the Childless Tags
+        excelReport.range("M3").value = df5
+        df5 = df.reset_index(drop=True)
+
+        
         
 
         # Adding childTag header
@@ -1433,6 +1450,7 @@ def createExcel():
         excelReport.range("E3").font.Size = 14
         excelReport.range("E3").font.ColorIndex = 2
         excelReport.range("E3:E3").color = (255, 0, 0)
+
         # Adding parentTag header
         excelReport.range("F3").value = 'Parent Tag'
         excelReport.range("F3").font.Size = 14 # Change font size
@@ -1451,9 +1469,16 @@ def createExcel():
         excelReport.range("L3").font.ColorIndex = 2 # Change font color
         excelReport.range('L3:L3').color = (150, 75, 0) # Change cell background color
 
+        # Adding TBVTags header
+        excelReport.range("N3").value = 'TBV Tags'
+        excelReport.range("N3").font.Size = 14 # Change font size
+        excelReport.range("N3").font.ColorIndex = 2 # Change font color
+        excelReport.range('N3:N3').color = (150, 75, 0) # Change cell background color
+
+
         
         
-        excelReport.autofit()
+        #excelReport.autofit()
 
 
         for key in dicts2:
@@ -1497,6 +1522,9 @@ def createExcel2():
 
         # For Childless Tags
         df4 = pd.DataFrame(childless)
+
+        # For TBV Tags
+        df5 = pd.DataFrame(TBVTags)
         
         
 
@@ -1513,6 +1541,10 @@ def createExcel2():
         # Listing out the Childless Tags
         excelReport2.range("K3").value = df4
         df4 = df4.reset_index(drop=True)
+
+        # Listing out the Childless Tags
+        excelReport2.range("M3").value = df5
+        df5 = df5.reset_index(drop=True)
         
 
         
@@ -1527,6 +1559,12 @@ def createExcel2():
         excelReport2.range("L3").font.Size = 14 # Change font size
         excelReport2.range("L3").font.ColorIndex = 2 # Change font color
         excelReport2.range('L3:L3').color = (150, 75, 0) # Change cell background color
+
+        # Adding TBVTags header
+        excelReport2.range("N3").value = 'TBV Tags'
+        excelReport2.range("N3").font.Size = 14 # Change font size
+        excelReport2.range("N3").font.ColorIndex = 2 # Change font color
+        excelReport2.range('N3:N3').color = (150, 75, 0) # Change cell background color
 
         
         

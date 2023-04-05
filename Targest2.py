@@ -544,6 +544,8 @@ def generateReport2():
         global TBVTags
         TBVTags = [] 
 
+        global TBDTags
+        TBDTags = []
                     
         # for loop to check if the child tag is in the parents list
         for element in values_list:
@@ -637,7 +639,7 @@ def generateReport2():
                                     if "TBD:" in parentTag1:
                                         TBDReport.add_paragraph(parentTag1)
                                         TBDReport.save('TBDReport.docx')
-
+                                        TBDTags.append(parentTag1)
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
                                     duplicates.append(str(tag))
@@ -796,6 +798,7 @@ def generateReport2():
                                     if "TBD:" in x:
                                                             TBDReport.add_paragraph(item)
                                                             TBDReport.save('TBDReport.docx')
+                                                            TBDTags.append(x)
                                     cell = str('A'+ str(counter1))
                                     cell2 = str(str(x))
                                     excelReport2.range(cell).value = cell2
@@ -1386,10 +1389,10 @@ def createExcel():
         # excelReport = wb.sheets.add("Report")
 
         #excelReport.name = report
-        excelReport.range("B1").value = "Report"
-        excelReport.range("B1").font.Size = 18 # Change font size
-        excelReport.range("B1").font.ColorIndex = 2 # Change font color
-        excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
+        # excelReport.range("B1").value = "Report"
+        # excelReport.range("B1").font.Size = 18 # Change font size
+        # excelReport.range("B1").font.ColorIndex = 2 # Change font color
+        # excelReport.range('A1:S1').color = (0, 0, 255) # Change cell background color
 
 
         # creating a Dataframe object from a list
@@ -1404,12 +1407,13 @@ def createExcel():
         # For Childless Tags
         df4 = pd.DataFrame(childless)
 
-        # For TBV Tags
         df5 = pd.DataFrame(TBVTags)
+
+        df6 = pd.DataFrame(TBDTags)
         
 
         # For childTag -Text
-        excelReport.range("A3").value = df
+        excelReport.range("A1").value = df
 
         # Select the range with the dataframe
         #data_range = ws.range('A1').expand()
@@ -1417,68 +1421,73 @@ def createExcel():
         #data_range.options(index=False).value
 
         # Listing out the Orphan Tags
-        excelReport.range("H3").value = df3
+        excelReport.range("G1").value = df3
         df3 = df.reset_index(drop=True)
 
         # Listing out the Childless Tags
-        excelReport.range("K3").value = df4
+        excelReport.range("I1").value = df4
         df4 = df.reset_index(drop=True)
 
-        # Listing out the Childless Tags
-        excelReport.range("M3").value = df5
+        # Listing out the TBV Tags
+        excelReport.range("K1").value = df5
         df5 = df.reset_index(drop=True)
 
-        
+        # Listing out the TBD Tags
+        excelReport.range("M1").value = df6
+        df6 = df.reset_index(drop=True)
+
         
 
         # Adding childTag header
-        excelReport.range("B3").value = 'Child Tag'
-        excelReport.range("B3").font.Size = 14 # Change font size
-        excelReport.range("B3").font.ColorIndex = 2 # Change font color
-        excelReport.range('B3:B3').color = (255, 0, 0) # Change cell background color
+        excelReport.range("B1").value = 'Child Tag'
+        excelReport.range("B1").font.Size = 14 # Change font size
+        excelReport.range("B1").font.ColorIndex = 2 # Change font color
+        excelReport.range('B1:B1').color = (255, 0, 0) # Change cell background color
 
         # Adding Text header
-        excelReport.range("C3").value = 'Text'
-        excelReport.range("C3").font.Size = 14 # Change font size
-        excelReport.range("C3").font.ColorIndex = 2 # Change font color
-        excelReport.range('C3:C3').color = (0,255,0) # Change cell background color
+        excelReport.range("C1").value = 'Text'
+        excelReport.range("C1").font.Size = 14 # Change font size
+        excelReport.range("C1").font.ColorIndex = 2 # Change font color
+        excelReport.range('C1:C1').color = (0,255,0) # Change cell background color
 
         # For the childTag - parentTag
-        excelReport.range("D3").value = df2
+        excelReport.range("D1").value = df2
 
-        excelReport.range("E3").value = "Child Tag"
-        excelReport.range("E3").font.Size = 14
-        excelReport.range("E3").font.ColorIndex = 2
-        excelReport.range("E3:E3").color = (255, 0, 0)
-
+        excelReport.range("E1").value = "Child Tag"
+        excelReport.range("E1").font.Size = 14
+        excelReport.range("E1").font.ColorIndex = 2
+        excelReport.range("E1:E1").color = (255, 0, 0)
         # Adding parentTag header
-        excelReport.range("F3").value = 'Parent Tag'
-        excelReport.range("F3").font.Size = 14 # Change font size
-        excelReport.range("F3").font.ColorIndex = 2 # Change font color
-        excelReport.range('F3:F3').color = (128, 128, 128) # Change cell background color
+        excelReport.range("F1").value = 'Parent Tag'
+        excelReport.range("F1").font.Size = 14 # Change font size
+        excelReport.range("F1").font.ColorIndex = 2 # Change font color
+        excelReport.range('F1:F1').color = (128, 128, 128) # Change cell background color
 
         # Adding OrphanTags header
-        excelReport.range("I3").value = 'Orphan Tags'
-        excelReport.range("I3").font.Size = 14 # Change font size
-        excelReport.range("I3").font.ColorIndex = 2 # Change font color
-        excelReport.range('I3:I3').color = (255, 128, 0) # Change cell background color
-
+        excelReport.range("H1").value = 'Orphan Tags'
+        excelReport.range("H1").font.Size = 14 # Change font size
+        excelReport.range("H1").font.ColorIndex = 2 # Change font color
+        excelReport.range('H1:H1').color = (255, 128, 0) # Change cell background color
         # Adding OrphanTags header
-        excelReport.range("L3").value = 'Childless Tags'
-        excelReport.range("L3").font.Size = 14 # Change font size
-        excelReport.range("L3").font.ColorIndex = 2 # Change font color
-        excelReport.range('L3:L3').color = (150, 75, 0) # Change cell background color
+        excelReport.range("J1").value = 'Childless Tags'
+        excelReport.range("J1").font.Size = 14 # Change font size
+        excelReport.range("J1").font.ColorIndex = 2 # Change font color
+        excelReport.range('J1:J1').color = (150, 75, 0) # Change cell background color
 
         # Adding TBVTags header
-        excelReport.range("N3").value = 'TBV Tags'
-        excelReport.range("N3").font.Size = 14 # Change font size
-        excelReport.range("N3").font.ColorIndex = 2 # Change font color
-        excelReport.range('N3:N3').color = (150, 75, 0) # Change cell background color
+        excelReport.range("L1").value = 'TBV Tags'
+        excelReport.range("L1").font.Size = 14 # Change font size
+        excelReport.range("L1").font.ColorIndex = 2 # Change font color
+        excelReport.range('L1:L1').color = (150, 75, 0) # Change cell background color
 
-
+        # Adding TBDTags header
+        excelReport.range("N1").value = 'TBD Tags'
+        excelReport.range("N1").font.Size = 14 # Change font size
+        excelReport.range("N1").font.ColorIndex = 2 # Change font color
+        excelReport.range('N1:N1').color = (150, 75, 0) # Change cell background color
         
         
-        #excelReport.autofit()
+        excelReport.autofit()
 
 
         for key in dicts2:

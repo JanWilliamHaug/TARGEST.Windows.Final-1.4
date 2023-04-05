@@ -638,8 +638,7 @@ def generateReport2():
                                         TBDReport.add_paragraph(parentTag1)
                                         TBDReport.save('TBDReport.docx')
                                         TBDTags.append(parentTag1)
-                                        print("TBD tag found")
-                                        print(parentTag1)
+                                        
                                     report3.add_paragraph(parentTag1)
                                     tag.strip()
                                     duplicates.append(str(tag))
@@ -799,7 +798,7 @@ def generateReport2():
                                                             TBDReport.add_paragraph(item)
                                                             TBDReport.save('TBDReport.docx')
                                                             TBDTags.append(x)
-                                                            print("TBDTags", x)
+                                                            
                                     cell = str('A'+ str(counter1))
                                     cell2 = str(str(x))
                                     excelReport2.range(cell).value = cell2

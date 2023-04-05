@@ -99,6 +99,12 @@ wb2 = xw.Book()
 global excelReport2
 excelReport2 = wb2.sheets[0]
 excelReport2.name = "Report"
+wb2.save('AllTags.xlsx')
+
+#wb3 = xw.Book()
+#global excelReport3
+#excelReport3 = wb3.sheets[0]
+#excelReport3.name = "ReportNew"
 
 global dicts2Copy # This will hold the dicts2 content in all documents
 dicts2Copy = {}
@@ -629,7 +635,7 @@ def generateReport2():
                                     counter1 += 2 # counter for excel report
                                     counter2 += 1 # counter for excel report
 
-                                    wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
+                                    #wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
                                     if "TBV:" in parentTag1:
                                         TBVReport.add_paragraph(parentTag1)
                                         TBVReport.save('TBVReport.docx')
@@ -753,8 +759,9 @@ def generateReport2():
                                                         counter1 += 1
 
 
-                                                        wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
+                                                        #wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
 
+                                                wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
                                                 report3.add_paragraph("\n")
                                                 counter2 += 1
                                                 counter1 += 1
@@ -805,7 +812,7 @@ def generateReport2():
                                     counter1 += 2 # counter for excel report
                                     counter2 += 1 # counter for excel report
 
-                                    wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
+                                    #wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
 
                                     if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                         if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
@@ -964,7 +971,7 @@ def generateReport2():
            #     report3.save('AllChildandParentTags.docx')
 
         
-
+        wb2.save('AllTags.xlsx')
         msg1 = ("\nYou can now open up your Word and Excel reports\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("\nDifferent reports include:\n")

@@ -32,7 +32,7 @@ def GUI1():
    
     try:
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.12.1 ')
+        window = Tk(className=' TARGEST v.1.13.1 ')
         # set window size #
         window.geometry("900x650")
         window['background'] = '#afeae6'

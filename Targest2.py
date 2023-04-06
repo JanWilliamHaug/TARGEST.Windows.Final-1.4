@@ -1818,9 +1818,9 @@ def createExcel3():
     cell = 0;
     global cell2
     cell2 = 0;
-    print("dicts10",dicts10)
+    #print("dicts10",dicts10)
     remove_empty_values(dicts10)
-    print("new dicts10",dicts10)
+    #print("new dicts10",dicts10)
     #print("this is dicts10",dicts10)
 
     hello = 'PUMP:RISK:10'
@@ -1841,28 +1841,26 @@ def createExcel3():
         counter1 += 2 # counter for excel report
         counter2 += 1 # counter for excel report
         #print("hello",len(hello))
-        print(type(orpha))
+        #print(type(orpha))
         hx = str(orpha)
         #hx.replace(" ", "")
-        print(repr(hx))
-        print(hx)
+        #print(repr(hx))
+        #print(hx)
         hx = hx.strip('\n')  # remove newline characters
         hx = hx.strip()     # remove leading/trailing whitespaces
-        print(repr(hx))
-        print(hx)
-        print(type(hx))
+        #print(repr(hx))
+        #print(hx)
+        #print(type(hx))
         hx.strip()
-        print(len(hx))
-        if hx == 'PUMP:RISK:10':
-            print("PUMP:RISK:10 found")
+        #print(len(hx))
         keys = [h for h, v in dicts10.items() if check_string(hx, str(v))]
         #wi = 'PUMP:RISK:10'
         #keys3 = [h for h, v in dicts10.items() if check_string(wi, str(v))] # finds all the child tags
         #print("keys3",keys3)
 
-        print("keys",keys)
+        #print("keys",keys)
         for item in keys: #keys are child tags of hx/the parent tag
-             print("child",item)
+             #print("child",item)
              if item != "" and item!= " ": # if the child tag is not empty
 
                 counter2 = counter1 - 1
@@ -1886,7 +1884,7 @@ def createExcel3():
                         keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                         for item1 in keys: #keys are child tags of hx/the parent tag
-                            print("grandchild",item1)
+                            #print("grandchild",item1)
                             if item1 != "" and item1!= " ":
                                 #if item1 not in duplicates2:
                                     #duplicates2.append(item1)
@@ -1909,7 +1907,7 @@ def createExcel3():
                                             keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                                             for item2 in keys: #keys are child tags of hx/the parent tag
-                                                print("grandgrandchild",item2)
+                                                #print("grandgrandchild",item2)
                                                 if item2 != "" and item2!= " ":
                                                     #if item2 not in duplicates2:
                                                         #duplicates2.append(item1)
@@ -1932,7 +1930,7 @@ def createExcel3():
                                                                 keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                                                                 for item3 in keys: #keys are child tags of hx/the parent tag
-                                                                    print("grandgrandGrandchild",item3)
+                                                                    #print("grandgrandGrandchild",item3)
                                                                     if item3 != "" and item3!= " ":
                                                                         #if item2 not in duplicates2:
                                                                             #duplicates2.append(item1)
@@ -1955,7 +1953,7 @@ def createExcel3():
                                                                                     keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                                                                                     for item4 in keys: #keys are child tags of hx/the parent tag
-                                                                                        print("grandgrandGrandGrandchild",item3)
+                                                                                        #print("grandgrandGrandGrandchild",item3)
                                                                                         if item4 != "" and item4!= " ":
                                                                                             #if item2 not in duplicates2:
                                                                                                 #duplicates2.append(item1)
@@ -1978,7 +1976,7 @@ def createExcel3():
                                                                                                         keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                                                                                                         for item5 in keys: #keys are child tags of hx/the parent tag
-                                                                                                            print("grandgrandGrandGrandchild",item3)
+                                                                                                            #print("grandgrandGrandGrandchild",item3)
                                                                                                             if item5 != "" and item5!= " ":
                                                                                                                 #if item2 not in duplicates2:
                                                                                                                     #duplicates2.append(item1)
@@ -2001,7 +1999,7 @@ def createExcel3():
                                                                                                                             keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
 
                                                                                                                             for item6 in keys: #keys are child tags of hx/the parent tag
-                                                                                                                                print("grandgrandGrandGrandchild",item3)
+                                                                                                                                #print("grandgrandGrandGrandchild",item3)
                                                                                                                                 if item6 != "" and item6!= " ":
                                                                                                                                     #if item2 not in duplicates2:
                                                                                                                                         #duplicates2.append(item1)

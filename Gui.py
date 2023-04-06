@@ -32,7 +32,7 @@ def GUI1():
    
     try:
         # Creates the gui
-        window = Tk(className=' TARGEST v.1.13.1 ')
+        window = Tk(className=' TARGEST v.1.14.1 ')
         # set window size #
         window.geometry("900x650")
         window['background'] = '#afeae6'
@@ -104,9 +104,15 @@ def GUI1():
         getExcel.place(x=620, y=160)
 
         # button 10
+        #global getExcel2
+        #getExcel2 = ttk.Button(text="Open All Tags Excel Report", state= DISABLED, command=Targest2.createExcel2, width = 30)
+        #getExcel2.place(x=620, y=185)
+
+        # button 10
         global getExcel2
-        getExcel2 = ttk.Button(text="Open All Tags Excel Report", state= DISABLED, command=Targest2.createExcel2, width = 30)
+        getExcel2 = ttk.Button(text="Open Relationship Trees Excel Report", state= DISABLED, command=Targest2.createExcel3, width = 30)
         getExcel2.place(x=620, y=185)
+       
 
         #global button
         #button = Button(text="End Program", command=window.destroy, width = 30, font=("Segoe UI", 10), background="#4CAF50", foreground="white")

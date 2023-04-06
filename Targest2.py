@@ -95,16 +95,17 @@ global paragraph6
 paragraph6 = TBDReport.add_paragraph()
 TBDReport.save('TBDReport.docx')
 
-wb2 = xw.Book()
-global excelReport2
-excelReport2 = wb2.sheets[0]
-excelReport2.name = "Report"
-wb2.save('AllTags.xlsx')
+#wb2 = xw.Book()
+#global excelReport2
+#excelReport2 = wb2.sheets[0]
+#excelReport2.name = "Report"
+#wb2.save('AllTags.xlsx')
 
-#wb3 = xw.Book()
-#global excelReport3
-#excelReport3 = wb3.sheets[0]
-#excelReport3.name = "ReportNew"
+wb3 = xw.Book()
+global excelReport3
+excelReport3 = wb3.sheets[0]
+excelReport3.name = "ReportNew"
+wb3.save('excelNew.xlsx') # Saving excel report as 'AllTags.xlsx'
 
 global dicts2Copy # This will hold the dicts2 content in all documents
 dicts2Copy = {}
@@ -629,9 +630,9 @@ def generateReport2():
                                 else:
                                     parentTag1 = ('['+tag+']')
                                     
-                                    cell = str('A'+ str(counter1))
-                                    cell2 = str(str(parentTag1))
-                                    excelReport2.range(cell).value = cell2
+                                    #cell = str('A'+ str(counter1))
+                                    #cell2 = str(str(parentTag1))
+                                    #xcelReport2.range(cell).value = cell2
                                     counter1 += 2 # counter for excel report
                                     counter2 += 1 # counter for excel report
 
@@ -754,18 +755,18 @@ def generateReport2():
                                                         counter2 = counter1 - 1
                                                         cell = str('B'+ str(counter2))
                                                         cell2 = str(item)
-                                                        excelReport2.range(cell).value = cell2
+                                                        #excelReport2.range(cell).value = cell2
                                                         counter2 += 1
                                                         counter1 += 1
 
 
                                                         #wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
 
-                                                wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
+                                                #wb2.save('AllTags.xlsx') # Saving excel report as 'AllTags.xlsx'
                                                 report3.add_paragraph("\n")
                                                 counter2 += 1
                                                 counter1 += 1
-                                                excelReport2.autofit()
+                                                #excelReport2.autofit()
 
 
 
@@ -808,7 +809,7 @@ def generateReport2():
                                                             
                                     cell = str('A'+ str(counter1))
                                     cell2 = str(str(x))
-                                    excelReport2.range(cell).value = cell2
+                                    #excelReport2.range(cell).value = cell2
                                     counter1 += 2 # counter for excel report
                                     counter2 += 1 # counter for excel report
 
@@ -906,14 +907,14 @@ def generateReport2():
                                                     counter2 = counter1 - 1
                                                     cell = str('B'+ str(counter2))
                                                     cell2 = str(item)
-                                                    excelReport2.range(cell).value = cell2
+                                                    #excelReport2.range(cell).value = cell2
                                                     counter2 += 1
                                                     counter1 += 1
 
                                             report3.add_paragraph("\n")
                                             counter2 += 1
                                             counter1 += 1
-                                            excelReport2.autofit()
+                                            #excelReport2.autofit()
 
                             #report3.add_paragraph("\n") # Adds a line space
                             #print(k)
@@ -971,7 +972,7 @@ def generateReport2():
            #     report3.save('AllChildandParentTags.docx')
 
         
-        wb2.save('AllTags.xlsx')
+        #wb2.save('AllTags.xlsx')
         msg1 = ("\nYou can now open up your Word and Excel reports\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
         msg2 = ("\nDifferent reports include:\n")
@@ -990,7 +991,7 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg8) #print in GUI
         msg9 = ("g. Tags and Requirements Excel report\n")
         Gui.Txt.insert(tk.END, msg9) #print in GUI
-        msg10 = ("h. Tag Relation Excel report\n")
+        msg10 = ("h. Relationship Trees Excel Report\n")
         Gui.Txt.insert(tk.END, msg10) #print in GUI
         report3.save('AllChildandParentTags.docx')
         toggle_state() #This will enable the getDoc button
@@ -1510,7 +1511,7 @@ def createExcel():
         # Log a success message
         logging.info('createExcel(): PASS')
 
-
+"""
 # Creates an excel report
 def createExcel2():
     try:
@@ -1611,7 +1612,7 @@ def createExcel2():
     else:
         # Log a success message
         logging.info('createExcel2(): PASS')
-
+"""
 
 def toggle_state(): # this will re-enable getDoc button
     Gui.getDoc.config(state="normal")
@@ -1643,15 +1644,58 @@ def toggle_state9(): # this will re-enable tbv report button
 def toggle_state10(): # this will renable tbd report button
     Gui.getTBDdoc.config(state="normal")
 
-def check_string(string1, string2): # checks if a string1 is in string2
-    if isinstance(string2, str): 
+#def check_string(string1, string2): # checks if a string1 is in string2
+ #   if isinstance(string2, str): 
+  #      string2 = [string2]
+   # pattern = r'{}(?!\d)'.format(re.escape(string1))
+    #for s in string2:
+     #   match = re.search(pattern, s)
+      #  if match is not None:
+       #     return True
+    #return False
+
+
+
+def check_string2(string1, string2):
+    if not isinstance(string1, str):
+        return False
+    if isinstance(string2, str):
         string2 = [string2]
+    elif not isinstance(string2, list):
+        return False
+    
     pattern = r'{}(?!\d)'.format(re.escape(string1))
+    
     for s in string2:
+        if not isinstance(s, str):
+            continue
         match = re.search(pattern, s)
         if match is not None:
             return True
+    
     return False
+
+
+def check_string(string1, string2):
+    if not isinstance(string1, str):
+        return False
+    if isinstance(string2, str):
+        string2 = [string2]
+    elif not isinstance(string2, list):
+        return False
+    
+    pattern = r'(?<=\[)?{}(?=\])?(?!\d)'.format(re.escape(string1))
+    
+    for s in string2:
+        if not isinstance(s, str):
+            continue
+        match = re.search(pattern, s)
+        if match is not None:
+            return True
+    
+    return False
+
+
 
 
 import platform
@@ -1695,4 +1739,304 @@ def closeExcelWorkbooks():
     else:
         # Log a success message
         logging.info('closeExcelWorkbooks(): PASS')
+
+
+def remove_empty_values(d):
+    """
+    This function takes a dictionary 'd' as input and removes all key-value pairs from it where the value is an empty string, whitespace, or an empty list.
+    """
+    keys_to_remove = []
+    for key, value in d.items():
+        if isinstance(value, list):
+            if not value:
+                keys_to_remove.append(key)
+            else:
+                for v in value:
+                    if v.strip() == "":
+                        keys_to_remove.append(key)
+                        break
+        elif value.strip() == "":
+            keys_to_remove.append(key)
+    for key in keys_to_remove:
+        del d[key]
+
+
+
+def createExcel3():
+
+    # Adding First Generation Tags header
+    excelReport3.range("A1").value = 'First Generation'
+    excelReport3.range("A1").font.Size = 14 # Change font size
+    excelReport3.range("A1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('A1:A1').color = (255, 128, 0) # Change cell background color
+
+    # Adding Second Generation Tags header
+    excelReport3.range("B1").value = 'Second Generation'
+    excelReport3.range("B1").font.Size = 14 # Change font size
+    excelReport3.range("B1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('B1:B1').color = (150, 75, 0) # Change cell background color
+
+    # Adding Third Generation Tags header
+    excelReport3.range("C1").value = 'Third Generation'
+    excelReport3.range("C1").font.Size = 14 # Change font size
+    excelReport3.range("C1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('C1:C1').color = (150, 75, 0) # Change cell background color
+
+    # Adding Fourth Generation Tags header
+    excelReport3.range("D1").value = 'Fourth Generation'
+    excelReport3.range("D1").font.Size = 14 # Change font size
+    excelReport3.range("D1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('D1:D1').color = (150, 75, 0) # Change cell background color
+
+    # Adding Fifth Generation Tags header
+    excelReport3.range("E1").value = 'Fifth Generation'
+    excelReport3.range("E1").font.Size = 14 # Change font size
+    excelReport3.range("E1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('E1:E1').color = (150, 75, 0) # Change cell background color
+
+    # Adding Sixth Generation Tags header
+    excelReport3.range("F1").value = 'Sixth Generation'
+    excelReport3.range("F1").font.Size = 14 # Change font size
+    excelReport3.range("F1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('F1:F1').color = (150, 75, 0) # Change cell background color
+
+    # Adding Fifth Generation Tags header
+    excelReport3.range("G1").value = 'Seventh Generation'
+    excelReport3.range("G1").font.Size = 14 # Change font size
+    excelReport3.range("g1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('G1:G1').color = (150, 75, 0) # Change cell background color
+
+    # counters for Excel report3
+
+    global counter1
+    counter1 = 2
+    global counter2
+    counter2 = 1
+    global counter3
+    counter3 = 0
+    global cell
+    cell = 0;
+    global cell2
+    cell2 = 0;
+    print("dicts10",dicts10)
+    remove_empty_values(dicts10)
+    print("new dicts10",dicts10)
+    #print("this is dicts10",dicts10)
+
+    hello = 'PUMP:RISK:10'
+
+
+    for orpha in orphanChildren2Copy:
+        if orpha != orphanChildren2Copy[0]:
+            cell10 = str('A'+ str(counter1-1))
+            #excelReport3.range(cell10).value = 'SEPERATOR'
+            excelReport3.range(cell10).font.Size = 14 # Change font size
+            excelReport3.range(cell10).font.ColorIndex = 2 # Change font color
+            cell11 = str(str(cell10) + ':G' + str(counter1-1))
+            excelReport3.range(cell11).color = (178,223,238) # Change cell background color
+
+        cell = str('A'+ str(counter1))
+        cell2 = str(str(orpha))
+        excelReport3.range(cell).value = cell2
+        counter1 += 2 # counter for excel report
+        counter2 += 1 # counter for excel report
+        #print("hello",len(hello))
+        print(type(orpha))
+        hx = str(orpha)
+        #hx.replace(" ", "")
+        print(repr(hx))
+        print(hx)
+        hx = hx.strip('\n')  # remove newline characters
+        hx = hx.strip()     # remove leading/trailing whitespaces
+        print(repr(hx))
+        print(hx)
+        print(type(hx))
+        hx.strip()
+        print(len(hx))
+        if hx == 'PUMP:RISK:10':
+            print("PUMP:RISK:10 found")
+        keys = [h for h, v in dicts10.items() if check_string(hx, str(v))]
+        #wi = 'PUMP:RISK:10'
+        #keys3 = [h for h, v in dicts10.items() if check_string(wi, str(v))] # finds all the child tags
+        #print("keys3",keys3)
+
+        print("keys",keys)
+        for item in keys: #keys are child tags of hx/the parent tag
+             print("child",item)
+             if item != "" and item!= " ": # if the child tag is not empty
+
+                counter2 = counter1 - 1
+                cell = str('B'+ str(counter2))                                                
+                cell2 = str(item)  
+                #print("cell",cell) 
+                #print("cell2",cell2)                                              
+                excelReport3.range(cell).value = cell2
+                counter2 += 1
+                counter1 += 1
+                stringKey = str(item)
+                stringKey2 = (stringKey.replace(' ', ''))
+                #duplicates2 = []
+                #print("item is not '' ", item)
+                if str(stringKey2) in dicts10: # if the key is in the dictionary
+                #for key in dicts10:
+                    if item in dicts10:
+                        #print("item is in dicts10",item)
+                        hx = item
+
+                        keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                        for item1 in keys: #keys are child tags of hx/the parent tag
+                            print("grandchild",item1)
+                            if item1 != "" and item1!= " ":
+                                #if item1 not in duplicates2:
+                                    #duplicates2.append(item1)
+                                    counter2 = counter1 - 1
+                                    cell = str('C'+ str(counter2))                                                
+                                    cell2 = str(item1)                                                
+                                    excelReport3.range(cell).value = cell2
+                                    counter2 += 1
+                                    counter1 += 1
+                                    stringKey = str(item1)
+                                    stringKey2 = (stringKey.replace(' ', ''))
+                                    #duplicates2 = []
+                                    #print("item is not '' ", item)
+                                    if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                    #for key in dicts10:
+                                        if item1 in dicts10:
+                                            #print("item is in dicts10",item)
+                                            hx = item1
+
+                                            keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                                            for item2 in keys: #keys are child tags of hx/the parent tag
+                                                print("grandgrandchild",item2)
+                                                if item2 != "" and item2!= " ":
+                                                    #if item2 not in duplicates2:
+                                                        #duplicates2.append(item1)
+                                                        counter2 = counter1 - 1
+                                                        cell = str('D'+ str(counter2))                                                
+                                                        cell2 = str(item2)                                                
+                                                        excelReport3.range(cell).value = cell2
+                                                        counter2 += 1
+                                                        counter1 += 1
+                                                        stringKey = str(item2)
+                                                        stringKey2 = (stringKey.replace(' ', ''))
+                                                        #duplicates2 = []
+                                                        #print("item is not '' ", item)
+                                                        if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                        #for key in dicts10:
+                                                            if item2 in dicts10:
+                                                                #print("item is in dicts10",item)
+                                                                hx = item2
+
+                                                                keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                                                                for item3 in keys: #keys are child tags of hx/the parent tag
+                                                                    print("grandgrandGrandchild",item3)
+                                                                    if item3 != "" and item3!= " ":
+                                                                        #if item2 not in duplicates2:
+                                                                            #duplicates2.append(item1)
+                                                                            counter2 = counter1 - 1
+                                                                            cell = str('E'+ str(counter2))                                                
+                                                                            cell2 = str(item3)                                                
+                                                                            excelReport3.range(cell).value = cell2
+                                                                            counter2 += 1
+                                                                            counter1 += 1
+                                                                            stringKey = str(item3)
+                                                                            stringKey2 = (stringKey.replace(' ', ''))
+                                                                            #duplicates2 = []
+                                                                            #print("item is not '' ", item)
+                                                                            if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                                            #for key in dicts10:
+                                                                                if item3 in dicts10:
+                                                                                    #print("item is in dicts10",item)
+                                                                                    hx = item3
+
+                                                                                    keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                                                                                    for item4 in keys: #keys are child tags of hx/the parent tag
+                                                                                        print("grandgrandGrandGrandchild",item3)
+                                                                                        if item4 != "" and item4!= " ":
+                                                                                            #if item2 not in duplicates2:
+                                                                                                #duplicates2.append(item1)
+                                                                                                counter2 = counter1 - 1
+                                                                                                cell = str('F'+ str(counter2))                                                
+                                                                                                cell2 = str(item4)                                                
+                                                                                                excelReport3.range(cell).value = cell2
+                                                                                                counter2 += 1
+                                                                                                counter1 += 1
+                                                                                                stringKey = str(item4)
+                                                                                                stringKey2 = (stringKey.replace(' ', ''))
+                                                                                                #duplicates2 = []
+                                                                                                #print("item is not '' ", item)
+                                                                                                if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                                                                #for key in dicts10:
+                                                                                                    if item4 in dicts10:
+                                                                                                        #print("item is in dicts10",item)
+                                                                                                        hx = item4
+
+                                                                                                        keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                                                                                                        for item5 in keys: #keys are child tags of hx/the parent tag
+                                                                                                            print("grandgrandGrandGrandchild",item3)
+                                                                                                            if item5 != "" and item5!= " ":
+                                                                                                                #if item2 not in duplicates2:
+                                                                                                                    #duplicates2.append(item1)
+                                                                                                                    counter2 = counter1 - 1
+                                                                                                                    cell = str('G'+ str(counter2))                                                
+                                                                                                                    cell2 = str(item5)                                                
+                                                                                                                    excelReport3.range(cell).value = cell2
+                                                                                                                    counter2 += 1
+                                                                                                                    counter1 += 1
+                                                                                                                    stringKey = str(item5)
+                                                                                                                    stringKey2 = (stringKey.replace(' ', ''))
+                                                                                                                    #duplicates2 = []
+                                                                                                                    #print("item is not '' ", item)
+                                                                                                                    if str(stringKey2) in dicts10: # if the key is in the dictionary
+                                                                                                                    #for key in dicts10:
+                                                                                                                        if item5 in dicts10:
+                                                                                                                            #print("item is in dicts10",item)
+                                                                                                                            hx = item5
+
+                                                                                                                            keys = [h for h, v in dicts10.items() if check_string(hx, v)] # finds all the child tags
+
+                                                                                                                            for item6 in keys: #keys are child tags of hx/the parent tag
+                                                                                                                                print("grandgrandGrandGrandchild",item3)
+                                                                                                                                if item6 != "" and item6!= " ":
+                                                                                                                                    #if item2 not in duplicates2:
+                                                                                                                                        #duplicates2.append(item1)
+                                                                                                                                        counter2 = counter1 - 1
+                                                                                                                                        cell = str('H'+ str(counter2))                                                
+                                                                                                                                        cell2 = str(item6)                                                
+                                                                                                                                        excelReport3.range(cell).value = cell2
+                                                                                                                                        counter2 += 1
+                                                                                                                                        counter1 += 1
+
+
+
+    #dicts9999 = {'PUMP:HRD:100': '[PUMP:HRS:100]', 'PUMP:HRD:105': '[PUMP:HRS:103]', 'PUMP:HRD:1000': '[PUMP:HRS:1000]', 'PUMP:HRD:3330': '[PUMP:HRS:3330]', 'PUMP:HRD:3350': '[PUMP:TBV:1111]', 'PUMP:HRD:0000': '[PUMP:TBV:1111]', 'PUMP:HRS:100': '[PUMP:PRS:100]', 'PUMP:HRS:105': '[PUMP:PRS:103]', 'PUMP:HRS:1000': '[PUMP:PRS:1000]', 'PUMP:HRS:3330': '[PUMP:PRS:3330]', 'PUMP:HRS:3340': '[PUMP:PRS:3330]', 'PUMP:HRS:3350': '[PUMP:PRS:3350]', 'PUMP:HTP:100': '[PUMP:HRS:100]', 'PUMP:HTP:200': '[PUMP:HRS:105]', 'PUMP:HTP:300': '[PUMP:HRS:1000]', 'PUMP:HTP:400': '[PUMP:HRS:3330]', 'PUMP:HTP:500': '[PUMP:HRS:3350]', 'PUMP:HTP:1100': '[PUMP:HRD:100]', 'PUMP:HTP:1200': '[PUMP:HRD:105]', 'PUMP:HTP:1300': '[PUMP:HRD:1000]', 'PUMP:HTP:1400': '[PUMP:HRD:3330]', 'PUMP:HTP:1500': '[PUMP:HRD:3350]', 'PUMP:HTR:100': '[PUMP:HTP:100]', 'PUMPHTR:200': '[PUMP:HTP:200]', 'PUMP:HTR:300': '[PUMP:HTP:300]', 'PUMP:HTR:400': '[PUMP:HTP:400]', 'PUMP:HTR:500': '[PUMP:HTP:500]', 'PUMP:HTR:1100': '[PUMP:HTP:1100]', 'PUMP:HTR:1200': '[PUMP:HTP:1200]', 'PUMP:HTR:1300': '[PUMP:HTP:1300]', 'PUMP:HTR:1400': '[PUMP:HTP:1400]', 'PUMP:HTR:1500': '[PUMP:HTP:1500]', 'PUMP:PRS:1': '[PUMP:URS:1]', 'PUMP:PRS:2': '[PUMP:RISK:10]', 'PUMP:PRS:3': '[PUMP:RISK:20]', 'PUMP:PRS:4': '[PUMP:URS:3]', 'PUMP:PRS:5': '[PUMP:URS:3]', 'PUMP:PRS:8': ['PUMP:URS:8', 'PUMP:RISK:30'], 'PUMP:PRS:10': '[PUMP:URS:10]', 'PUMP:PRS:100': '[PUMP:URS:100]', 'PUMP:PRS:105': ['PUMP:URS:103', 'PUMP:RISK:40'], 'PUMP:PRS:1000': ['PUMP:URS:1000', 'PUMP:RISK:50'], 'PUMP:PRS:3330': '[PUMP:URS:3330]', 'PUMP:PRS:3340': '[PUMP:URS:3330]', 'PUMP:PRS:3350': '[PUMP:URS:3350]', 'PUMP:PRS:4000': '[PUMP:URS:4000]', 'PUMP:RISK:10': '', 'PUMP:RISK:20': '', 'PUMP:RISK:30': '', 'PUMP:RISK:40': '', 'PUMP:RISK:50': '', 'PUMP:SDS:10': ['BOLUS:SRS:1', 'BOLUS:SRS:2', 'BOLUS:SRS:5', 'BOLUS:SRS:6', 'BOLUS:SRS:8', 'BOLUS:SRS:12', 'ACE:SRS:1', 'ACE:SRS:5', 'ACE:SRS:6'], 'PUMP:SDS:20': '[ACE:SRS:2]', 'PUMP:SDS:30': ['AID:SRS:1', 'AID:SRS:2', 'AID:SRS:10', 'AID:SRS:12', 'AID:SRS:20'], 'PUMP:SDS:40': ['ACE:SRS:110', 'ACE:SRS:120'], 'PUMP:SDS:50': '[ACE:SRS:110]', 'PUMP:SDS:60': '[ACE:SRS:10]', 'PUMP:SDS:70': '[ACE:SRS:100]', 'ACE:SRS:1': ['PUMP:PRS:1', 'PUMP:TBV:1'], 'ACE:SRS:2': '[PUMP:PRS:1]', 'ACE:SRS:5': '[PUMP:PRS:5]', 'ACE:SRS:6': '[PUMP:PRS:6]', 'ACE:SRS:10': '[PUMP:PRS:10]', 'ACE:SRS:100': '[PUMP:PRS:105]', 'BOLUS:SRS:1': '[PUMP:PRS:1]', 'BOLUS:SRS:2': ['PUMP:PRS:1', 'PUMP:TBD:1'], 'BOLUS:SRS:5': ['PUMP:PRS:1', 'PUMP:PRS:5'], 'BOLUS:SRS:6': ['PUMP:PRS:1', 'PUMP:PRS:3'], 'BOLUS:SRS:8': '[PUMP:PRS:1]', 'BOLUS:SRS:12': ['PUMP:PRS:1', 'PUMP:PRS:8'], 'AID:SRS:1': ['PUMP:PRS:4000', 'PUMP:DER:2'], 'AID:SRS:2': ['PUMP:PRS:4000', 'PUMP:DER:2'], 'AID:SRS:10': ['PUMP:PRS:4000', 'PUMP:DER:2'], 'AID:SRS:12': ['PUMP:PRS:4000', 'PUMP:DER:2'], 'AID:SRS:20': ['PUMP:PRS:4000', 'PUMP:DER:2'], 'PUMP:SVAL:100': ['ACE:SRS:1', 'ACE:SRS:5', 'ACE:SRS:6', 'BOLUS:SRS:1', 'BOLUS:SRS:2', 'BOLUS:SRS:5', 'BOLUS:SRS:6', 'BOLUS:SRS:8'], 'PUMP:SVAL:200': '[ACE:SRS:2]', 'PUMP:SVAL:300': ['ACE:SRS:10', 'ACE:SRS:100', 'ACE:SRS:1000', 'ACE:SRS:120'], 'PUMP:SVAL:400': '[BOLUS:SRS:12]', 'PUMP:SVAL:500': ['AID:SRS:1', 'AID:SRS:2', 'AID:SRS:10', 'AID:SRS:12', 'AID:SRS:20'], 'PUMP:SVATR:100': '[PUMP:SVAL:100]', 'PUMP:SVATR:200': '[PUMP:SVAL:200]', 'PUMP:SVATR:300': '[PUMP:SVAL:300]', 'PUMP:SVATR:400': '[PUMP:SVAL:400]', 'PUMP:SVATR:500': '[PUMP:SVAL:500]', 'PUMP:UT:100': '[PUMP:UNIT:100]', 'PUMP:UT:110': '[PUMP:UNIT:110]', 'PUMP:UT:120': '[PUMP:UNIT:120]', 'PUMP:UT:130': '[PUMP:UNIT:130]', 'PUMP:UT:140': '[PUMP:UNIT:140]', 'PUMP:UT:150': '[PUMP:UNIT:150]', 'PUMP:UT:160': '[PUMP:UNIT:160]', 'PUMP:UT:170': '[PUMP:UNIT:170]', 'PUMP:UT:180': '[PUMP:UNIT:180]', 'PUMP:UT:190': '[PUMP:UNIT:190]', 'PUMP:UT:200': '[PUMP:UNIT:200]', 'PUMP:UT:210': '[PUMP:UNIT:210]', 'PUMP:UT:220': '[PUMP:UNIT:220]', 'PUMP:INS:100': '[PUMP:UNIT:100]', 'PUMP:INS:110': '[PUMP:UNIT:110]', 'PUMP:INS:120': '[PUMP:UNIT:120]', 'PUMP:INS:130': '[PUMP:UNIT:130]', 'PUMP:INS:140': '[PUMP:UNIT:140]', 'PUMP:INS:150': '[PUMP:UNIT:150]', 'PUMP:INS:160': '[PUMP:UNIT:160]', 'PUMP:INS:170': '[PUMP:UNIT:170]', 'PUMP:INS:180': '[PUMP:UNIT:180]', 'PUMP:INS:190': '[PUMP:UNIT:190]', 'PUMP:INS:200': '[PUMP:UNIT:200]', 'PUMP:INS:210': '[PUMP:UNIT:210]', 'PUMP:INS:220': '[PUMP:UNIT:220]', 'PUMP:URS:1': '', 'PUMP:URS:3': '', 'PUMP:URS:8': '', 'PUMP:URS:10': '', 'PUMP:URS:100': '', 'PUMP:URS:103': '', 'PUMP:URS:1000': '', 'PUMP:URS:3330': '', 'PUMP:URS:3350': '', 'PUMP:URS:4000': ''}
+    #hx = 'PUMP:RISK:10'
+    #print(type(hx))
+    #keys = [h for h, v in dicts9999.items() if check_string(hx, v)]
+    #print("parent",hx)
+    #print("keys2", keys)
+    excelReport3.autofit()
+    wb3.save('excelNew.xlsx') # Saving excel report as 'AllTags.xlsx'
+
+                 
+
+            
+
+
+
+
+                                                
+                                                   
+
+
+    
+                                                            
+                                                    
+                                                    
+                                                    
 

@@ -1218,6 +1218,7 @@ def orphanGenReport():
         toggle_state() #This will enable the getDoc button
         toggle_state4() # This will enable the open orphan report button
         toggle_state8() # This will enable the getExcel2 report button
+        toggle_state13() # This will enable the guiTree View button
         return dicts2Copy
 
     except Exception as e:
@@ -1644,6 +1645,9 @@ def toggle_state9(): # this will re-enable tbv report button
 def toggle_state10(): # this will renable tbd report button
     Gui.getTBDdoc.config(state="normal")
 
+def toggle_state13(): # this will renable treeview button
+    Gui.TreeDiagram.config(state="normal")
+
 #def check_string(string1, string2): # checks if a string1 is in string2
  #   if isinstance(string2, str): 
   #      string2 = [string2]
@@ -1829,7 +1833,7 @@ def createExcel3():
     for orpha in orphanChildren2Copy:
         if orpha != orphanChildren2Copy[0]:
             cell10 = str('A'+ str(counter1-1))
-            #excelReport3.range(cell10).value = 'SEPERATOR'
+            excelReport3.range(cell10).value = 'SEPERATOR'
             excelReport3.range(cell10).font.Size = 14 # Change font size
             excelReport3.range(cell10).font.ColorIndex = 2 # Change font color
             cell11 = str(str(cell10) + ':G' + str(counter1-1))
@@ -2021,7 +2025,71 @@ def createExcel3():
     excelReport3.autofit()
     wb3.save('excelNew.xlsx') # Saving excel report as 'AllTags.xlsx'
 
-                 
+
+def guiTree():
+    family_trees = []
+    current_tree = []
+
+    for orpha in orphanChildren2Copy:
+        if orpha != orphanChildren2Copy[0]:
+            family_trees.append(current_tree)
+            current_tree = []
+
+        hx = orpha.strip()
+        current_tree += "├─ " + hx + "\n"
+
+        keys = [h for h, v in dicts10.items() if check_string(hx, str(v))]
+
+        for i, item in enumerate(keys): #keys are child tags of hx/the parent tag
+            if item != "" and item != " ":
+                current_tree += "│  ├─ " + item + "\n"
+                stringKey = item.strip()
+                if stringKey in dicts10:
+                    hx = item
+                    keys1 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                    for j, item1 in enumerate(keys1):
+                        if item1 != "" and item1 != " ":
+                            current_tree += "│  │  ├─ " + item1 + "\n"
+                            stringKey = item1.strip()
+                            if stringKey in dicts10:
+                                hx = item1
+                                keys2 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                                for k, item2 in enumerate(keys2):
+                                    if item2 != "" and item2 != " ":
+                                        current_tree += "│  │  │  ├─ " + item2 + "\n"
+                                        stringKey = item2.strip()
+                                        if stringKey in dicts10:
+                                            hx = item2
+                                            keys3 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                                            for l, item3 in enumerate(keys3):
+                                                if item3 != "" and item3 != " ":
+                                                    current_tree += "│  │  │  │  ├─ " + item3 + "\n"
+                                                    stringKey = item3.strip()
+                                                    if stringKey in dicts10:
+                                                        hx = item3
+                                                        keys4 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                                                        for m, item4 in enumerate(keys4):
+                                                            if item4 != "" and item4 != " ":
+                                                                current_tree += "│  │  │  │  │  ├─ " + item4 + "\n"
+                                                                stringKey = item4.strip()
+                                                                if stringKey in dicts10:
+                                                                    hx = item4
+                                                                    keys5 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                                                                    for n, item5 in enumerate(keys5):
+                                                                        if item5 != "" and item5 != " ":
+                                                                            current_tree += "│  │  │  │  │  │  ├─ " + item5 + "\n"
+                                                                            stringKey = item5.strip()
+                                                                            if stringKey in dicts10:
+                                                                                hx = item5
+                                                                                keys6 = [h for h, v in dicts10.items() if check_string(hx, v)]
+                                                                                for o, item6 in enumerate(keys6):
+                                                                                    if item6 != "" and item6 != " ":
+                                                                                        current_tree += "│  │  │  │  │  │  │  ├─ " + item6 + "\n"
+                                            
+
+    family_trees.append(current_tree)
+    wb3.save('excelNew.xlsx') # Saving excel report as 'AllTags.xlsx'
+    return family_trees
 
             
 

@@ -10,6 +10,7 @@ from tkinter import ttk
 from typing import Tuple
 
 from tkinter import scrolledtext
+from tkinter.scrolledtext import ScrolledText
 import re
 import copy
 import time
@@ -26,7 +27,11 @@ import matplotlib.pyplot as plt
 
 import Targest2
 
+import Targest
+global scrolled_text_box
+
 from tkinter import messagebox
+
 
 def GUI1():
    
@@ -34,7 +39,7 @@ def GUI1():
         # Creates the gui
         window = Tk(className=' TARGEST v.1.14.1 ')
         # set window size #
-        window.geometry("900x650")
+        window.geometry("1000x750")
         window['background'] = '#afeae6'
 
         #icon = tk.PhotoImage(file='itachiakatttt.png')
@@ -112,6 +117,11 @@ def GUI1():
         global getExcel2
         getExcel2 = ttk.Button(text="Open Relationship Trees Excel Report", state= DISABLED, command=Targest2.createExcel3, width = 30)
         getExcel2.place(x=620, y=185)
+        
+        # button 10
+        global TreeDiagram
+        TreeDiagram = ttk.Button(text="Create Family Trees", state= DISABLED, command =lambda: Targest.text3(window), width = 30)
+        TreeDiagram.place(x=620, y=210)
        
 
         #global button
@@ -129,6 +139,25 @@ def GUI1():
         Txt.place(x=30, y=80)
         Txt.configure(bg='grey', fg='white')
 
+        # Create a label for the developers
+        labelDevs = Label(window, text="Made by:\nJan William Haug\nAdrian Bernardino\nStephania Rey", font=("Segoe UI", 10, "bold"), bg="#afeae6")
+        labelDevs.place(x=580, y=550)
+        labelDevs.config(borderwidth=2, relief="groove", padx=10, pady=5, fg="#444444")
+        
+
+        # Create ScrolledText widget
+        scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=45)
+        scrolled_text_box.place(x=600, y=240)
+        scrolled_text_box.configure(bg='grey', fg='white') 
+
+        # Load the image file
+        global imageLogo
+        imageLogo = PhotoImage(file="TARGEST3.png")
+
+        # Create a label to display the image
+        label2 = Label(window, image=imageLogo)
+        label2.place(x=735, y=535)
+
         
         msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "Choose list of Documents" button.\n 2. Once your documents are displayed, Click "Generate Reports"\n\n')
         Txt.insert(tk.END, msg3) #print in GUI
@@ -145,3 +174,6 @@ def GUI1():
         logging.info('main(): PASS')
 
         window.mainloop()
+
+
+    

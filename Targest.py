@@ -78,9 +78,11 @@ def display_tree3(tree_structure):
 def text3(window):
     family_trees = Targest2.guiTree()
     print("text3 function called") 
-    print(family_trees)
+    #print(family_trees)
     data_string = convert_to_string(family_trees)
     print(data_string)
+    #Targest2.TBDReport.add_paragraph(data_string)
+    #Targest2.TBDReport.save('TBDReport.docx')
     scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=45)
     scrolled_text_box.place(x=610, y=240)
     scrolled_text_box.configure(bg='grey', fg='white')

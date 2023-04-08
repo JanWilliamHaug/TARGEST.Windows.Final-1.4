@@ -36,55 +36,6 @@ def process_tree(ws, row, col, parent=None):
 
     return family_tree
 
-#def display_tree(tree):
-#    if not tree or tree[0][0].lower() == 'separator':
-#        return ""
-
-#    tree_dict = {}
-#    for node, level, parent in tree:
-#        if level in tree_dict:
-#            tree_dict[level].append((node, parent))
-#        else:
-#            tree_dict[level] = [(node, parent)]
-
- #   tree_str = ""
-
-#    def print_node(node, level, last_child=False, parent=None):
-#        nonlocal tree_str
-#        indent = "  " * level + ("└─ " if last_child else "├─ ")
-#       tree_str += indent + node + "\n"
- #       children = tree_dict.get(level + 1, [])
-#        children = [child for child, child_parent in children if child_parent == node]
-#        for i, child in enumerate(children):
-#            print_node(child, level + 1, i == len(children) - 1, node)
-
-#    root_node = tree_dict[0][0][0]
-#    print_node(root_node, 0)
-#    return tree_str
-
-"""
-def Tree():
-    # Load the workbook and select the worksheet
-    workbook = openpyxl.load_workbook('family_trees.xlsx')
-    ws = workbook.active
-
-    row = 2
-    family_trees = []
-
-    while row < ws.max_row:
-        tree = process_tree(ws, row, 1, None)  # Pass None as the parent for the root node
-        if tree:
-            family_trees.append(tree)
-            row += len(tree)
-        else:
-            row += 1
-
-    # Filter out trees that only have a separator
-    family_trees = [tree for tree in family_trees if not (len(tree) == 1 and tree[0][0].lower() == 'separator')]
-
-    # Return the family trees
-    return family_trees
-"""
 
 def build_tree_structure(tree):
     tree_structure = {}
@@ -147,18 +98,6 @@ def text3(window):
          #   #scrolled_text_box.insert(tk.END, display_result + "\n")
           #  scrolled_text_box.insert(tk.END, data_string)  # Insert the converted string
 
-def text2(window):
-    family_trees = Targest2.guiTree()
-    scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=30)
-    scrolled_text_box.place(x=610, y=240)
-    scrolled_text_box.configure(bg='grey', fg='white')
-    for i, tree in enumerate(family_trees, 1):
-        tree_structure = build_tree_structure(tree)
-        display_result = display_tree3(tree_structure)
-        if display_result:
-            scrolled_text_box.insert(tk.END, f"Family Tree {i}:\n")
-            scrolled_text_box.insert(tk.END, "------------\n")
-            scrolled_text_box.insert(tk.END, display_result + "\n")
 
 def display_tree2(tree):
     if not tree or tree[0][0].lower() == 'separator':

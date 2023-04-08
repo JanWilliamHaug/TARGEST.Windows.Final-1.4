@@ -1772,43 +1772,50 @@ def createExcel3():
     excelReport3.range("A1").value = 'First Generation'
     excelReport3.range("A1").font.Size = 14 # Change font size
     excelReport3.range("A1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('A1:A1').color = (255, 128, 0) # Change cell background color
+    excelReport3.range('A1').font.bold = True
+    excelReport3.range('A1:A1').color = (121,205,205) # Change cell background color
 
     # Adding Second Generation Tags header
     excelReport3.range("B1").value = 'Second Generation'
     excelReport3.range("B1").font.Size = 14 # Change font size
+    excelReport3.range('B1').font.bold = True
     excelReport3.range("B1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('B1:B1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('B1:B1').color = (121,205,205) # Change cell background color
 
     # Adding Third Generation Tags header
     excelReport3.range("C1").value = 'Third Generation'
     excelReport3.range("C1").font.Size = 14 # Change font size
+    excelReport3.range('C1').font.bold = True
     excelReport3.range("C1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('C1:C1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('C1:C1').color = (121,205,205) # Change cell background color
 
     # Adding Fourth Generation Tags header
     excelReport3.range("D1").value = 'Fourth Generation'
     excelReport3.range("D1").font.Size = 14 # Change font size
+    excelReport3.range('D1').font.bold = True
     excelReport3.range("D1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('D1:D1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('D1:D1').color = (121,205,205) # Change cell background color
 
     # Adding Fifth Generation Tags header
     excelReport3.range("E1").value = 'Fifth Generation'
     excelReport3.range("E1").font.Size = 14 # Change font size
+    excelReport3.range('E1').font.bold = True
     excelReport3.range("E1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('E1:E1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('E1:E1').color = (121,205,205) # Change cell background color
 
     # Adding Sixth Generation Tags header
     excelReport3.range("F1").value = 'Sixth Generation'
     excelReport3.range("F1").font.Size = 14 # Change font size
+    excelReport3.range('F1').font.bold = True
     excelReport3.range("F1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('F1:F1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('F1:F1').color = (121,205,205) # Change cell background color
 
     # Adding Fifth Generation Tags header
     excelReport3.range("G1").value = 'Seventh Generation'
     excelReport3.range("G1").font.Size = 14 # Change font size
-    excelReport3.range("g1").font.ColorIndex = 2 # Change font color
-    excelReport3.range('G1:G1').color = (150, 75, 0) # Change cell background color
+    excelReport3.range('G1').font.bold = True
+    excelReport3.range("G1").font.ColorIndex = 2 # Change font color
+    excelReport3.range('G1:G1').color = (121,205,205) # Change cell background color
 
     # counters for Excel report3
 

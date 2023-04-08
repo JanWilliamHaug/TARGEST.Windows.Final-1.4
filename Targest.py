@@ -83,8 +83,8 @@ def text3(window):
     print(data_string)
     #Targest2.TBDReport.add_paragraph(data_string)
     #Targest2.TBDReport.save('TBDReport.docx')
-    scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=45)
-    scrolled_text_box.place(x=610, y=240)
+    scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=51)
+    scrolled_text_box.place(x=566, y=240)
     scrolled_text_box.configure(bg='grey', fg='white')
     #scrolled_text_box.delete(1.0, tk.END)  # Clear the scrolltext box
     #scrolled_text_box.insert(tk.END, data_string)  # Insert the converted string

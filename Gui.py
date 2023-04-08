@@ -32,6 +32,8 @@ global scrolled_text_box
 
 from tkinter import messagebox
 
+import webbrowser
+
 
 def GUI1():
    
@@ -122,6 +124,11 @@ def GUI1():
         global TreeDiagram
         TreeDiagram = ttk.Button(text="Create Family Trees", state= DISABLED, command =lambda: Targest.text3(window), width = 30)
         TreeDiagram.place(x=620, y=210)
+
+        # button 11
+        global Website
+        Website = ttk.Button(text="Go to our website for more info", state= ACTIVE, command =lambda: open_website(), width = 30)
+        Website.place(x=580, y=500)
        
 
         #global button
@@ -135,8 +142,8 @@ def GUI1():
 
         # Create text widget and specify size.
         global Txt
-        Txt = Text(window, height = 40, width = 65)
-        Txt.place(x=30, y=80)
+        Txt = Text(window, height = 40, width = 63)
+        Txt.place(x=25, y=80)
         Txt.configure(bg='grey', fg='white')
 
         # Create a label for the developers
@@ -146,8 +153,8 @@ def GUI1():
         
 
         # Create ScrolledText widget
-        scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=45)
-        scrolled_text_box.place(x=600, y=240)
+        scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=51)
+        scrolled_text_box.place(x=566, y=240)
         scrolled_text_box.configure(bg='grey', fg='white') 
 
         # Load the image file
@@ -159,7 +166,7 @@ def GUI1():
         label2.place(x=735, y=535)
 
         
-        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "Choose list of Documents" button.\n 2. Once your documents are displayed, Click "Generate Reports"\n\n')
+        msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "Choose list of Documents" button.\n 2. Once the documents are displayed, Click "Generate Reports"\n\n')
         Txt.insert(tk.END, msg3) #print in GUI
 
         # show a pop-up message
@@ -177,3 +184,5 @@ def GUI1():
 
 
     
+def open_website():
+    webbrowser.open("https://targest-website-r7p6gm07p-janwilliamhaug.vercel.app/")

@@ -185,4 +185,4 @@ def GUI1():
 
     
 def open_website():
-    webbrowser.open("https://targest-website-r7p6gm07p-janwilliamhaug.vercel.app/")
+    webbrowser.open("https://targest-website.vercel.app/")

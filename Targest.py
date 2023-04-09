@@ -2,6 +2,7 @@ import openpyxl
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
+from tkinter import *
 
 import Targest2
 
@@ -83,9 +84,22 @@ def text3(window):
     print(data_string)
     #Targest2.TBDReport.add_paragraph(data_string)
     #Targest2.TBDReport.save('TBDReport.docx')
-    scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=51)
+# Create a vertical scrollbar
+    scrollbar_y = Scrollbar(window, orient=VERTICAL)
+    scrollbar_y.pack(side=RIGHT, fill=Y)
+
+    # Create a horizontal scrollbar
+    scrollbar_x = Scrollbar(window, orient=HORIZONTAL)
+    scrollbar_x.pack(side=BOTTOM, fill=X)
+
+    # Create a ScrolledText widget and configure its scrollbars
+    scrolled_text_box = ScrolledText(window, wrap=NONE, xscrollcommand=scrollbar_x.set, yscrollcommand=scrollbar_y.set, height=15, width=51)
     scrolled_text_box.place(x=566, y=240)
     scrolled_text_box.configure(bg='grey', fg='white')
+
+    # Configure the scrollbars
+    scrollbar_x.config(command=scrolled_text_box.xview)
+    scrollbar_y.config(command=scrolled_text_box.yview)
     #scrolled_text_box.delete(1.0, tk.END)  # Clear the scrolltext box
     #scrolled_text_box.insert(tk.END, data_string)  # Insert the converted string
     #scrolled_text_box.insert(tk.END, f"Family Tree {i}:\n")

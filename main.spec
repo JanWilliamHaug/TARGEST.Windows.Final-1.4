@@ -5,10 +5,10 @@ block_cipher = None
 
 
 a = Analysis(
-    ['C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/main.py'],
+    ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/itachiakatttt.png', '.'), ('C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/TARGEST.png', '.'), ('C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/TARGEST2.png', '.'), ('C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/TARGEST3.ico', '.'), ('C:/Users/Willi/Desktop/CS481/TARGEST.Final-1.0/TARGEST3.png', '.')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -24,28 +24,21 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='main',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['C:\\Users\\Willi\\Desktop\\CS481\\TARGEST.Final-1.0\\TARGEST3.ico'],
-)
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='main',
 )

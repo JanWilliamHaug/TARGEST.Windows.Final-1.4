@@ -983,13 +983,17 @@ def generateReport2():
         Gui.Txt.insert(tk.END, msg10) #print in GUI
         report3.save('AllChildandParentTags.docx')
         toggle_state() #This will enable the getDoc button
+        Gui.genRep.config(state="disabled") # This will disable the generate report button
         TBVReport.save('TBVReport.docx') # saves the TBV report
         toggle_state3() # this will re-enable excel report button
         #toggle_state5() # This will enable the generate orphan report button
         toggle_state7() #This will enable the getChildless document button
-        orphanGenReport()
         toggle_state9() # This will enable the get TBV button
         toggle_state10() # This will enable the get TBD button
+        toggle_state8() # This will enable the getExcel2 report button
+        toggle_state13() # This will enable the guiTree View button
+        orphanGenReport()
+ 
 
         
     except Exception as e:
@@ -1036,7 +1040,8 @@ def orphanGenReport():
                         #report3.add_paragraph("\n")
                         stringKey = str(key)
                         stringKey2 = (stringKey.replace(' ', ''))
-                        text = dicts10[str(stringKey2)]
+                        if stringKey2 in dicts10:
+                            text = dicts10[str(stringKey2)]
                         
 
                         if isinstance(text, list):
@@ -1204,10 +1209,7 @@ def orphanGenReport():
             orphanReport.add_paragraph(orph5)
 
         orphanReport.save('orphanReport.docx')
-        toggle_state() #This will enable the getDoc button
         toggle_state4() # This will enable the open orphan report button
-        toggle_state8() # This will enable the getExcel2 report button
-        toggle_state13() # This will enable the guiTree View button
         return dicts2Copy
 
     except Exception as e:
@@ -1814,7 +1816,7 @@ def createExcel3():
     for orpha in orphanChildren2Copy:
         if orpha != orphanChildren2Copy[0]:
             cell10 = str('A'+ str(counter1-1))
-            excelReport3.range(cell10).value = 'SEPERATOR'
+            excelReport3.range(cell10).value = 'SEPARATOR'
             excelReport3.range(cell10).font.Size = 14 # Change font size
             excelReport3.range(cell10).font.ColorIndex = 2 # Change font color
             cell11 = str(str(cell10) + ':G' + str(counter1-1))

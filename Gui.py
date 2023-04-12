@@ -86,37 +86,37 @@ def GUI1():
 
         # button 3
         global allTagsButton
-        allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 30)
+        allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 34)
         allTagsButton.place(x=620, y=10)
 
         # button 4
         global getDoc
-        getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 30)
+        getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 34)
         getDoc.place(x=620, y=35)
 
         # button 5
         global getOrphanDoc
-        getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 30)
+        getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 34)
         getOrphanDoc.place(x=620, y=60)
 
         # button 6
         global getChildlessDoc
-        getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 30)
+        getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 34)
         getChildlessDoc.place(x=620, y=85)
 
         # button 7
         global getTBVdoc
-        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 30)
+        getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 34)
         getTBVdoc.place(x=620, y=110)
 
         # button 8
         global getTBDdoc
-        getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 30)
+        getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 34)
         getTBDdoc.place(x=620, y=135)
 
         # button 9
         global getExcel
-        getExcel = ttk.Button(text="Open Tags and Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 30)
+        getExcel = ttk.Button(text="Open Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 34)
         getExcel.place(x=620, y=160)
 
         # button 10
@@ -126,12 +126,12 @@ def GUI1():
 
         # button 10
         global getExcel2
-        getExcel2 = ttk.Button(text="Open Relationship Trees Excel Report", state= DISABLED, command=Targest2.createExcel3, width = 30)
+        getExcel2 = ttk.Button(text="Open Relationship Trees Excel Report", state= DISABLED, command=Targest2.createExcel3, width = 34)
         getExcel2.place(x=620, y=185)
         
         # button 10
         global TreeDiagram
-        TreeDiagram = ttk.Button(text="Create Family Trees", state= DISABLED, command =lambda: Targest.text3(window), width = 30)
+        TreeDiagram = ttk.Button(text="Create Family Trees", state= DISABLED, command =lambda: Targest.text3(window), width = 34)
         TreeDiagram.place(x=620, y=210)
 
         # button 11

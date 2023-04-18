@@ -57,7 +57,7 @@ report1.save('ChildandParentTagsTables.docx')
 
 global report3
 report3 = Document()
-report3.add_heading('Report', 0) #create word document
+report3.add_heading('All Tags and Requirement Tracing', 0) #create word document
 global paragraph 
 paragraph = report3.add_paragraph()
 report3.save('AllChildandParentTags.docx')

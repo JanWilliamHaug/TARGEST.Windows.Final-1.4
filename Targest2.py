@@ -928,6 +928,8 @@ def generateReport2():
                            # if "TBV:" in parentTag1:
                             #    TBVReport.add_paragraph(item, style='List Bullet')
                             
+
+
                             TBVReport.save('TBVReport.docx')
                             #print(parents2Copy[i])
                             #print(orphanTagText[o])
@@ -959,7 +961,12 @@ def generateReport2():
                 # save the modified document
            #     report3.save('AllChildandParentTags.docx')
 
-        
+        #if parents2Copy:
+        #    for tg in parents2Copy:
+        #        if "TBV:" in tg:
+        #            TBVReport.add_paragraph(tg)
+        #            TBVReport.save('TBVReport.docx')
+
         #wb2.save('AllTags.xlsx')
         msg1 = ("\nYou can now open up your Word and Excel reports\n")
         Gui.Txt.insert(tk.END, msg1) #print in GUI
@@ -1205,8 +1212,11 @@ def orphanGenReport():
         #for orph in orphanss:
         #    orphanReport.add_paragraph(orph)
         #orphanReport.add_paragraph("Orphan Tags2: ")
+
+
         for orph5 in orphanChildren2Copy:
             orphanReport.add_paragraph(orph5)
+            print(orph5)
 
         orphanReport.save('orphanReport.docx')
         toggle_state4() # This will enable the open orphan report button

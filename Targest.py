@@ -93,8 +93,8 @@ def text3(window):
     scrollbar_x.pack(side=BOTTOM, fill=X)
 
     # Create a ScrolledText widget and configure its scrollbars
-    scrolled_text_box = ScrolledText(window, wrap=NONE, xscrollcommand=scrollbar_x.set, yscrollcommand=scrollbar_y.set, height=15, width=47)
-    scrolled_text_box.place(x=566, y=240)
+    scrolled_text_box = ScrolledText(window, wrap=NONE, xscrollcommand=scrollbar_x.set, yscrollcommand=scrollbar_y.set, height=23, width=47)
+    scrolled_text_box.place(x=566, y=120)
     scrolled_text_box.configure(bg='grey', fg='white')
 
     # Configure the scrollbars

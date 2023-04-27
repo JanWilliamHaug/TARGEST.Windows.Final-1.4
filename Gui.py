@@ -89,37 +89,37 @@ def GUI1():
         # button 3
         global allTagsButton
         allTagsButton = ttk.Button(text="Open All Tags Table Report", state= DISABLED, command=Targest2.getDocumentTable, width = 34)
-        allTagsButton.place(x=627, y=10)
+        #allTagsButton.place(x=627, y=10)
 
         # button 4
         global getDoc
         getDoc = ttk.Button(window, text="Open Child and Parent Tags Report", state= DISABLED, command=Targest2.getDocument, width = 34)
-        getDoc.place(x=627, y=35)
+        #getDoc.place(x=627, y=35)
 
         # button 5
         global getOrphanDoc
         getOrphanDoc = ttk.Button(text="Open Orphan Tags Report", state= DISABLED, command=Targest2.getOrphanDocument, width = 34)
-        getOrphanDoc.place(x=627, y=60)
+        #getOrphanDoc.place(x=627, y=60)
 
         # button 6
         global getChildlessDoc
         getChildlessDoc = ttk.Button(text="Open Childless Tags Report", state= DISABLED, command=Targest2.getChildlessDocument, width = 34)
-        getChildlessDoc.place(x=627, y=85)
+        #getChildlessDoc.place(x=627, y=85)
 
         # button 7
         global getTBVdoc
         getTBVdoc = ttk.Button(text="Open TBV Word Report", state= DISABLED, command=Targest2.getTBV, width = 34)
-        getTBVdoc.place(x=627, y=110)
+        #getTBVdoc.place(x=627, y=110)
 
         # button 8
         global getTBDdoc
         getTBDdoc = ttk.Button(text="Open TBD Word Report", state= DISABLED, command=Targest2.getTBD, width = 34)
-        getTBDdoc.place(x=627, y=135)
+        #getTBDdoc.place(x=627, y=135)
 
         # button 9
         global getExcel
         getExcel = ttk.Button(text="Open Requirements Excel Report", state= DISABLED, command=Targest2.createExcel, width = 34)
-        getExcel.place(x=627, y=160)
+        #getExcel.place(x=627, y=160)
 
         # button 10
         #global getExcel2
@@ -129,12 +129,12 @@ def GUI1():
         # button 10
         global getExcel2
         getExcel2 = ttk.Button(text="Open Relationship Trees Excel Report", state= DISABLED, command=Targest2.createExcel3, width = 34)
-        getExcel2.place(x=627, y=185)
+        #getExcel2.place(x=627, y=185)
         
         # button 10
         global TreeDiagram
         TreeDiagram = ttk.Button(text="Create Family Trees", state= DISABLED, command =lambda: Targest.text3(window), width = 34)
-        TreeDiagram.place(x=627, y=210)
+        #TreeDiagram.place(x=627, y=210)
 
         # button 11
         global Website
@@ -164,8 +164,8 @@ def GUI1():
         
 
         # Create ScrolledText widget
-        scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=15, width=47)
-        scrolled_text_box.place(x=566, y=240)
+        scrolled_text_box = ScrolledText(window, wrap=tk.WORD, height=23, width=47)
+        scrolled_text_box.place(x=566, y=120)
         scrolled_text_box.configure(bg='grey', fg='white') 
 
         # Load the image file
@@ -176,13 +176,51 @@ def GUI1():
         label2 = Label(window, image=imageLogo)
         label2.place(x=25, y=10)
 
+         # Load the copy right image file
+        global imageCopyRight
+        imageCopyRight = PhotoImage(file="copyright.png")
+
+        # Create a label to display the image
+        label3 = Label(window, image=imageCopyRight)
+        label3.place(x=692, y=515)
+        label3.config(bg="#E5CCFF")
+
         
         msg3 = ('You need a text file with paths to your documents\n 1. Please choose your documents by clicking on \n    the "Choose list of Documents" button.\n 2. Once the documents are displayed, Click "Generate Reports"\n\n')
         Txt.insert(tk.END, msg3) #print in GUI
 
+        def selection_changed(selection):
+            if selection == "Open All Tags Table Report":
+                allTagsButton.invoke()
+            elif selection == "Open Child & Parent Tags Report":
+                getDoc.invoke()
+            elif selection == "Open Orphan Tags Report":
+                getOrphanDoc.invoke()
+            elif selection == "Open Childless Tags Report":
+                getChildlessDoc.invoke()
+            elif selection == "Open TBV Word Report":
+                getTBVdoc.invoke()
+            elif selection == "Open TBD Word Report":
+                getTBDdoc.invoke()
+            elif selection == "Open Tags & Requirements Excel Report":
+                getExcel.invoke()
+            elif selection == "Open Relationship Trees Excel Report":
+                getExcel2.invoke()
+            elif selection == "Create Family Trees":
+                TreeDiagram.invoke()
+
+        options = ["Open All Tags Table Report", "Open Child & Parent Tags Report", "Open Orphan Tags Report", "Open Childless Tags Report", "Open TBV Word Report", "Open TBD Word Report", "Open Tags & Requirements Excel Report", "Open Relationship Trees Excel Report", "Create Family Trees"]
+
+        selected_option = StringVar()
+        selected_option.set(options[0])
+
+        dropdown = OptionMenu(window, selected_option, *options, command=selection_changed)
+        dropdown.place(x=660, y=46)
+
         # show a pop-up message
         #messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous Word Reports and Excel Reports, before running this application")
         messagebox.showinfo("Welcome to TARGEST",  "Make sure to save a text file with the paths to the documents you want to use, if you haven't already")
+
 
     except Exception as e:
         # Log an error message

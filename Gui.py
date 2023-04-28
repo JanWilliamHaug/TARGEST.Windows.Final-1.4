@@ -213,9 +213,14 @@ def GUI1():
 
         selected_option = StringVar()
         selected_option.set(options[0])
-
+        
         dropdown = OptionMenu(window, selected_option, *options, command=selection_changed)
         dropdown.place(x=660, y=46)
+
+        # Configure dropdown style
+        dropdown["menu"].configure(font=("Segoe UI", 10, "bold"), background="#b2d8ff", foreground="black")
+        dropdown["highlightthickness"] = 0
+        dropdown.configure(font=("Segoe UI", 10, "bold"), background="#b2d8ff", foreground="black")
 
         # show a pop-up message
         #messagebox.showinfo("Welcome to TARGEST",  "Make sure you have closed all your previous Word Reports and Excel Reports, before running this application")

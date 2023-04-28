@@ -25,6 +25,7 @@ This Python-based requirements tracing tool aims to streamline the process of pa
    git clone [https://github.com/JanWilliamHaug/TARGEST.Windows.Final-1.4.git](https://github.com/JanWilliamHaug/TARGEST.Windows.Final-1.4.git)
 
 2. Install the required libraries:
+<br>
    pip install -r requirements.txt
 
 ## Usage

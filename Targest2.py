@@ -703,7 +703,9 @@ def generateReport2():
                                                             para3 = report3.add_paragraph(dicts2Copy[str(item)])
                                                             para3.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBDReport.save('TBDReport.docx')
-
+                                                        
+                                                        
+                                                    
                                                         if "TBV:" in parentTag1:
                                                             TBVReport.add_paragraph(item, style='List Bullet')
                                                             if str(item) in dicts2Copy:
@@ -714,6 +716,15 @@ def generateReport2():
                                                             stringKey = str(item)
                                                             stringKey2 = (stringKey.replace(' ', ''))
                                                             duplicates2 = []
+
+                                                        if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item)
+                                                            TBDReport.save('TBDReport.docx')
+
+                                                        if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item)
+                                                            TBVReport.save('TBVReport.docx')
+
                                                             if str(stringKey2) in dicts10: # if the key is in the dictionary
                                                                 #for key in dicts10:
                                                                     if item in dicts10:
@@ -867,6 +878,15 @@ def generateReport2():
                                                             stringKey = str(item)
                                                             stringKey2 = (stringKey.replace(' ', ''))
                                                             duplicates2 = []
+                                                        
+                                                    if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item)
+                                                            TBDReport.save('TBDReport.docx')
+
+                                                    if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item)
+                                                            TBVReport.save('TBVReport.docx')
+                                                            
                                                             if str(stringKey2) in dicts10: # if the key is in the dictionary
                                                                 #for key in dicts10:
                                                                     if item in dicts10:

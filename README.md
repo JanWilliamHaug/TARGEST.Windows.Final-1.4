@@ -26,7 +26,7 @@ This Python-based requirements tracing tool streamlines the process of parsing W
 
 ## Usage
 
-Windows: python main.py
+Windows: python main.py <br>
 macOS: python3 main.py
 
 ## Key Algorithms

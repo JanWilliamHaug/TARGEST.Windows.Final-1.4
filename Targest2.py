@@ -717,13 +717,7 @@ def generateReport2():
                                                             stringKey2 = (stringKey.replace(' ', ''))
                                                             duplicates2 = []
 
-                                                        if "TBD:" in item:
-                                                            TBDReport.add_paragraph(item)
-                                                            TBDReport.save('TBDReport.docx')
-
-                                                        if "TBV:" in item:
-                                                            TBVReport.add_paragraph(item)
-                                                            TBVReport.save('TBVReport.docx')
+                                                        
 
                                                             if str(stringKey2) in dicts10: # if the key is in the dictionary
                                                                 #for key in dicts10:
@@ -750,7 +744,20 @@ def generateReport2():
                                                                     TBVReport.save('TBVReport.docx')
                                                         
                                                         
-                                                        
+                                                        if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item)
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+
+                                                        if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item)
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBVReport.save('TBVReport.docx')
+
                                                         counter2 = counter1 - 1
                                                         cell = str('B'+ str(counter2))
                                                         cell2 = str(item)
@@ -802,7 +809,7 @@ def generateReport2():
                                                             TBVReport.save('TBVReport.docx')
                                                             TBVTags.append(x)
                                     if "TBD:" in x:
-                                                            TBDReport.add_paragraph(item)
+                                                            TBDReport.add_paragraph(x)
                                                             TBDReport.save('TBDReport.docx')
                                                             TBDTags.append(x)
                                                             
@@ -817,6 +824,7 @@ def generateReport2():
                                     if keyCheck4 in dicts2Copy:  # Checks if text of parent tag is found
                                         if dicts2Copy[str(keyCheck4)] != "" and dicts2Copy[str(keyCheck4)] != " ":
                                             report3.add_paragraph(dicts2Copy[str(keyCheck4)])
+
                                             if "TBD:" in keyCheck4:
                                                             TBDReport.add_paragraph(dicts2Copy[str(keyCheck4)])
                                                             TBDReport.save('TBDReport.docx')
@@ -865,8 +873,9 @@ def generateReport2():
                                                     para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                     if "TBD:" in x:
                                                             TBDReport.add_paragraph(item, style='List Bullet')
-                                                            para = TBDReport.add_paragraph(dicts2Copy[str(item)])
-                                                            para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            if str(item) in dicts2Copy:
+                                                                para = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
                                                             TBDReport.save('TBDReport.docx')
                                                     if "TBV:" in x:
                                                             TBVReport.add_paragraph(item, style='List Bullet')
@@ -879,13 +888,7 @@ def generateReport2():
                                                             stringKey2 = (stringKey.replace(' ', ''))
                                                             duplicates2 = []
                                                         
-                                                    if "TBD:" in item:
-                                                            TBDReport.add_paragraph(item)
-                                                            TBDReport.save('TBDReport.docx')
-
-                                                    if "TBV:" in item:
-                                                            TBVReport.add_paragraph(item)
-                                                            TBVReport.save('TBVReport.docx')
+                                                    
                                                             
                                                             if str(stringKey2) in dicts10: # if the key is in the dictionary
                                                                 #for key in dicts10:
@@ -911,7 +914,20 @@ def generateReport2():
                                                                 
                                                                     TBVReport.save('TBVReport.docx')
                                                     
-                                                    
+                                                    if "TBD:" in item:
+                                                            TBDReport.add_paragraph(item)
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBDReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBDReport.save('TBDReport.docx')
+
+                                                    if "TBV:" in item:
+                                                            TBVReport.add_paragraph(item)
+                                                            if str(item) in dicts2Copy:
+                                                                para2 = TBVReport.add_paragraph(dicts2Copy[str(item)])
+                                                                para2.paragraph_format.left_indent = Inches(0.25) # adds indentation of text
+                                                            TBVReport.save('TBVReport.docx')
+
                                                     counter2 = counter1 - 1
                                                     cell = str('B'+ str(counter2))
                                                     cell2 = str(item)

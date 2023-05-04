@@ -42,7 +42,7 @@ The tool employs several key algorithms to achieve its functionality:
 
 ## Technologies
 
-Programming Language: Python 3.9
+Programming Language: ![Python](https://img.shields.io/badge/python-3670A0?style=plastic&logo=python&logoColor=ffdd54) 3.9 <br>
 Libraries:
 * Xlwings 0.29.0
 * Python-docx 0.8.11
